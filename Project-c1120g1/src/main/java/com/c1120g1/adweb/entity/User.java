@@ -24,7 +24,7 @@ public class User {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "account", referencedColumnName = "username")
+    @JoinColumn(name = "username", referencedColumnName = "username")
     private Account account;
 
     @Column(name = "email", columnDefinition = "VARCHAR(50)")
@@ -33,13 +33,10 @@ public class User {
     @Column(name = "phone", columnDefinition = "VARCHAR(20)")
     private String phone;
 
-    @Column(name = "address", columnDefinition = "VARCHAR(255)")
-    private String address;
-
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "district", referencedColumnName = "district_id", nullable = false)
-    private District district;
+    @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
+    private Ward ward;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Post> postSet;

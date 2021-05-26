@@ -29,9 +29,6 @@ public class Post {
     @Column(name = "email", columnDefinition = "VARCHAR(50)")
     private String email;
 
-    @Column(name = "address", columnDefinition = "VARCHAR(50)")
-    private String address;
-
     @Column(name = "title", columnDefinition = "VARCHAR(50)")
     private String title;
 
@@ -52,22 +49,22 @@ public class Post {
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "status", nullable = false, referencedColumnName = "status_id")
+    @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "status_id")
     private Status status;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "child_category", nullable = false, referencedColumnName = "child_category_id")
+    @JoinColumn(name = "child_category_id", nullable = false, referencedColumnName = "child_category_id")
     private ChildCategory childCategory;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "province", nullable = false, referencedColumnName = "province_id")
-    private Province province;
+    @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
+    private Ward ward;
 
     @JsonBackReference
     @ManyToOne
-    @JoinColumn(name = "user", nullable = false, referencedColumnName = "user_id")
+    @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
