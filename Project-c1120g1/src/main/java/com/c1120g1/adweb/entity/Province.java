@@ -25,7 +25,4 @@ public class Province {
     @OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
     private Set<District> districtSet;
 
-    @OneToMany(mappedBy = "province", cascade = CascadeType.ALL)
-    private Set<Post> postSet;
-
 }
