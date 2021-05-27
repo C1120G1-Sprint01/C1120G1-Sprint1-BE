@@ -29,4 +29,5 @@ public class Banner {
 
     @Column(name = "image", columnDefinition = "VARCHAR(255)")
     private String image;
+
 }

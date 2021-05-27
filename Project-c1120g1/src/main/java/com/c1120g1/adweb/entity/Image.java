@@ -29,4 +29,5 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "post_id", nullable = false, referencedColumnName = "post_id")
     private Post post;
+
 }
