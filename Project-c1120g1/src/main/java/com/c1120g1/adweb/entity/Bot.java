@@ -26,4 +26,5 @@ public class Bot {
 
     @Column(name = "answer", columnDefinition = "VARCHAR(255)")
     private String answer;
+
 }

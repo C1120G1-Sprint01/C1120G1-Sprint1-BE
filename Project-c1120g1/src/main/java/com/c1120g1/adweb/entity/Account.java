@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -27,5 +28,7 @@ public class Account {
     private String registerDate;
 
     @OneToOne(mappedBy = "account")
+    @JsonIgnoreProperties("account")
     private User user;
+
 }
