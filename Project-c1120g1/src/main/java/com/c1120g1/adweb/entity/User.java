@@ -46,4 +46,7 @@ public class User {
     @JsonIgnoreProperties("ward")
     private Set<Post> postSet;
 
+    @Column(name = "avatar", columnDefinition = "VARCHAR(255)")
+    private String avatar;
+
 }
