@@ -14,13 +14,17 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private PostRepository repository;
 
-    @Override
     public Page<Post> findAllByUsername(String username, Pageable pageable) {
         return repository.findAllByUsername(username, pageable);
     }
 
     @Override
     public Post findByIdAndUserId(Integer id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Post findById(Integer id) {
         return repository.findById(id).orElse(null);
     }
 }
