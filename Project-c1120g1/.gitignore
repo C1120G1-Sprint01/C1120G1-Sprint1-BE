@@ -35,7 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+/gradle/
 
 ### Sensitive Data ###
 src/main/resources/application.properties
-

@@ -9,4 +9,7 @@ public interface PostService {
     Page<Post> findAllByUsername(String username, Pageable pageable);
 
     Post findByIdAndUserId(Integer id);
+
+    Post findById(Integer id);
+
 }
