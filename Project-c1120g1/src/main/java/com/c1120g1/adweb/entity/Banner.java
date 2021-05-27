@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.sql.Timestamp;
 
 @Entity
 @Getter
@@ -25,7 +26,7 @@ public class Banner {
     private String size;
 
     @Column(name = "duration", columnDefinition = "DATETIME(6)")
-    private String duration;
+    private Timestamp duration;
 
     @Column(name = "image", columnDefinition = "VARCHAR(255)")
     private String image;
