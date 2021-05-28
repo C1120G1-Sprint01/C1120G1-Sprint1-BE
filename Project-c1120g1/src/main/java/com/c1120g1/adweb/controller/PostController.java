@@ -18,8 +18,8 @@ public class PostController {
     @Autowired
     private PostService postService;
 
-    @GetMapping("")
-    public ResponseEntity<Page<Post>> getPostByUserId(@PageableDefault(size = 2) Pageable pageable) {
+    @GetMapping("/cus-post-list")
+    public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2)Pageable pageable) {
         String username = "username";
         Page<Post> postList = postService.findAllByUsername(username, pageable);
         if (postList.isEmpty()) {
@@ -28,14 +28,14 @@ public class PostController {
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
-//    @GetMapping("{id}")
-//    public ResponseEntity<Post> getByIdAndUserId(@PathVariable("id") Integer id) {
-//        Post post = postService.findByIdAndUserId(id);
-//        if (post == null) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//        return new ResponseEntity<>(post, HttpStatus.OK);
-//    }
+    @GetMapping("/cus-post/{id}")
+    public ResponseEntity<Post> getByIdAndUserId(@PathVariable("id") Integer id) {
+        Post post = postService.findByIdAndUserId(id);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
 
     @GetMapping("{id}")
     public ResponseEntity<Post> getPostById(@PathVariable("id") Integer id) {
