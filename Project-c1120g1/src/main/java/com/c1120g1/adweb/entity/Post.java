@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -48,27 +48,28 @@ public class Post {
     private String description;
 
 
-
-    @JsonBackReference
     @ManyToOne
+    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "status_id")
     private Status status;
 
-    @JsonBackReference
     @ManyToOne
+    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "child_category_id", nullable = false, referencedColumnName = "child_category_id")
     private ChildCategory childCategory;
 
-    @JsonBackReference
     @ManyToOne
+    @JsonIgnoreProperties({"postSet", "userSet"})
     @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
     private Ward ward;
 
-    @JsonBackReference
     @ManyToOne
+    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("post")
     private Set<Image> imageSet;
+
 }

@@ -18,13 +18,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void saveAccount(Account account) {
-     if (account.getUsername()==null){
-         account.setRegisterDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
-     }
+        if (account.getUsername() == null) {
+            account.setRegisterDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+        }
     }
 
     @Override
     public List<Account> getAllAccount() {
         return repository.findAll();
+
     }
 }
