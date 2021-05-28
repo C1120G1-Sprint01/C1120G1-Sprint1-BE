@@ -11,14 +11,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/customer")
+@RequestMapping("api/posts")
 @CrossOrigin(origins = "http://localhost:4200")
 public class PostController {
 
     @Autowired
-    PostService postService;
+    private PostService postService;
 
-    @GetMapping("")
+    @GetMapping("/cus-post-list")
     public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2)Pageable pageable) {
         String username = "username";
         Page<Post> postList = postService.findAllByUsername(username, pageable);
@@ -28,13 +28,22 @@ public class PostController {
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/cus-post/{id}")
     public ResponseEntity<Post> getByIdAndUserId(@PathVariable("id") Integer id) {
         Post post = postService.findByIdAndUserId(id);
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<Post> getPostById(@PathVariable("id") Integer id) {
+        Post post = postService.findById(id);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
+        }
+        return new ResponseEntity<>(post, HttpStatus.OK); //200
     }
 
 }

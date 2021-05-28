@@ -18,6 +18,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+Project-c1120g1/.idea
 .idea
 *.iws
 *.iml
@@ -35,7 +36,7 @@ out/
 
 ### VS Code ###
 .vscode/
+/gradle/
 
 ### Sensitive Data ###
-src/main/resources/application.properties
-
+Project-c1120g1/src/main/resources/application.properties
