@@ -22,6 +22,23 @@ public class BannerServiceImpl implements BannerService {
 
     @Override
     public void addAdvertiseBanner(Banner banner) {
-        repository.addAdvertiseBanner( banner.getDuration(),banner.getImage(),banner.getPosition(),banner.getSize() );
+        repository.addAdvertiseBanner( banner.getDuration(), banner.getImage(), banner.getPosition().getPositionId(),
+                banner.getSize().getSizeId() );
+    }
+
+    @Override
+    public void editAdvertiseBanner(Banner banner) {
+        repository.editAdvertiseBanner( banner.getBannerId(), banner.getDuration(), banner.getImage(),
+                banner.getPosition().getPositionId(),banner.getSize().getSizeId() );
+    }
+
+    @Override
+    public void deleteAdvertiseBanner(Integer bannerId) {
+        repository.deleteAdvertiseBanner( bannerId );
+    }
+
+    @Override
+    public Banner findBannerById(Integer bannerId) {
+        return repository.findBannerById( bannerId );
     }
 }

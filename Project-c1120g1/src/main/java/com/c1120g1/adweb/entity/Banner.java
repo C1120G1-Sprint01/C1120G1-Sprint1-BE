@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,11 +20,14 @@ public class Banner {
     @Column(name = "banner_id")
     private Integer bannerId;
 
-    @Column(name = "position", columnDefinition = "VARCHAR(50)")
-    private String position;
+    @ManyToOne
+    @JoinColumn(name = "position_id", referencedColumnName = "positionId")
+    private Position position;
 
-    @Column(name = "size", columnDefinition = "VARCHAR(50)")
-    private String size;
+    @ManyToOne
+    @JoinColumn(name = "size_id", referencedColumnName = "sizeId")
+    private Size size;
+
 
     @Column(name = "duration", columnDefinition = "DATETIME(6)")
     private Timestamp duration;

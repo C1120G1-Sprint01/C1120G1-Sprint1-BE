@@ -9,4 +9,10 @@ public interface BannerService {
     List<Banner> showAllAdvertiseBanner();
 
     void addAdvertiseBanner(Banner banner);
+
+    void editAdvertiseBanner(Banner banner);
+
+    void deleteAdvertiseBanner(Integer bannerId);
+
+    Banner findBannerById(Integer bannerId);
 }
