@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -26,5 +28,20 @@ public class PostServiceImpl implements PostService {
     @Override
     public Post findById(Integer id) {
         return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Post> findAll() {
+        return repository.findAll();
+    }
+
+    @Override
+    public void save(Post post) {
+        repository.save(post);
+    }
+
+    @Override
+    public List<Post> search(String title, String child_category, String province_name) {
+        return repository.search(title, child_category, province_name);
     }
 }
