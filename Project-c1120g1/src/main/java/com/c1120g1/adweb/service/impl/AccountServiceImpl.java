@@ -16,4 +16,10 @@ public class AccountServiceImpl implements AccountService {
     public Account findByUsername(String username) {
         return repository.findByUsername(username);
     }
+
+    @Override
+    public String generateCode() {
+        return ""+ (int)(Math.random()*1000000*1.1);
+    }
 }
+

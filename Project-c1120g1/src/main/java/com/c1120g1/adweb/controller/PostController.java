@@ -28,14 +28,14 @@ public class PostController {
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
-    public ResponseEntity<Post> getByIdAndUserId(@PathVariable("id") Integer id) {
-        Post post = postService.findByIdAndUserId(id);
-        if (post == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(post, HttpStatus.OK);
-    }
+//    @GetMapping("{id}")
+//    public ResponseEntity<Post> getByIdAndUserId(@PathVariable("id") Integer id) {
+//        Post post = postService.findByIdAndUserId(id);
+//        if (post == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        return new ResponseEntity<>(post, HttpStatus.OK);
+//    }
 
     @GetMapping("{id}")
     public ResponseEntity<Post> getPostById(@PathVariable("id") Integer id) {
