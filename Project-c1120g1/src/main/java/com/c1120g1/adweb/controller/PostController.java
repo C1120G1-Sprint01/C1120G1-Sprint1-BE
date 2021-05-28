@@ -19,7 +19,7 @@ public class PostController {
     PostService postService;
 
     @GetMapping("")
-    public ResponseEntity<Page<Post>> getPostByUserId(@PageableDefault(size = 2)Pageable pageable) {
+    public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2)Pageable pageable) {
         String username = "username";
         Page<Post> postList = postService.findAllByUsername(username, pageable);
         if (postList.isEmpty()) {
