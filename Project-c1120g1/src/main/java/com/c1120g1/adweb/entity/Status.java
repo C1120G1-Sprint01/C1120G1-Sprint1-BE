@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ public class Status {
     private String statusName;
 
     @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("status")
     private Set<Post> postSet;
 
 }
