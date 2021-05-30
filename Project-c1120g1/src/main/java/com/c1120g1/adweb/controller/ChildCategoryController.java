@@ -3,6 +3,8 @@ package com.c1120g1.adweb.controller;
 import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.service.ChildCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,22 +12,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/main-category/child-category")
-@CrossOrigin(value = "*",allowedHeaders = "*")
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class ChildCategoryController {
 
     @Autowired
     private ChildCategoryService childCategoryService;
 
     @GetMapping("/")
-    public ResponseEntity<List<ChildCategory>> getList(){
+    public ResponseEntity<List<ChildCategory>> getList() {
         List<ChildCategory> childCategoryList = childCategoryService.findAllChildCategory();
         if (childCategoryList.isEmpty()) {
             return new ResponseEntity<List<ChildCategory>>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<List<ChildCategory>>(childCategoryList,HttpStatus.OK);
+        return new ResponseEntity<List<ChildCategory>>(childCategoryList, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
@@ -62,5 +65,29 @@ public class ChildCategoryController {
 
         childCategoryService.delete(id);
         return new ResponseEntity<ChildCategory>(HttpStatus.NO_CONTENT);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ChildCategory>> searchName(@RequestParam Optional<String> childCategoryName,
+                                                          @RequestParam Optional<String> categoryName) {
+        List<ChildCategory> childCategoryList;
+        if (categoryName.isPresent()){
+            if (childCategoryName.isPresent()){
+                childCategoryList = childCategoryService.findAllByChildCategoryNameAndCategoryName(childCategoryName.get(),categoryName.get());
+            } else {
+                childCategoryList = childCategoryService.findAllByCategoryName(categoryName.get());
+            }
+        } else {
+            if (childCategoryName.isPresent()) {
+                childCategoryList = childCategoryService.findAllByChildCategoryName(childCategoryName.get());
+            } else {
+                childCategoryList = childCategoryService.findAllChildCategory();
+            }
+        }
+
+        if (childCategoryList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
     }
 }

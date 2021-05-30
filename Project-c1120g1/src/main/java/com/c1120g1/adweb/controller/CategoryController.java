@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.entity.Category;
+import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -64,5 +65,4 @@ public class CategoryController {
         categoryService.delete(id);
         return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
     }
-
 }
