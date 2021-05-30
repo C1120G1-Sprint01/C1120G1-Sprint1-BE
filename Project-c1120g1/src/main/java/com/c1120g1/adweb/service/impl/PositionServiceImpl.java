@@ -13,6 +13,12 @@ public class PositionServiceImpl implements PositionService {
     @Autowired
     private PositionRepository positionRepository;
 
+    /**
+     * Method: get all position
+     * Author: HanTH
+     *
+     * @return
+     */
     @Override
     public List<Position> showAllPosition() {
         return positionRepository.showAllPosition();

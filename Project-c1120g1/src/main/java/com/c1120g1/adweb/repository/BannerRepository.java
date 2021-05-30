@@ -21,7 +21,7 @@ public interface BannerRepository extends JpaRepository<Banner, Integer> {
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE ad_web_db.banner SET banner.duration = ?2, banner.image = ?3, banner.position_id = ?4, banner.size_id = ?5)\n" +
+    @Query(value = "UPDATE ad_web_db.banner SET banner.duration = ?2, banner.image = ?3, banner.position_id = ?4, banner.size_id = ?5\n" +
             "WHERE banner.banner_id = ?1", nativeQuery = true)
     void editAdvertiseBanner(Integer bannerId, Timestamp duration, String image, Integer positionId, Integer sizeId);
 
@@ -31,4 +31,7 @@ public interface BannerRepository extends JpaRepository<Banner, Integer> {
 
     @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.banner_id = ?1" ,nativeQuery = true)
     Banner findBannerById(Integer bannerId);
+
+    @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.banner_id = ?1",nativeQuery = true)
+    List<Banner> showAllBannerByPosition(Integer positionId);
 }

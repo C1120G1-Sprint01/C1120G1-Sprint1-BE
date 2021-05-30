@@ -11,6 +11,13 @@ import java.util.List;
 public class SizeServiceImpl implements SizeService {
     @Autowired
     private SizeRepository sizeRepository;
+
+    /**
+     * Method: get all size
+     * Author: HanTH
+     *
+     * @return
+     */
     @Override
     public List<Size> showAllSize() {
         return sizeRepository.showAllSize();

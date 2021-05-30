@@ -1,16 +1,18 @@
 package com.c1120g1.adweb.service;
 
 import com.c1120g1.adweb.entity.Banner;
-
-import java.sql.Timestamp;
+import com.c1120g1.adweb.model.BannerDTO;
 import java.util.List;
 
 public interface BannerService {
+
     List<Banner> showAllAdvertiseBanner();
 
-    void addAdvertiseBanner(Banner banner);
+    List<Banner> showAllBannerByPosition(Integer positionId);
 
-    void editAdvertiseBanner(Banner banner);
+    void addAdvertiseBanner(BannerDTO bannerDTO);
+
+    void editAdvertiseBanner(BannerDTO bannerDTO);
 
     void deleteAdvertiseBanner(Integer bannerId);
 
