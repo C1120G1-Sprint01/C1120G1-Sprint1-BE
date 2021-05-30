@@ -3,6 +3,7 @@ package com.c1120g1.adweb.controller;
 import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.service.ChildCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
@@ -90,4 +91,15 @@ public class ChildCategoryController {
         }
         return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
     }
+
+    @GetMapping("listChildCategory")
+    public ResponseEntity<List<ChildCategory>> getChildCategories(){
+        if (childCategoryService.findAllChildCategory().isEmpty()){
+            return new ResponseEntity<>(childCategoryService.findAllChildCategory(), HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(childCategoryService.findAllChildCategory(), HttpStatus.OK);
+    }
 }
+
+
+
