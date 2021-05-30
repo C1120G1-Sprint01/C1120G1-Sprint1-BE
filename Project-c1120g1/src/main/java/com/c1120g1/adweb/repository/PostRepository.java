@@ -29,6 +29,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "       )", nativeQuery = true)
     List<Post> search(String title, String child_category, String province_name);
 
-    @Query(value="select * from post order by post_date_time desc", nativeQuery = true)
+    @Query(value="select * from post where enabled = 1 order by post_date_time desc", nativeQuery = true)
     Page<Post> findAllNewest(Pageable pageable);
 }
