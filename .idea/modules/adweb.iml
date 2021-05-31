@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module version="4">
+  <component name="ExternalSystem" externalSystem="GRADLE" externalSystemModuleGroup="com.c1120g1" externalSystemModuleVersion="0.0.1-SNAPSHOT" linkedProjectId="adweb" linkedProjectPath="$MODULE_DIR$/../../Project-c1120g1" rootProjectPath="$MODULE_DIR$/../../Project-c1120g1" />
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$/../../Project-c1120g1">
+      <excludeFolder url="file://$MODULE_DIR$/../../Project-c1120g1/.gradle" />
+      <excludeFolder url="file://$MODULE_DIR$/../../Project-c1120g1/build" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

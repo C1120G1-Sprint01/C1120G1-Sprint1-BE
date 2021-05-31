@@ -6,6 +6,10 @@ import com.c1120g1.adweb.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
@@ -13,8 +17,21 @@ public class AccountServiceImpl implements AccountService {
     private AccountRepository repository;
 
     @Override
+    public void saveAccount(Account account) {
+        if (account.getUsername() == null) {
+            account.setRegisterDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+        }
+    }
+
+    @Override
+    public List<Account> getAllAccount() {
+        return repository.findAll();
+
+    }
+
+    @Override
     public Account findByUsername(String username) {
-        return repository.findByUsername(username);
+        return null;
     }
 
     @Override
