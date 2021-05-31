@@ -14,4 +14,6 @@ public interface AccountService {
     Account findByUsername(String username);
 
     String generateCode();
+
+    void sendEmail(String email, String code);
 }
