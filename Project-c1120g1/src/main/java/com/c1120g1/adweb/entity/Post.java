@@ -69,4 +69,12 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<Image> imageSet;
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
 }

@@ -33,6 +33,9 @@ public class User {
     @Column(name = "phone", columnDefinition = "VARCHAR(20)")
     private String phone;
 
+    @Column(name = "avatarURL", columnDefinition = "VARCHAR(255)")
+    private String avatarURL;
+
     @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
