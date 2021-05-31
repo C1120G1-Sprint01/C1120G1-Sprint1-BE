@@ -57,5 +57,11 @@ public class UserServiceImpl implements UserService {
         }
         name = name2.trim();
         return name;
+
+    }
+
+    @Override
+    public void save(User user) {
+        repository.save(user);
     }
 }
