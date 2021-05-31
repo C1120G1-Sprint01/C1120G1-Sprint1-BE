@@ -20,7 +20,7 @@ public class Status {
     @Column(name = "status_id", columnDefinition = "INT NOT NULL")
     private Integer statusId;
 
-    @Column(name =  "status_name", columnDefinition = "VARCHAR(50)")
+    @Column(name = "status_name", columnDefinition = "VARCHAR(50)")
     private String statusName;
 
     @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)

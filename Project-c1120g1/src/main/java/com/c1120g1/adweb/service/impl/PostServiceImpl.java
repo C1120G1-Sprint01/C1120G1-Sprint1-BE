@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class PostServiceImpl implements PostService {
 
@@ -16,6 +18,16 @@ public class PostServiceImpl implements PostService {
 
     public Page<Post> findAllByUsername(String username, Pageable pageable) {
         return repository.findAllByUsername(username, pageable);
+    }
+
+    @Override
+    public List<Post> findAllByCategoryName(String categoryName) {
+        return repository.findAllByCategoryName(categoryName);
+    }
+
+    @Override
+    public List<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName) {
+        return repository.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName);
     }
 
     @Override

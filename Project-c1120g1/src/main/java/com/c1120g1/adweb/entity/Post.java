@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -59,16 +60,19 @@ public class Post {
 
     @ManyToOne
     @JsonIgnoreProperties({"postSet", "userSet"})
+    @JsonIgnore
     @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
     private Ward ward;
 
     @ManyToOne
     @JsonIgnoreProperties("postSet")
+    @JsonIgnore
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("post")
+    @JsonIgnore
     private Set<Image> imageSet;
 
 }

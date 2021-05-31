@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table( name = "`account`",
+@Table(name = "`account`",
         uniqueConstraints = {
                 @UniqueConstraint(name = "ACC_UK", columnNames = "username")
         })
