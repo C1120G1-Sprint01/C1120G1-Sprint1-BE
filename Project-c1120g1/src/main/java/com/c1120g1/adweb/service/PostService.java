@@ -10,10 +10,6 @@ public interface PostService {
 
     Page<Post> findAllByUsername(String username, Pageable pageable);
 
-    List<Post> findAllByCategoryName(String categoryName);
-
-    List<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName);
-
     Post findByIdAndUserId(Integer id);
 
     Post findById(Integer id);

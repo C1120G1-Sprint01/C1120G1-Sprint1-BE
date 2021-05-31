@@ -45,7 +45,7 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
         }
-        return new ResponseEntity<>(post, HttpStatus.OK); //200
+        return new ResponseEntity<>(post, HttpStatus.OK); // 200
     }
 
     @GetMapping("listPost")

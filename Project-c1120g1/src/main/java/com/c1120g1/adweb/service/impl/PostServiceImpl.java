@@ -21,16 +21,6 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> findAllByCategoryName(String categoryName) {
-        return repository.findAllByCategoryName(categoryName);
-    }
-
-    @Override
-    public List<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName) {
-        return repository.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName);
-    }
-
-    @Override
     public Post findByIdAndUserId(Integer id) {
         return repository.findById(id).orElse(null);
     }
