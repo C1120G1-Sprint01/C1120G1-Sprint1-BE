@@ -12,4 +12,6 @@ public interface PostService {
 
     Post findById(Integer id);
 
+    void updatePost(Post post);
+
 }

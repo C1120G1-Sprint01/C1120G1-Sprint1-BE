@@ -1,7 +1,7 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.entity.District;
-import com.c1120g1.adweb.entity.Province;
+import com.c1120g1.adweb.dto.DistrictDTO;
+import com.c1120g1.adweb.dto.ProvinceDTO;
 import com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.service.DistrictService;
 import com.c1120g1.adweb.service.ProvinceService;
@@ -28,23 +28,23 @@ public class AddressController {
     WardService wardService;
 
     @GetMapping("/province")
-    public ResponseEntity<List<Province>> getAllProvince() {
-        List<Province> provinceList = provinceService.findAll();
+    public ResponseEntity<List<ProvinceDTO>> getAllProvince() {
+        List<ProvinceDTO> provinceDTOList = provinceService.findAll();
 
-        if (provinceList.isEmpty()) {
+        if (provinceDTOList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(provinceList, HttpStatus.OK);
+        return new ResponseEntity<>(provinceDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/district/{provinceId}")
-    public ResponseEntity<List<District>> getAllDistrictByProvinceId(@PathVariable Integer provinceId) {
-        List<District> districtList = districtService.findAllByProvinceId(provinceId);
+    public ResponseEntity<List<DistrictDTO>> getAllDistrictByProvinceId(@PathVariable Integer provinceId) {
+        List<DistrictDTO> districtDTOList = districtService.findAllByProvinceId(provinceId);
 
-        if (districtList.isEmpty()) {
+        if (districtDTOList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(districtList, HttpStatus.OK);
+        return new ResponseEntity<>(districtDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/ward/{districtId}")

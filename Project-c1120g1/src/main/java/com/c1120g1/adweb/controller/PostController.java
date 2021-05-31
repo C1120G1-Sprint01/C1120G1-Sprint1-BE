@@ -46,4 +46,32 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK); //200
     }
 
+    @PostMapping("/cus-post-edit/{id}")
+    public ResponseEntity<Post> editPost(@RequestBody Post post, @PathVariable Integer id) {
+        Post postObj = postService.findByIdAndUserId(id);
+
+        if (postObj == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            if (post.getStatus().getStatusId() == 2 || post.getStatus().getStatusId() == 4 ||
+                    post.getStatus().getStatusId() == 5) {
+                postObj.setDescription(post.getDescription());
+                postObj.setEmail(post.getEmail());
+                postObj.setPhone(post.getPhone());
+                postObj.setPostType(post.isPostType());
+                postObj.setPosterName(post.getPosterName());
+                postObj.setPrice(post.getPrice());
+                postObj.setTitle(post.getTitle());
+                postObj.setChildCategory(post.getChildCategory());
+                postObj.setStatus(post.getStatus());
+                postObj.setWard(post.getWard());
+                postObj.setImageSet(post.getImageSet());
+                postService.updatePost(postObj);
+                return new ResponseEntity<>(postObj, HttpStatus.OK);
+            }
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+        }
+    }
+
 }
