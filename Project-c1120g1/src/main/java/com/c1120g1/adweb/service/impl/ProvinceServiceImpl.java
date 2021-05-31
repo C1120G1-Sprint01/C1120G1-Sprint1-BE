@@ -20,8 +20,9 @@ public class ProvinceServiceImpl implements ProvinceService {
     public List<ProvinceDTO> findAll() {
         List<Province> provinceList = repository.findAll();
         List<ProvinceDTO> provinceDTOList = new ArrayList<>();
+        ProvinceDTO provinceDTO = null;
         for (Province province : provinceList) {
-            ProvinceDTO provinceDTO = new ProvinceDTO();
+            provinceDTO = new ProvinceDTO();
             provinceDTO.setProvinceId(province.getProvinceId());
             provinceDTO.setProvinceName(province.getProvinceName());
             provinceDTOList.add(provinceDTO);

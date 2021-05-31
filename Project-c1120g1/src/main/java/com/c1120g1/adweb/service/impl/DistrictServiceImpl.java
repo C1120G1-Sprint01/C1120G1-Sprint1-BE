@@ -20,8 +20,9 @@ public class DistrictServiceImpl implements DistrictService {
     public List<DistrictDTO> findAllByProvinceId(int provinceId) {
         List<District> districtList = repository.findAllByProvinceId(provinceId);
         List<DistrictDTO> districtDTOList = new ArrayList<>();
+        DistrictDTO districtDTO = null;
         for (District district : districtList) {
-            DistrictDTO districtDTO = new DistrictDTO();
+            districtDTO = new DistrictDTO();
             districtDTO.setDistrictId(district.getDistrictId());
             districtDTO.setDistrictName(district.getDistrictName());
             districtDTOList.add(districtDTO);

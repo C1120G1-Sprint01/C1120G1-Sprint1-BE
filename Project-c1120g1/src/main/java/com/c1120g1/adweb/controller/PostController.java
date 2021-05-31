@@ -65,7 +65,7 @@ public class PostController {
                 postObj.setChildCategory(post.getChildCategory());
                 postObj.setStatus(post.getStatus());
                 postObj.setWard(post.getWard());
-                postObj.setImageSet(post.getImageSet());
+//                postObj.setImageSet(post.getImageSet());
                 postService.updatePost(postObj);
                 return new ResponseEntity<>(postObj, HttpStatus.OK);
             }

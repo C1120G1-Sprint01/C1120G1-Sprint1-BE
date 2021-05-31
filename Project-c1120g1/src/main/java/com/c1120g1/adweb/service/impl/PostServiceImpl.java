@@ -39,8 +39,8 @@ public class PostServiceImpl implements PostService {
                 post.getPosterName(), post.getPrice(), post.getTitle(), post.getChildCategory().getChildCategoryId(),
                 post.getStatus().getStatusId(), post.getWard().getWardId(), post.getPostId());
 
-        for (Image image : post.getImageSet()) {
-            imageRepository.update(image.getUrl(), image.getImageId());
-        }
+//        for (Image image : post.getImageSet()) {
+//            imageRepository.update(image.getUrl(), image.getImageId());
+//        }
     }
 }
