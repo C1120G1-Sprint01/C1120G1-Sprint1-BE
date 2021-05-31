@@ -15,6 +15,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -71,5 +72,17 @@ public class SecurityController {
                 + "Thanks and regards!");
 
         this.emailSender.send(message);
+    }
+
+    @GetMapping("api/setNewPw/{email}/{newPw}")
+    public void setNewPassword(@PathVariable(name = "email") String email,
+                               @PathVariable(name = "newPw") String newPw){
+        BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder();
+        User user = this.userService.findByEmail(email);
+        if (user != null){
+            user.getAccount().setPassword(bCryptEncoder.encode(newPw));
+            userService.save(user);
+            System.out.println("Set new Pw successfully");
+        }
     }
 }
