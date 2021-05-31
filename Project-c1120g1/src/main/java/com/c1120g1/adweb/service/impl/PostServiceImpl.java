@@ -14,30 +14,56 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
 
     @Autowired
-    private PostRepository postRepository;
+    private PostRepository repository;
 
     @Override
     public List<Post> findAll() {
-        return postRepository.findAll();
+        return repository.findAll();
     }
 
     @Override
     public Page<Post> findAll(Pageable pageable) {
-        return postRepository.findAll(pageable);
+        return repository.findAll(pageable);
     }
 
     @Override
     public Post findById(Integer id) {
-        return postRepository.findById(id).orElse(null);
+        return repository.findById(id).orElse(null);
     }
 
     @Override
     public void deleteById(Integer id) {
-        postRepository.deleteById(id);
+        repository.deleteById(id);
     }
 
-//    @Override
+    @Override
+    public Page<Post> findAllByUsername(String username, Pageable pageable) {
+        return repository.findAllByUsername(username, pageable);
+    }
+
+    @Override
+    public Post findByIdAndUserId(Integer id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public Page<Post> findAllNewest(Pageable pageable) {
+        return repository.findAllNewest(pageable);
+    }
+
+    @Override
+    public void save(Post post) {
+        repository.save(post);
+    }
+
+    @Override
+    public List<Post> search(String title, String child_category, String province_name) {
+        return repository.search(title, child_category, province_name);
+    }
+
+    //    @Override
 //    public List<Post> statisticalByDate(String startDate, String endDate) {
 //        return postRepository.statisticalByDate(startDate, endDate);
 //    }
+
 }

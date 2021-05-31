@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,6 +24,7 @@ public class User {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("user")
     @JoinColumn(name = "username", referencedColumnName = "username")
     private Account account;
 
@@ -33,12 +34,16 @@ public class User {
     @Column(name = "phone", columnDefinition = "VARCHAR(20)")
     private String phone;
 
-    @JsonBackReference
+    @Column(name = "avatar_url", columnDefinition = "VARCHAR(255)")
+    private String avatarUrl;
+
     @ManyToOne
+    @JsonIgnoreProperties({"userSet", "postSet"})
     @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
     private Ward ward;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnoreProperties("ward")
     private Set<Post> postSet;
 
     @Column(name = "avatar_url", columnDefinition = "VARCHAR(255)")
