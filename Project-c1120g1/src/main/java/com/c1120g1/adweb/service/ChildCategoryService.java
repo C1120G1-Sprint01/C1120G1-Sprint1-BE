@@ -8,4 +8,6 @@ public interface ChildCategoryService {
     List<ChildCategory> findAll();
 
     ChildCategory findById(Integer id);
+
+    List<ChildCategory> getAllChildCategoryByCategoryId(Integer id);
 }

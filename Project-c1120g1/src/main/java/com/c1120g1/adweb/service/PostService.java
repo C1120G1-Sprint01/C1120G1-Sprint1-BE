@@ -20,4 +20,6 @@ public interface PostService {
 
     List<Post> search(String title, String child_category, String province_name);
 
+    String getPostDateTime();
+
 }

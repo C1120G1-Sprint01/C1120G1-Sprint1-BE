@@ -71,4 +71,17 @@ public class Post {
     @JsonIgnoreProperties("post")
     private Set<Image> imageSet;
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "posterName='" + posterName + '\'' +
+                ", email='" + email + '\'' +
+                ", title='" + title + '\'' +
+                ", postDateTime='" + postDateTime + '\'' +
+                ", enabled=" + enabled +
+                ", status=" + status +
+                ", ward=" + ward +
+                ", imageSet=" + imageSet +
+                '}';
+    }
 }

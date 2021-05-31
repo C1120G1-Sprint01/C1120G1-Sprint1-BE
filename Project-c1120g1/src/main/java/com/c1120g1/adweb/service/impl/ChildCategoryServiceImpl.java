@@ -23,4 +23,9 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
     public ChildCategory findById(Integer id) {
         return repository.findById(id).orElse(null);
     }
+
+    @Override
+    public List<ChildCategory> getAllChildCategoryByCategoryId(Integer id) {
+        return repository.getAllChildCategoryByCategoryId(id);
+    }
 }

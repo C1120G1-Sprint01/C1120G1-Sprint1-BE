@@ -4,4 +4,6 @@ import com.c1120g1.adweb.entity.User;
 
 public interface UserService {
     User findByEmail(String email);
+
+    User findById(Integer id);
 }
