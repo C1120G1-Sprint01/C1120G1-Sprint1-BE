@@ -41,4 +41,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private Set<Post> postSet;
 
+    @Column(name = "avatar_url", columnDefinition = "VARCHAR(255)")
+    private String avatarUrl;
 }
