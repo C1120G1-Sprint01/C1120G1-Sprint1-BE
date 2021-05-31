@@ -8,9 +8,8 @@ import com.c1120g1.adweb.service.AccountService;
 import com.c1120g1.adweb.service.UserService;
 import com.c1120g1.adweb.service.impl.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -31,8 +30,6 @@ public class SecurityController {
     @Autowired
     private UserService userService;
     @Autowired
-    private JavaMailSender emailSender;
-    @Autowired
     private AccountService accountService;
 
     @PostMapping("/api/login")
@@ -49,33 +46,21 @@ public class SecurityController {
     }
 
     @GetMapping("/api/checkEmail/{email}")
-    public String checkEmail(@PathVariable(name = "email") String email) {
+    public ResponseEntity<String> checkEmail(@PathVariable(name = "email") String email) {
         System.out.println("Email : " + email);
         User user = this.userService.findByEmail(email);
         if (user != null) {
             String code = accountService.generateCode();
             System.out.println("CODE : "+code);
-//            sendEmail(email, code);
-            return code;
+//            accountService.sendEmail(email, code);
+            return new ResponseEntity<>(code, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return "";
-    }
-
-    public void sendEmail(String email, String code) {
-
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(email);
-        message.setSubject("Email lấy lại mật khẩu từ Soren");
-        message.setText("Chào bạn\n"
-                + "TRANG WEB RAO VẶT C11 gửi mã code bên dưới để lấy lại mật khẩu\n"
-                + "CODE : " + code + "\n"
-                + "Thanks and regards!");
-
-        this.emailSender.send(message);
     }
 
     @GetMapping("api/setNewPw/{email}/{newPw}")
-    public void setNewPassword(@PathVariable(name = "email") String email,
+    public ResponseEntity<Void> setNewPassword(@PathVariable(name = "email") String email,
                                @PathVariable(name = "newPw") String newPw){
         BCryptPasswordEncoder bCryptEncoder = new BCryptPasswordEncoder();
         User user = this.userService.findByEmail(email);
@@ -83,6 +68,9 @@ public class SecurityController {
             user.getAccount().setPassword(bCryptEncoder.encode(newPw));
             userService.save(user);
             System.out.println("Set new Pw successfully");
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }
