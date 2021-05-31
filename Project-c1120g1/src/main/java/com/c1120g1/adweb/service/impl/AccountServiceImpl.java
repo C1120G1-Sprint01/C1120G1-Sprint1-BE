@@ -28,4 +28,15 @@ public class AccountServiceImpl implements AccountService {
         return repository.findAll();
 
     }
+
+    @Override
+    public Account findByUsername(String username) {
+        return null;
+    }
+
+    @Override
+    public String generateCode() {
+        return ""+ (int)(Math.random()*1000000*1.1);
+    }
 }
+

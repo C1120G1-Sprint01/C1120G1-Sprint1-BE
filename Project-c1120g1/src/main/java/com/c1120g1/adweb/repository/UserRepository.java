@@ -14,13 +14,15 @@ import javax.transaction.Transactional;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     @Modifying
-    @Query(value = "INSERT INTO `user` ( avatar_Url, email, name, phone, username, ward_id) " +
-            "values " + "(:avatar_Url "+":email," + ":name," + ":phone," + ":username," , nativeQuery = true)
+    @Query(value = "INSERT INTO `user` ( avatar_Url, email, name, phone, username) " +
+            "values " + "(:avatarUrl "+":email," + ":name," + ":phone," + ":account,", nativeQuery = true)
     @Transactional
     void saveUser(   @Param("avatar")String avatarUrl,
                         @Param("name") String name,
-                        @Param("username") String username,
+                        @Param("account") String account,
                         @Param("email") String email,
                         @Param("phone") String phone);
 
+
+    User findByEmail(String email);
 }

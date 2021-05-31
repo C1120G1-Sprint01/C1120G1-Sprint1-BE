@@ -6,6 +6,8 @@ import com.c1120g1.adweb.service.WardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class WardServiceImpl implements WardService {
 
@@ -14,7 +16,12 @@ public class WardServiceImpl implements WardService {
 
 
     @Override
-    public Ward getWardById(Integer id) {
-        return repository.getById(id);
+    public List<Ward> findAllByDistrictId(Integer districtId) {
+        return null;
+    }
+
+    @Override
+    public List<Ward> findWardByDistrictId(Integer districtId) {
+        return null;
     }
 }

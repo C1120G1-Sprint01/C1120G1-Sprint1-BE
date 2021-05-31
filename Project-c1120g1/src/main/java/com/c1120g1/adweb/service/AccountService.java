@@ -10,4 +10,8 @@ public interface AccountService {
 
     List<Account> getAllAccount();
 
+
+    Account findByUsername(String username);
+
+    String generateCode();
 }
