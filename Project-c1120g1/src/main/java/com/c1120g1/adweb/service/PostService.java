@@ -18,4 +18,10 @@ public interface PostService {
 
     Post findById(Integer id);
 
+    Page<Post> findAllNewest(Pageable pageable);
+
+    void save(Post post);
+
+    List<Post> search(String title, String child_category, String province_name);
+
 }

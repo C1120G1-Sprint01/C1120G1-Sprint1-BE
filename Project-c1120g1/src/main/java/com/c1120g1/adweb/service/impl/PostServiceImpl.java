@@ -39,4 +39,19 @@ public class PostServiceImpl implements PostService {
     public Post findById(Integer id) {
         return repository.findById(id).orElse(null);
     }
+
+    @Override
+    public Page<Post> findAllNewest(Pageable pageable) {
+        return repository.findAllNewest(pageable);
+    }
+
+    @Override
+    public void save(Post post) {
+        repository.save(post);
+    }
+
+    @Override
+    public List<Post> search(String title, String child_category, String province_name) {
+        return repository.search(title, child_category, province_name);
+    }
 }
