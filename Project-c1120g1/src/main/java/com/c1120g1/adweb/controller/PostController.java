@@ -61,7 +61,6 @@ public class PostController {
         postService.save(post);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
     @GetMapping("search")
     public List<Post> search(
             @RequestParam(name = "title") String title,
@@ -113,3 +112,4 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
+
