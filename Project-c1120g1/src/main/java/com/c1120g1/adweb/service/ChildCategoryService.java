@@ -11,7 +11,6 @@ import java.util.List;
 public interface ChildCategoryService {
 
     Page<ChildCategory> findAllChildCategoryPage(Pageable pageable);
-    List<ChildCategory> findAllChildCategoryIndex(int index);
     List<ChildCategory> findAllChildCategory();
     ChildCategory findChildCategoryById(Integer id);
     void save(ChildCategory childCategory);

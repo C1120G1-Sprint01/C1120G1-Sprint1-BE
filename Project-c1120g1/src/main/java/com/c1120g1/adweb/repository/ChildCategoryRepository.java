@@ -14,19 +14,25 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
 //            " where (child_category_name like concat('%',?1,'%') and category_name like concat('%',?2,'%')", nativeQuery = true)
     @Query(value = "select cc from ChildCategory cc " +
             "where cc.childCategoryName like concat('%',?1,'%') and cc.category.categoryName like concat('%',?2,'%')")
+//    @Query(value = "select child_category.child_category_name, category.category_name" +
+//            " from child_category" +
+//            " inner join category on category.category_id=child_category.category_id" +
+//            " where (child_category_name like %?1% and category_name like %?2%)", nativeQuery = true)
     List<ChildCategory> findAllByChildCategoryNameAndCategoryName(String childCategoryName, String categoryName);
 
     @Query(value = "select cc from ChildCategory cc " +
             "where cc.category.categoryName like concat('%',?1,'%')")
+//    @Query(value = "select child_category.child_category_name, category.category_name " +
+//            "from child_category " +
+//            "inner join category on category.category_id=child_category.category_id " +
+//            "where (child_category_name like %?1%)", nativeQuery = true)
     List<ChildCategory> findAllByCategoryName(String categoryName);
 
     @Query(value = "select cc from ChildCategory cc " +
             "where cc.childCategoryName like concat('%',?1,'%')")
+//    @Query(value = "select child_category.child_category_name, category.category_name " +
+//            "from child_category " +
+//            "inner join category on category.category_id=child_category.category_id " +
+//            "where (category_name like %?1%)", nativeQuery = true)
     List<ChildCategory> findAllByChildCategoryName(String childCategoryName);
-
-    @Query(value = "select child_category.child_category_name,category.category_name" +
-            " from child_category" +
-            " inner join category on category.category_id=child_category.category_id" +
-            " group by child_category.child_category_id limit 1,5",nativeQuery = true)
-    List<ChildCategory> findAllChildCategory(int index);
 }

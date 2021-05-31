@@ -23,11 +23,6 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
     }
 
     @Override
-    public List<ChildCategory> findAllChildCategoryIndex(int index) {
-        return repository.findAllChildCategory(index);
-    }
-
-    @Override
     public List<ChildCategory> findAllChildCategory() {
         return repository.findAll();
     }
@@ -54,7 +49,7 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
 
     @Override
     public List<ChildCategory> findAllByCategoryName(String categoryName) {
-        return repository.findAllByChildCategoryName(categoryName);
+        return repository.findAllByCategoryName(categoryName);
     }
 
     @Override

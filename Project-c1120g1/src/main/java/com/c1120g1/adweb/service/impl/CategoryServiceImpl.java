@@ -35,13 +35,4 @@ public class CategoryServiceImpl implements CategoryService {
         repository.deleteById(id);
     }
 
-    @Override
-    public List<Category> findAll() {
-        return repository.findAll();
-    }
-
-    @Override
-    public Category findById(Integer id) {
-        return repository.findById(id).orElse(null);
-    }
 }

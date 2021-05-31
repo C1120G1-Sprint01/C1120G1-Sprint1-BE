@@ -32,6 +32,8 @@ public class ChildCategory {
     @JsonIgnoreProperties("childCategory")
     private Set<Post> postSet;
 
+    private Boolean deleteFlag;
+
     public ChildCategory() {
     }
 
@@ -65,5 +67,13 @@ public class ChildCategory {
 
     public void setPostSet(Set<Post> postSet) {
         this.postSet = postSet;
+    }
+
+    public Boolean getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
     }
 }

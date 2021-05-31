@@ -1,8 +1,6 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.entity.Category;
-
-import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -10,17 +8,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-
-import com.c1120g1.adweb.service.CategoryService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-
 import java.util.List;
 
+@RestController
 @RequestMapping("/main-category/category")
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class CategoryController {
@@ -28,6 +19,11 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
+    /**
+     * Method: get all category
+     * Author: TuanLHM
+     * @return
+     */
     @GetMapping("/")
     public ResponseEntity<List<Category>> getList() {
         List<Category> categoryList = categoryService.findAllCategory();
@@ -37,12 +33,23 @@ public class CategoryController {
         return new ResponseEntity<List<Category>>(categoryList, HttpStatus.OK);
     }
 
+    /**
+     * Method: get category by id
+     * Author: TuanLHM
+     * @return
+     */
+
     @GetMapping("/{id}")
-    public ResponseEntity<Category> getChildCategoryById(@PathVariable int id) {
+    public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
         return new ResponseEntity<>(this.categoryService.findCategoryById(id), HttpStatus.OK);
     }
 
-    //----------------------Tạo mới category----------------------
+
+    /**
+     * Method: create category
+     * Author: TuanLHM
+     * @return
+     */
 
     @PostMapping(value = "/create-category")
     public ResponseEntity<Void> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
@@ -54,6 +61,13 @@ public class CategoryController {
     }
 
     //-----------------------update category-------------------------------
+
+    /**
+     * Method: edit category
+     * Author: TuanLHM
+     * @return
+     */
+
     @PutMapping(value = "/edit-category")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
 
@@ -61,7 +75,12 @@ public class CategoryController {
         return new ResponseEntity<Category>(category, HttpStatus.OK);
     }
 
-    //--------------------------delete category---------------------------
+    /**
+     * Method: delete category by id
+     * Author: TuanLHM
+     * @return
+     */
+
     @DeleteMapping(value = "/delete-category/{id}")
     public ResponseEntity<Category> deleteCustomer(@PathVariable("id") Integer id) {
 
@@ -75,11 +94,4 @@ public class CategoryController {
 
     }
 
-    @GetMapping("listCategory")
-    public ResponseEntity<List<Category>> getCategory() {
-        if (categoryService.findAll().isEmpty()) {
-            return new ResponseEntity<>(categoryService.findAll(), HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(categoryService.findAll(), HttpStatus.OK);
-    }
 }
