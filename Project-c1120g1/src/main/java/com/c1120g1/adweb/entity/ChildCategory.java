@@ -1,17 +1,10 @@
 package com.c1120g1.adweb.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-//@Getter
-//@Setter
-//@NoArgsConstructor
 @Table(name = "child_category")
 public class ChildCategory {
 
