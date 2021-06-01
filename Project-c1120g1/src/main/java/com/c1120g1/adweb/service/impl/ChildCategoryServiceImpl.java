@@ -4,8 +4,6 @@ import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.repository.ChildCategoryRepository;
 import com.c1120g1.adweb.service.ChildCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,15 +14,9 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
     @Autowired
     private ChildCategoryRepository repository;
 
-
-    @Override
-    public Page<ChildCategory> findAllChildCategoryPage(Pageable pageable) {
-        return repository.findAll(pageable);
-    }
-
     @Override
     public List<ChildCategory> findAllChildCategory() {
-        return repository.findAll();
+        return repository.showAllChildCategory();
     }
 
     @Override
@@ -33,27 +25,24 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
     }
 
     @Override
-    public void save(ChildCategory childCategory) {
+    public void addChildCategory(ChildCategory childCategory) {
+        childCategory.setDeleteFlag(false);
         repository.save(childCategory);
     }
 
     @Override
-    public void delete(Integer id) {
-        repository.deleteById(id);
+    public void saveChildCategory(ChildCategory childCategory) {
+        repository.save(childCategory);
+    }
+
+    @Override
+    public void deleteChildCategory(ChildCategory childCategory) {
+        childCategory.setDeleteFlag(true);
+        repository.save(childCategory);
     }
 
     @Override
     public List<ChildCategory> findAllByChildCategoryNameAndCategoryName(String childCategoryName, String categoryName) {
         return repository.findAllByChildCategoryNameAndCategoryName(childCategoryName,categoryName);
-    }
-
-    @Override
-    public List<ChildCategory> findAllByCategoryName(String categoryName) {
-        return repository.findAllByCategoryName(categoryName);
-    }
-
-    @Override
-    public List<ChildCategory> findAllByChildCategoryName(String childCategoryName) {
-        return repository.findAllByChildCategoryName(childCategoryName);
     }
 }

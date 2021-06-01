@@ -17,7 +17,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public List<Category> findAllCategory() {
-        return repository.findAll();
+        return repository.showAllCategory();
     }
 
     @Override
@@ -26,13 +26,21 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public void save(Category category) {
+    public void saveCategory(Category category) {
+         category.setDeleteFlag(false);
         repository.save(category);
     }
 
     @Override
-    public void delete(Integer id) {
-        repository.deleteById(id);
+    public void deleteCategory(Category category) {
+        category.setDeleteFlag(true);
+        repository.save(category);
+    }
+
+    @Override
+    public void addCategory(Category category) {
+        category.setDeleteFlag(false);
+        repository.save(category);
     }
 
 }

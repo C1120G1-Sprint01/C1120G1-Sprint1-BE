@@ -31,6 +31,8 @@ public class Category {
     @JsonBackReference
     private Set<ChildCategory> childCategorySet;
 
+    private Boolean deleteFlag;
+
     public Category() {
     }
 
@@ -58,4 +60,11 @@ public class Category {
         this.childCategorySet = childCategorySet;
     }
 
+    public Boolean getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
 }

@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.entity.Category;
+import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -53,8 +54,7 @@ public class CategoryController {
 
     @PostMapping(value = "/create-category")
     public ResponseEntity<Void> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating Category " + category.getCategoryName());
-        categoryService.save(category);
+        categoryService.addCategory(category);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/category/{id}").buildAndExpand(category.getCategoryId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -68,11 +68,22 @@ public class CategoryController {
      * @return
      */
 
-    @PutMapping(value = "/edit-category")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
+    @PutMapping(value = "/edit-category/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody Category category) {
 
-        categoryService.save(category);
-        return new ResponseEntity<Category>(category, HttpStatus.OK);
+        Category category1 = categoryService.findCategoryById(id);
+
+        if (category1 == null) {
+            return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
+        }
+
+        category1.setCategoryName(category.getCategoryName());
+        category1.setChildCategorySet(category.getChildCategorySet());
+        category1.setDeleteFlag(false);
+        category1.setCategoryId(id);
+
+        categoryService.saveCategory(category1);
+        return new ResponseEntity<Category>(category1, HttpStatus.OK);
     }
 
     /**
@@ -81,17 +92,15 @@ public class CategoryController {
      * @return
      */
 
-    @DeleteMapping(value = "/delete-category/{id}")
-    public ResponseEntity<Category> deleteCustomer(@PathVariable("id") Integer id) {
+    @GetMapping(value = "/delete-category/{id}")
+    public ResponseEntity deleteCategory(@PathVariable("id") Integer id) {
 
         Category category = categoryService.findCategoryById(id);
-        if (category == null) {
-            return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
+        if (category.getCategoryId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            categoryService.deleteCategory(category);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-
-        categoryService.delete(id);
-        return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
-
     }
-
 }
