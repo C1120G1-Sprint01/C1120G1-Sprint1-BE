@@ -7,6 +7,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin(origins = "*")
 @RequestMapping("/api/bot")
@@ -14,12 +16,17 @@ public class BotController {
     @Autowired
     BotService botService;
 
-    @GetMapping("")
+    @PostMapping("")
     public ResponseEntity<Bot> getBotByQuestion(@RequestBody String question) {
         try {
-            Bot bot = botService.getBotByQuestionContainsOrKeywordContains(question, question);
+            Bot bot = botService.getBotByQuestion(question);
             if (bot == null) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                List<Bot> botContains = botService.getBotByQuestionContains(question);
+                if (botContains.isEmpty()) {
+                    return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                } else {
+                    return new ResponseEntity<>(botContains.get(0), HttpStatus.OK);
+                }
             } else {
                 return new ResponseEntity<>(bot, HttpStatus.OK);
             }

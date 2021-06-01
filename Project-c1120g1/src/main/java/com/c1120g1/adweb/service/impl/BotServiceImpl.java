@@ -6,6 +6,8 @@ import com.c1120g1.adweb.service.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class BotServiceImpl implements BotService {
 
@@ -13,8 +15,13 @@ public class BotServiceImpl implements BotService {
     private BotRepository repository;
 
     @Override
-    public Bot getBotByQuestionContainsOrKeywordContains(String question, String keyword) {
-        return repository.getBotByQuestionContainsOrKeywordContains(question, keyword);
+    public Bot getBotByQuestion(String question) {
+        return repository.getBotByQuestion(question);
+    }
+
+    @Override
+    public List<Bot> getBotByQuestionContains(String question) {
+        return repository.getBotByQuestionContains(question);
     }
 
     @Override
