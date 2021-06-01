@@ -32,4 +32,5 @@ public class AccountRole {
     @JoinColumn(name = "role_id")
     private Role role;
 
+
 }

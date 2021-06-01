@@ -19,6 +19,8 @@ public interface UserService {
 
     void saveUser(Integer userId, String name, String email, String phone, Ward ward);
 
+    void saveUsers(User user);
+
     User findById(Integer id);
 
     void delete(Integer id);

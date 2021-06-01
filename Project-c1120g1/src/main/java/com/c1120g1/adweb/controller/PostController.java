@@ -53,6 +53,7 @@ package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.entity.Post;
 import com.c1120g1.adweb.service.PostService;
+import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -60,6 +61,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/posts")
@@ -69,8 +72,11 @@ public class PostController {
     @Autowired
     private PostService postService;
 
+    @Autowired
+    private UserService userService;
+
     @GetMapping("/cus-post-list")
-    public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2)Pageable pageable) {
+    public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2) Pageable pageable) {
         String username = "username";
         Page<Post> postList = postService.findAllByUsername(username, pageable);
         if (postList.isEmpty()) {
@@ -95,6 +101,28 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
         }
         return new ResponseEntity<>(post, HttpStatus.OK); //200
+    }
+
+    @GetMapping("listPost")
+    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
+        if (postService.findAllNewest(pageable).isEmpty()) {
+            return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.OK);
+    }
+
+    @PostMapping("createPost")
+    public ResponseEntity<Void> createPost(@RequestBody Post post) {
+        postService.save(post);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("search")
+    public List<Post> search(
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "child_category") String child_category,
+            @RequestParam(name = "province") String province) {
+        return postService.search("%" + title + "%", child_category, province);
     }
 
 }

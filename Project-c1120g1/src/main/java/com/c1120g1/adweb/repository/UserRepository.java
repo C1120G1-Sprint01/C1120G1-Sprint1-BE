@@ -9,16 +9,20 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
+import org.springframework.stereotype.Repository;
 
+
+@Transactional
+@Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
+
 
 
 //    ngoc - tim kiem full text search
     @Query(value = "select * from user" +
-                    "inner join ward on user.wardId = ward.ward_id" +
-                    "where concat (user_id, email, name, phone, ward.ward_name) like?1",
+                    " inner join ward on user.wardId = ward.ward_id" +
+                    " where concat (user_id, email, name, phone, ward.ward_name) like?1",
             nativeQuery =true)
     List<User> fullSearch(String q);
 
@@ -29,7 +33,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 //    ngoc - them moi user
     @Modifying
     @Query(value = "insert into User (name, email, phone, ward_id, username)" +
-            "values (:name, :email, :phone, :wardId, :username)",
+            " values (:name, :email, :phone, :wardId, :username)",
                 nativeQuery = true)
     @Transactional
     void createUser(@Param("name") String name, @Param("email") String email,
@@ -47,6 +51,16 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "where u.userId = ?1")
     void updateUser(Integer userId, String name, String email, String phone, Ward ward);
 
+
+    @Modifying
+    @Query(value = "INSERT INTO `user` ( avatar_Url, email, name, phone, username) " +
+            "values " + " (:avatarUrl "+":email," + ":name," + ":phone," + ":account)", nativeQuery = true)
+    @Transactional
+    void saveUser(@Param("avatar")String avatarUrl,
+                        @Param("name") String name,
+                        @Param("account") String account,
+                        @Param("email") String email,
+                        @Param("phone") String phone);
 
 
     User findByEmail(String email);

@@ -6,7 +6,13 @@ import java.util.List;
 
 public interface DistrictService {
 
+
     List<District> findAllByProvinceId(int provinceId);
 
     List<District> findAllDistrictByProvinceId(Integer provinceId);
+
+
+
+
+
 }

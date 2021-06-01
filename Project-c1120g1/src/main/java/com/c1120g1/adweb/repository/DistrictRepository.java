@@ -7,12 +7,20 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface DistrictRepository extends JpaRepository<District, Integer> {
-//    @Query("select d from District d join Province p on p.id = d.province.id where p.id =?1")
-//    List<District> findByProvinceId(Long id);
+
+
+
 
     @Query(value = "select * from district where district.province_id = :provinceId", nativeQuery = true)
     List<District> findAllByProvinceId(int provinceId);
 
+
+//  Ngoc - find district by province id
     @Query(value = "select d from District d join Province p on p.provinceId = d.province.provinceId where p.provinceId =?1")
     List<District> findAllDistrictByProvinceId(Integer provinceId);
+
+
+
+
+
 }

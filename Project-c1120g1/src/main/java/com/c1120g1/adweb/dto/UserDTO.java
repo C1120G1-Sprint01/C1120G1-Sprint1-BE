@@ -2,28 +2,27 @@ package com.c1120g1.adweb.dto;
 
 import com.c1120g1.adweb.entity.Ward;
 
-import javax.persistence.Column;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-
 public class UserDTO {
+
     private String name;
+    private String username ;
     private String email;
     private String phone;
     private Ward ward;
-    private String img;
-    private String username;
-    private String newPassword;
-    private String confirmPassword;
+    private String avatarUrl;
+    private String registerDate ;
+    private String password ;
+    private String confirmPassword ;
 
-    public UserDTO(String name, String email, String phone, Ward ward, String img, String username, String newPassword, String confirmPassword) {
+    public UserDTO(String name, String username, String email, String phone, Ward ward, String avatarUrl, String registerDate, String password, String confirmPassword) {
         this.name = name;
+        this.username = username;
         this.email = email;
         this.phone = phone;
         this.ward = ward;
-        this.img = img;
-        this.username = username;
-        this.newPassword = newPassword;
+        this.avatarUrl = avatarUrl;
+        this.registerDate = registerDate;
+        this.password = password;
         this.confirmPassword = confirmPassword;
     }
 
@@ -33,6 +32,14 @@ public class UserDTO {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getEmail() {
@@ -59,28 +66,28 @@ public class UserDTO {
         this.ward = ward;
     }
 
-    public String getImg() {
-        return img;
+    public String getAvatarUrl() {
+        return avatarUrl;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
     }
 
-    public String getUsername() {
-        return username;
+    public String getRegisterDate() {
+        return registerDate;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setRegisterDate(String registerDate) {
+        this.registerDate = registerDate;
     }
 
-    public String getNewPassword() {
-        return newPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getConfirmPassword() {

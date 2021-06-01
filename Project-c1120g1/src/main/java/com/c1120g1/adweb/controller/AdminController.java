@@ -87,7 +87,7 @@ public class AdminController {
                         }
                     }
                 }
-                if (!userDTO.getNewPassword().equals(userDTO.getConfirmPassword())) {
+                if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
                     listError.put("notCorrect", "Password wrong !");
                 }
                 for (User user: userList) {
@@ -106,7 +106,7 @@ public class AdminController {
             }
             Account account = new Account();
             account.setUsername(userDTO.getUsername());
-            account.setPassword(passwordEncoder.encode(userDTO.getNewPassword()));
+            account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             accountService.save(account);
 
 
@@ -117,7 +117,7 @@ public class AdminController {
             user.setPhone(userDTO.getPhone());
             user.setWard(userDTO.getWard());
             user.setAvatarUrl(user.getAvatarUrl());
-            userService.save(user);
+            userService.saveUsers(user);
             return new ResponseEntity<>(user,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

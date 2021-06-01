@@ -3,6 +3,7 @@ package com.c1120g1.adweb.service.impl;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.repository.UserRepository;
+import com.c1120g1.adweb.repository.WardRepository;
 import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -33,6 +34,7 @@ public class UserServiceImpl implements UserService {
         repository.save(user);
     }
 
+//    ngoc - khong dc xoa nha
     @Override
     public void saveUser(Integer userId, String name, String email, String phone, Ward ward) {
         name = standardizeName(name);
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
         return repository.fullSearch(q);
     }
 
-    // chuan hoa ten
+    // ngoc - chuan hoa ten
     public String standardizeName(String name) {
         name = name.toLowerCase();
         name = name.replaceAll("\\s+", " ");
@@ -77,8 +79,30 @@ public class UserServiceImpl implements UserService {
         name = name2.trim();
         return name;
     }
+
+    @Autowired
+    private WardRepository wardRepository;
+
+
+    @Override
+    public void saveUsers(User user) {
+        repository.saveUser(user.getAvatarUrl(),
+                standardizeName(user.getName()),
+                user.getAccount().getUsername(),
+                user.getEmail(),
+                user.getPhone()
+        );
+    }
+
+
+
     @Override
     public User findByEmail(String email) {
         return repository.findByEmail(email);
     }
+
+
+
+
+
 }

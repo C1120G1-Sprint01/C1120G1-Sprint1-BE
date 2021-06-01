@@ -57,6 +57,8 @@ public class AddressController {
         return new ResponseEntity<>(wardList, HttpStatus.OK);
     }
 
+
+//    ngoc - up
     @GetMapping("/provinceTest")
     public ResponseEntity<List<Province>> getAllProvinceTest() {
         List<Province> provinceList1 = provinceService.findAll();
@@ -66,7 +68,8 @@ public class AddressController {
         return new ResponseEntity<>(provinceList1, HttpStatus.OK);
     }
 
-    @GetMapping("/districtTest/{provinceId}")
+
+    @GetMapping("/provinceTest/districtTest/{provinceId}")
     public ResponseEntity<List<District>> getAllDistrictByProvinceIdTest(@PathVariable Integer provinceId) {
         List<District> districtList1 = districtService.findAllDistrictByProvinceId(provinceId);
         if (districtList1.isEmpty()) {
@@ -83,6 +86,13 @@ public class AddressController {
         return  new ResponseEntity<>(wardList1, HttpStatus.OK);
     }
 
+// ngoc  - end
+
+
+
+
+
+
 
 //    @GetMapping(value = "/province")
 //    public ResponseEntity<List<Province>> getProvinceList() {
@@ -93,6 +103,7 @@ public class AddressController {
 //
 //        }
 //    }
+
 
 
 }

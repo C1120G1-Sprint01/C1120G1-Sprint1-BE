@@ -4,6 +4,7 @@ import com.c1120g1.adweb.entity.Ward;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+
 import java.util.List;
 
 public interface WardRepository extends JpaRepository<Ward, Integer> {
@@ -17,4 +18,7 @@ public interface WardRepository extends JpaRepository<Ward, Integer> {
 
     @Query(value = "select w from Ward w join District d on d.districtId = w.district.districtId where d.districtId =?1")
     List<Ward> findByDistrictId(Integer districtId);
+
+
+
 }

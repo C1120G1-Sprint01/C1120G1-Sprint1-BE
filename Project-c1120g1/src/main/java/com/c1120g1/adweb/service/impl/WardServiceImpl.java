@@ -14,6 +14,7 @@ public class WardServiceImpl implements WardService {
     @Autowired
     private WardRepository repository;
 
+
     @Override
     public List<Ward> getAllWard() {
         return repository.findAll();
@@ -21,6 +22,7 @@ public class WardServiceImpl implements WardService {
     @Override
     public List<Ward> findAllByDistrictId(int districtId) {
         return repository.findAllByDistrictId(districtId);
+
     }
 
     @Override
