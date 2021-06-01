@@ -16,7 +16,6 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
     @Autowired
     private ChildCategoryRepository repository;
 
-
     @Override
     public Page<ChildCategory> findAllChildCategoryPage(Pageable pageable) {
         return repository.findAll(pageable);
@@ -30,6 +29,16 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
     @Override
     public ChildCategory findChildCategoryById(Integer id) {
         return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public ChildCategory findById(Integer id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<ChildCategory> getAllChildCategoryByCategoryId(Integer id) {
+        return repository.getAllChildCategoryByCategoryId(id);
     }
 
     @Override

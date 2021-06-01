@@ -18,4 +18,9 @@ public class StatusServiceImpl implements StatusService {
     public List<Status> findAll() {
         return repository.findAll();
     }
+
+    @Override
+    public Status findById(Integer id) {
+        return repository.findById(id).orElse(null);
+    }
 }

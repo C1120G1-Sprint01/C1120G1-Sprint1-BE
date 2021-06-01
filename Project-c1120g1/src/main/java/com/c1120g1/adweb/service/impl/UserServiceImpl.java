@@ -7,7 +7,6 @@ import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import java.util.List;
 
 @Service
@@ -33,12 +32,16 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllUser() {
         return repository.findAll();
-
     }
 
     @Override
     public User findByEmail(String email) {
         return repository.findByEmail(email);
+    }
+
+    @Override
+    public User findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 
     public String standardizeName(String name) {
@@ -57,7 +60,6 @@ public class UserServiceImpl implements UserService {
         }
         name = name2.trim();
         return name;
-
     }
 
     @Override

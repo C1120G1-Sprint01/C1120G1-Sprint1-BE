@@ -3,7 +3,6 @@ package com.c1120g1.adweb.controller;
 import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.service.ChildCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/main-category/child-category")
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class ChildCategoryController {
 
@@ -24,10 +22,11 @@ public class ChildCategoryController {
     /**
      * Method: get all child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @GetMapping("/")
+    @GetMapping("/main-category/child-category/")
     public ResponseEntity<List<ChildCategory>> getList() {
         List<ChildCategory> childCategoryList = childCategoryService.findAllChildCategory();
         if (childCategoryList.isEmpty()) {
@@ -39,10 +38,11 @@ public class ChildCategoryController {
     /**
      * Method: get child_category by id
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @GetMapping("/{id}")
+    @GetMapping("/main-category/child-category/{id}")
     public ResponseEntity<ChildCategory> getChildCategoryById(@PathVariable int id) {
         return new ResponseEntity<>(this.childCategoryService.findChildCategoryById(id), HttpStatus.OK);
     }
@@ -50,10 +50,11 @@ public class ChildCategoryController {
     /**
      * Method: create child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @PostMapping("/create-child-category")
+    @PostMapping("/main-category/child-category/create-child-category")
     public ResponseEntity<Void> createChildCategory(@RequestBody ChildCategory childCategory, UriComponentsBuilder ucBuilder) {
         childCategoryService.save(childCategory);
         HttpHeaders headers = new HttpHeaders();
@@ -61,13 +62,23 @@ public class ChildCategoryController {
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
     }
 
+    @GetMapping("api/child-category/{id}")
+    public ResponseEntity<List<ChildCategory>> getChildCategories(@PathVariable(name = "id") Integer id) {
+        List<ChildCategory> categoryList = childCategoryService.getAllChildCategoryByCategoryId(id);
+        if (categoryList.isEmpty()) {
+            return new ResponseEntity<>(categoryList, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+    }
+
     /**
      * Method: edit child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @PutMapping(value = "/edit-child-category")
+    @PutMapping(value = "/main-category/child-category/edit-child-category")
     public ResponseEntity<ChildCategory> updateChildCategory(@RequestBody ChildCategory childCategory) {
         childCategoryService.save(childCategory);
         return new ResponseEntity<ChildCategory>(childCategory, HttpStatus.OK);
@@ -76,10 +87,11 @@ public class ChildCategoryController {
     /**
      * Method: delete child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @DeleteMapping(value = "/delete-child-category/{id}")
+    @DeleteMapping(value = "/main-category/child-category/delete-child-category/{id}")
     public ResponseEntity deleteChildCategory(@PathVariable("id") Integer id) {
 
         ChildCategory childCategory = childCategoryService.findChildCategoryById(id);
@@ -95,16 +107,18 @@ public class ChildCategoryController {
     /**
      * Method: search child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @GetMapping("/search")
-    public ResponseEntity<List<ChildCategory>> searchName(@RequestParam(name = "childCategoryName") Optional<String> childCategoryName,
-                                                          @RequestParam(name = "categoryName") Optional<String> categoryName) {
+    @GetMapping("/main-category/child-category/search")
+    public ResponseEntity<List<ChildCategory>> searchName
+            (@RequestParam(name = "childCategoryName") Optional<String> childCategoryName,
+             @RequestParam(name = "categoryName") Optional<String> categoryName) {
         List<ChildCategory> childCategoryList;
-        if (categoryName.isPresent()){
-            if (childCategoryName.isPresent()){
-                childCategoryList = childCategoryService.findAllByChildCategoryNameAndCategoryName(childCategoryName.get(),categoryName.get());
+        if (categoryName.isPresent()) {
+            if (childCategoryName.isPresent()) {
+                childCategoryList = childCategoryService.findAllByChildCategoryNameAndCategoryName(childCategoryName.get(), categoryName.get());
             } else {
                 childCategoryList = childCategoryService.findAllByCategoryName(categoryName.get());
             }

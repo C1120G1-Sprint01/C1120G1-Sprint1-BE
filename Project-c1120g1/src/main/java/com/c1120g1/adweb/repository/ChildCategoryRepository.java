@@ -1,13 +1,19 @@
 package com.c1120g1.adweb.repository;
 
 import com.c1120g1.adweb.entity.ChildCategory;
-import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface ChildCategoryRepository extends JpaRepository<ChildCategory, Integer> {
+
+
+    @Query(value = "select * from child_category " +
+            "where child_category.category_id = ?1",
+            nativeQuery = true)
+    List<ChildCategory> getAllChildCategoryByCategoryId(Integer id);
+
     //    @Query(value = "select child_category.child_category_name, category.category_name" +
 //            " from child_category" +
 //            " inner join category on category.category_id=child_category.category_id" +

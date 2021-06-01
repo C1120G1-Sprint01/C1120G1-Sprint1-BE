@@ -6,13 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @RestController
-@RequestMapping("/main-category/category")
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class CategoryController {
 
@@ -24,7 +24,7 @@ public class CategoryController {
      * Author: TuanLHM
      * @return
      */
-    @GetMapping("/")
+    @GetMapping("/main-category/category")
     public ResponseEntity<List<Category>> getList() {
         List<Category> categoryList = categoryService.findAllCategory();
         if (categoryList.isEmpty()) {
@@ -39,7 +39,7 @@ public class CategoryController {
      * @return
      */
 
-    @GetMapping("/{id}")
+    @GetMapping("/main-category/category/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
         return new ResponseEntity<>(this.categoryService.findCategoryById(id), HttpStatus.OK);
     }
@@ -51,7 +51,7 @@ public class CategoryController {
      * @return
      */
 
-    @PostMapping(value = "/create-category")
+    @PostMapping("/main-category/category/create-category")
     public ResponseEntity<Void> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
         System.out.println("Creating Category " + category.getCategoryName());
         categoryService.save(category);
@@ -68,11 +68,20 @@ public class CategoryController {
      * @return
      */
 
-    @PutMapping(value = "/edit-category")
+    @PutMapping("/main-category/category/edit-category")
     public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
 
         categoryService.save(category);
         return new ResponseEntity<Category>(category, HttpStatus.OK);
+    }
+
+    @GetMapping("api/category")
+    public ResponseEntity<List<Category>> getCategory() {
+        List<Category> categoryList =  categoryService.findAllCategory();
+        if (categoryList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
 
     /**
