@@ -1,5 +1,7 @@
 package com.c1120g1.adweb.dto;
 
+import com.c1120g1.adweb.entity.Ward;
+
 import javax.persistence.Column;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -8,16 +10,18 @@ public class UserDTO {
     private String name;
     private String email;
     private String phone;
-    private Integer ward;
+    private Ward ward;
+    private String img;
     private String username;
     private String newPassword;
     private String confirmPassword;
 
-    public UserDTO(String name, String email, String phone, Integer ward, String username, String newPassword, String confirmPassword) {
+    public UserDTO(String name, String email, String phone, Ward ward, String img, String username, String newPassword, String confirmPassword) {
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.ward = ward;
+        this.img = img;
         this.username = username;
         this.newPassword = newPassword;
         this.confirmPassword = confirmPassword;
@@ -47,12 +51,20 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public Integer getWard() {
+    public Ward getWard() {
         return ward;
     }
 
-    public void setWard(Integer ward) {
+    public void setWard(Ward ward) {
         this.ward = ward;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
     }
 
     public String getUsername() {

@@ -1,14 +1,14 @@
 package com.c1120g1.adweb.common;
 
-public class LoginObject {
+public class AuthLogin {
 
     private String username;
     private String password;
 
-    public LoginObject() {
+    public AuthLogin() {
     }
 
-    public LoginObject(String username, String password) {
+    public AuthLogin(String username, String password) {
         this.username = username;
         this.password = password;
     }

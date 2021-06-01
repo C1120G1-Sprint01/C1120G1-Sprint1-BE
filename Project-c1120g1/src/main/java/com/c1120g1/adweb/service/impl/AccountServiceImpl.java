@@ -21,6 +21,16 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void save(Account account) {
-         repository.save(account);
+        repository.save(account);
+    }
+    @Override
+    public Account findByUsername(String username) {
+        return repository.findByUsername(username);
+    }
+
+    @Override
+    public String generateCode() {
+        return ""+ (int)(Math.random()*1000000*1.1);
     }
 }
+

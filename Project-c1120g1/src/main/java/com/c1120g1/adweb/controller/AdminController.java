@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.dto.UserDTO;
+import com.c1120g1.adweb.dto.UserEditDTO;
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
@@ -13,8 +14,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +40,10 @@ public class AdminController {
     private AccountService accountService;
     @Autowired
     private WardRepository wardRepository;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+//    Ngoc - Get list, Pagination
 
     @GetMapping(value = "/admin/listUser", params = {"page", "size","onSorting","textSorting"})
     public ResponseEntity<Page<User>> listUser(@RequestParam("page") int page,
@@ -64,7 +71,7 @@ public class AdminController {
         }
     }
 
-//    Create new user
+//   Ngoc -  Create new user
     @PostMapping(value = "/admin/listUser/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         try {
@@ -97,21 +104,21 @@ public class AdminController {
                             .body(listError);
                 }
             }
-            System.out.println(userDTO.getNewPassword());
             Account account = new Account();
             account.setUsername(userDTO.getUsername());
-            account.setPassword(userDTO.getNewPassword());
+            account.setPassword(passwordEncoder.encode(userDTO.getNewPassword()));
             accountService.save(account);
 
 
             User user = new User();
+            user.setAccount(account);
             user.setName(userDTO.getName());
             user.setEmail(userDTO.getEmail());
             user.setPhone(userDTO.getPhone());
-            user.setWard(wardRepository.getOne(userDTO.getWard()));
-            user.setAccount(account);
+            user.setWard(userDTO.getWard());
+            user.setAvatarUrl(user.getAvatarUrl());
             userService.save(user);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(user,HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
@@ -126,26 +133,64 @@ public class AdminController {
 //        }
 //        return new ResponseEntity<>(userList, HttpStatus.OK);
 //    }
+
+//    Ngoc - Get User by id
     @GetMapping("/admin/listUser/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         User user = userService.findById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-    @PutMapping("/admin/listUser/edit/{id}")
+//    Ngoc - Update user
+    @PutMapping(value = "/admin/listUser/edit/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<User> editUser(@PathVariable("id") Integer id, @RequestBody User user) {
-        User editUser = userService.findById(id);
-        if (editUser == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        try {
+            User user1 = userService.findById(id);
+            if (user1 != null) {
+                user.setUserId(id);
+                user.setAccount(user1.getAccount());
+                userService.save(user);
+                return new ResponseEntity<>(user, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+        }catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        editUser.setName(user.getName());
-        editUser.setEmail(user.getEmail());
-        editUser.setPhone(user.getPhone());
-        editUser.setWard(user.getWard());
-        this.userService.save(editUser);
-        return new ResponseEntity<>(editUser, HttpStatus.OK);
+
+//        userEditDTO.setUserId(id);
+//        List<User> userList = userService.findAll();
+//        try {
+//            if (!userList.isEmpty()) {
+//                Map<String, String> listError = new HashMap<>();
+//                for (User user: userList) {
+//                    if (user.getEmail().equals(userEditDTO.getEmail()) && !user.getUserId().equals(userEditDTO.getUserId())) {
+//                        listError.put("existEmail", "Email da ton tai, moi nhap lai email khac !");
+//                    }
+//                    if (user.getPhone().equals(userEditDTO.getPhone()) && !user.getUserId().equals(userEditDTO.getUserId())) {
+//                        listError.put("existPhone", "So dien thoai nay da ton tai, nhap so dien thoai khac ! Xin cam on");
+//                    }
+//
+//                }
+//                if (!listError.isEmpty()) {
+//                    return ResponseEntity
+//                            .badRequest()
+//                            .body(listError);
+//                }
+//            }
+//            userService.saveUser(userEditDTO.getUserId(),
+//                                userEditDTO.getName(),
+//                                userEditDTO.getEmail(),
+//                                userEditDTO.getPhone(),
+//                                userEditDTO.getWard());
+//            return new ResponseEntity<>(HttpStatus.OK);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+
     }
 
+//    Ngoc - Delete User
     @DeleteMapping("/admin/listUser/delete/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable("id") Integer id) {
         User userDelete = userService.findById(id);

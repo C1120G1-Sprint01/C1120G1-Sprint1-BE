@@ -7,4 +7,8 @@ import java.util.List;
 public interface WardService {
     List<Ward> getAllWard();
 
+    List<Ward> findAllByDistrictId(int districtId);
+
+    List<Ward> findWardByDistrictId(Integer wardId);
+
 }

@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.service.impl;
 
 import com.c1120g1.adweb.entity.User;
+import com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.repository.UserRepository;
 import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,9 +30,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        repository.createUser(standardizeName(user.getName()), user.getEmail(),
-                user.getPhone(), user.getWard().getWardId(),
-                user.getAccount().getUsername());
+        repository.save(user);
+    }
+
+    @Override
+    public void saveUser(Integer userId, String name, String email, String phone, Ward ward) {
+        name = standardizeName(name);
+        repository.updateUser(userId, name, email, phone, ward);
     }
 
     @Override
@@ -71,5 +76,9 @@ public class UserServiceImpl implements UserService {
         }
         name = name2.trim();
         return name;
+    }
+    @Override
+    public User findByEmail(String email) {
+        return repository.findByEmail(email);
     }
 }

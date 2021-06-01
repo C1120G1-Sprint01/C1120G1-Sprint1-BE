@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.service;
 
 import com.c1120g1.adweb.entity.User;
+import com.c1120g1.adweb.entity.Ward;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ public interface UserService {
 
     void save(User user);
 
+    void saveUser(Integer userId, String name, String email, String phone, Ward ward);
+
     User findById(Integer id);
 
     void delete(Integer id);
@@ -24,4 +27,7 @@ public interface UserService {
 
 
     List<User> fullSearch(String q);
+
+    User findByEmail(String email);
+
 }
