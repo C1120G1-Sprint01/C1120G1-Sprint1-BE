@@ -56,4 +56,30 @@ public class AddressController {
         }
         return new ResponseEntity<>(wardList, HttpStatus.OK);
     }
+
+    @GetMapping("/provinceTest")
+    public ResponseEntity<List<Province>> getAllProvinceTest() {
+        List<Province> provinceList1 = provinceService.findAll();
+        if (provinceList1.isEmpty()) {
+            return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(provinceList1, HttpStatus.OK);
+    }
+
+    @GetMapping("/provinceTest/districtTest/{provinceId}")
+    public ResponseEntity<List<District>> getAllDistrictByProvinceIdTest(@PathVariable Integer provinceId) {
+        List<District> districtList1 = districtService.findAllDistrictByProvinceId(provinceId);
+        if (districtList1.isEmpty()) {
+            return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return  new ResponseEntity<>(districtList1, HttpStatus.OK);
+    }
+    @GetMapping("/wardTest/{districtId}")
+    public ResponseEntity<List<Ward>> getWardByDistrictId(@PathVariable Integer districtId) {
+        List<Ward> wardList1 = wardService.findWardByDistrictId(districtId);
+        if (wardList1.isEmpty()) {
+            return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return  new ResponseEntity<>(wardList1, HttpStatus.OK);
+    }
 }

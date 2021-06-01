@@ -3,6 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/C1120G1-Sprint1-BE.iml" filepath="$PROJECT_DIR$/.idea/C1120G1-Sprint1-BE.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/adweb.iml" filepath="$PROJECT_DIR$/.idea/modules/adweb.iml" group="adweb" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/adweb_main.iml" filepath="$PROJECT_DIR$/.idea/modules/adweb_main.iml" group="adweb" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/adweb_test.iml" filepath="$PROJECT_DIR$/.idea/modules/adweb_test.iml" group="adweb" />
     </modules>
   </component>
 </project>

@@ -47,6 +47,7 @@ public class Post {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+
     @ManyToOne
     @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "status_id")
