@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import java.util.List;
 
 @RestController
@@ -21,10 +22,11 @@ public class ChildCategoryController {
     /**
      * Method: get all child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @GetMapping("")
+    @GetMapping("/")
     public ResponseEntity<List<ChildCategory>> getList() {
         List<ChildCategory> childCategoryList = childCategoryService.findAllChildCategory();
         if (childCategoryList.isEmpty()) {
@@ -36,6 +38,7 @@ public class ChildCategoryController {
     /**
      * Method: get child_category by id
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -47,6 +50,7 @@ public class ChildCategoryController {
     /**
      * Method: create child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -61,6 +65,7 @@ public class ChildCategoryController {
     /**
      * Method: edit child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -86,6 +91,7 @@ public class ChildCategoryController {
     /**
      * Method: delete child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -101,9 +107,11 @@ public class ChildCategoryController {
         }
     }
 
+
     /**
      * Method: search child_category
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -112,8 +120,7 @@ public class ChildCategoryController {
                                                           @RequestParam(name = "categoryName") String categoryName) {
         List<ChildCategory> childCategoryList;
 
-        childCategoryList = childCategoryService.findAllByChildCategoryNameAndCategoryName(childCategoryName,categoryName);
-
+        childCategoryList = childCategoryService.findAllByChildCategoryNameAndCategoryName(childCategoryName, categoryName);
 
         if (childCategoryList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

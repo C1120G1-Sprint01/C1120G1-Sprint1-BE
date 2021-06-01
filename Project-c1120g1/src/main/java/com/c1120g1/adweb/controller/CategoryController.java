@@ -1,15 +1,16 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.entity.Category;
-import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.List;
 
 @RestController
@@ -23,6 +24,7 @@ public class CategoryController {
     /**
      * Method: get all category
      * Author: TuanLHM
+     *
      * @return
      */
     @GetMapping("/")
@@ -37,6 +39,7 @@ public class CategoryController {
     /**
      * Method: get category by id
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -49,10 +52,11 @@ public class CategoryController {
     /**
      * Method: create category
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @PostMapping(value = "/create-category")
+    @PostMapping("/create-category")
     public ResponseEntity<Void> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
         categoryService.addCategory(category);
         HttpHeaders headers = new HttpHeaders();
@@ -65,30 +69,33 @@ public class CategoryController {
     /**
      * Method: edit category
      * Author: TuanLHM
+     *
      * @return
      */
 
-    @PutMapping(value = "/edit-category/{id}")
+    @PutMapping("/edit-category/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody Category category) {
 
         Category category1 = categoryService.findCategoryById(id);
 
         if (category1 == null) {
             return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
+        } else {
+
+            category1.setCategoryName(category.getCategoryName());
+            category1.setChildCategorySet(category.getChildCategorySet());
+            category1.setDeleteFlag(false);
+            category1.setCategoryId(id);
+
+            categoryService.saveCategory(category1);
+            return new ResponseEntity<Category>(category1, HttpStatus.OK);
         }
-
-        category1.setCategoryName(category.getCategoryName());
-        category1.setChildCategorySet(category.getChildCategorySet());
-        category1.setDeleteFlag(false);
-        category1.setCategoryId(id);
-
-        categoryService.saveCategory(category1);
-        return new ResponseEntity<Category>(category1, HttpStatus.OK);
     }
 
     /**
      * Method: delete category by id
      * Author: TuanLHM
+     *
      * @return
      */
 

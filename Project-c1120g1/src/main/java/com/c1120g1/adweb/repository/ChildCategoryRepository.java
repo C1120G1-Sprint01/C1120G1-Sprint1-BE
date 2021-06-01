@@ -14,7 +14,6 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
             " where child_category.child_category_name like concat('%',?1,'%') and category.category_name like concat('%',?2,'%') and child_category.delete_flag = 0", nativeQuery = true)
     List<ChildCategory> findAllByChildCategoryNameAndCategoryName(String childCategoryName, String categoryName);
 
-
     @Query(value = "SELECT * FROM ad_web_db.child_category where child_category.delete_flag = 0", nativeQuery = true)
     List<ChildCategory> showAllChildCategory();
 }
