@@ -12,13 +12,22 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 import java.util.Optional;
 
-
 @RestController
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class ChildCategoryController {
 
     @Autowired
     private ChildCategoryService childCategoryService;
+
+    @GetMapping("child-category/{categoryId}")
+    public ResponseEntity<List<ChildCategory>> findAllByCategoryId(@PathVariable Integer categoryId) {
+        List<ChildCategory> childCategoryList = childCategoryService.findAllByCategoryId(categoryId);
+
+        if (childCategoryList == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
+    }
 
     /**
      * Method: get all child_category
