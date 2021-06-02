@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.controller;
 import com.c1120g1.adweb.entity.Post;
 import com.c1120g1.adweb.service.PostService;
+import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,6 +19,8 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+    @Autowired
+    private UserService userService;
 
 //    -----------------------LIST DETAIL------------------------
 
@@ -58,6 +61,7 @@ public class PostController {
         }
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
+    
 
     @GetMapping("/cus-post-list")
     public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2) Pageable pageable) {
@@ -160,7 +164,7 @@ public class PostController {
     }
 
     @GetMapping("listPost")
-    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 4) Pageable pageable) {
+    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
         if (postService.findAllNewest(pageable).isEmpty()) {
             return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
         }

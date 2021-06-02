@@ -30,4 +30,7 @@ public interface PostService {
     void save(Post post);
 
     List<Post> search(String title, String child_category, String province_name);
+
+    String getPostDateTime();
+
 }

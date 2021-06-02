@@ -8,17 +8,37 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
 @Service
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository repository;
     @Autowired
+
     private JavaMailSender javaMailSender;
+
+    private JavaMailSender emailSender;
+
+    @Override
+    public void saveAccount(Account account) {
+        if (account.getUsername() == null) {
+            account.setRegisterDate(new SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(new Date()));
+        }
+    }
+
+    @Override
+    public List<Account> getAllAccount() {
+        return repository.findAll();
+
+    }
 
     @Override
     public Account findByUsername(String username) {
-        return repository.findByUsername(username);
+        return null;
     }
 
     @Override
@@ -32,9 +52,22 @@ public class AccountServiceImpl implements AccountService {
         messageApprove.setTo(email);
         messageApprove.setSubject("Email xác nhận bài đăng được phê duyệt");
         messageApprove.setText("Chúc mừng bạn! Tin của bạn đã được đăng thành công!" +
-                                "CODE: " + code +
-                                "Thanks and regards!");
+                "CODE: " + code +
+                "Thanks and regards!");
         this.javaMailSender.send(messageApprove);
+    }
+
+    @Override
+    public void sendEmail(String email, String code) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(email);
+        message.setSubject("Email lấy lại mật khẩu từ Soren");
+        message.setText("Chào bạn\n"
+                + "TRANG WEB RAO VẶT C11 gửi mã code bên dưới để lấy lại mật khẩu\n"
+                + "CODE : " + code + "\n"
+                + "Thanks and regards!");
+
+        this.emailSender.send(message);
     }
 }
 

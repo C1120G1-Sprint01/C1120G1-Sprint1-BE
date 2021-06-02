@@ -47,6 +47,7 @@ public class Post {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+
     @ManyToOne
     @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "status_id")
@@ -70,4 +71,18 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     @JsonIgnoreProperties("post")
     private Set<Image> imageSet;
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "posterName='" + posterName + '\'' +
+                ", email='" + email + '\'' +
+                ", title='" + title + '\'' +
+                ", postDateTime='" + postDateTime + '\'' +
+                ", enabled=" + enabled +
+                ", status=" + status +
+                ", ward=" + ward +
+                ", imageSet=" + imageSet +
+                '}';
+    }
 }
