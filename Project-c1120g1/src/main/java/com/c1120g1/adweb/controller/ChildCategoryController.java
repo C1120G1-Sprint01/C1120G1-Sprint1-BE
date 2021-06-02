@@ -12,7 +12,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping("/main-category/child-category")
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class ChildCategoryController {
 
@@ -26,7 +25,7 @@ public class ChildCategoryController {
      * @return
      */
 
-    @GetMapping("/")
+    @GetMapping("/main-category/child-category")
     public ResponseEntity<List<ChildCategory>> getList() {
         List<ChildCategory> childCategoryList = childCategoryService.findAllChildCategory();
         if (childCategoryList.isEmpty()) {
@@ -42,7 +41,7 @@ public class ChildCategoryController {
      * @return
      */
 
-    @GetMapping("/{id}")
+    @GetMapping("/main-category/child-category/{id}")
     public ResponseEntity<ChildCategory> getChildCategoryById(@PathVariable int id) {
         return new ResponseEntity<>(this.childCategoryService.findChildCategoryById(id), HttpStatus.OK);
     }
@@ -54,7 +53,7 @@ public class ChildCategoryController {
      * @return
      */
 
-    @PostMapping("/create-child-category")
+    @PostMapping("/main-category/child-category/create-child-category")
     public ResponseEntity<Void> createChildCategory(@RequestBody ChildCategory childCategory, UriComponentsBuilder ucBuilder) {
         childCategoryService.addChildCategory(childCategory);
         HttpHeaders headers = new HttpHeaders();
@@ -69,7 +68,7 @@ public class ChildCategoryController {
      * @return
      */
 
-    @PutMapping(value = "/edit-child-category/{id}")
+    @PutMapping(value = "/main-category/child-category/edit-child-category/{id}")
     public ResponseEntity<ChildCategory> updateChildCategory(@PathVariable Integer id, @RequestBody ChildCategory childCategory) {
 
         ChildCategory childCategory1 = childCategoryService.findChildCategoryById(id);
@@ -95,7 +94,7 @@ public class ChildCategoryController {
      * @return
      */
 
-    @GetMapping(value = "/delete-child-category/{id}")
+    @GetMapping(value = "/main-category/child-category/delete-child-category/{id}")
     public ResponseEntity<?> deleteChildCategory(@PathVariable("id") Integer id) {
 
         ChildCategory childCategory = childCategoryService.findChildCategoryById(id);
@@ -115,7 +114,7 @@ public class ChildCategoryController {
      * @return
      */
 
-    @GetMapping("/search")
+    @GetMapping("/main-category/child-category/search")
     public ResponseEntity<List<ChildCategory>> searchName(@RequestParam(name = "childCategoryName") String childCategoryName,
                                                           @RequestParam(name = "categoryName") String categoryName) {
         List<ChildCategory> childCategoryList;

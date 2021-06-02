@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 
 @RestController
-@RequestMapping("/main-category/category")
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class CategoryController {
 
@@ -27,7 +26,7 @@ public class CategoryController {
      *
      * @return
      */
-    @GetMapping("/")
+    @GetMapping("/main-category/category/")
     public ResponseEntity<List<Category>> getList() {
         List<Category> categoryList = categoryService.findAllCategory();
         if (categoryList.isEmpty()) {
@@ -43,11 +42,10 @@ public class CategoryController {
      * @return
      */
 
-    @GetMapping("/{id}")
+    @GetMapping("/main-category/category/{id}")
     public ResponseEntity<Category> getCategoryById(@PathVariable int id) {
         return new ResponseEntity<>(this.categoryService.findCategoryById(id), HttpStatus.OK);
     }
-
 
     /**
      * Method: create category
@@ -56,7 +54,7 @@ public class CategoryController {
      * @return
      */
 
-    @PostMapping("/create-category")
+    @PostMapping("/main-category/category/create-category")
     public ResponseEntity<Void> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
         categoryService.addCategory(category);
         HttpHeaders headers = new HttpHeaders();
@@ -73,7 +71,7 @@ public class CategoryController {
      * @return
      */
 
-    @PutMapping("/edit-category/{id}")
+    @PutMapping("/main-category/category/edit-category/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody Category category) {
 
         Category category1 = categoryService.findCategoryById(id);
@@ -99,7 +97,7 @@ public class CategoryController {
      * @return
      */
 
-    @GetMapping(value = "/delete-category/{id}")
+    @GetMapping(value = "/main-category/category/delete-category/{id}")
     public ResponseEntity deleteCategory(@PathVariable("id") Integer id) {
 
         Category category = categoryService.findCategoryById(id);

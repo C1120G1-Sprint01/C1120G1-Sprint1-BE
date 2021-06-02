@@ -14,7 +14,6 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository repository;
 
-
     @Override
     public List<Category> findAllCategory() {
         return repository.showAllCategory();
@@ -42,6 +41,4 @@ public class CategoryServiceImpl implements CategoryService {
         category.setDeleteFlag(false);
         repository.save(category);
     }
-
-
 }
