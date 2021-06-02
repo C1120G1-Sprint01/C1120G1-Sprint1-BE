@@ -12,6 +12,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 import java.util.Optional;
 
+
 @RestController
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class ChildCategoryController {
@@ -113,8 +114,8 @@ public class ChildCategoryController {
 
     @GetMapping("/main-category/child-category/search")
     public ResponseEntity<List<ChildCategory>> searchName
-            (@RequestParam(name = "childCategoryName") Optional<String> childCategoryName,
-             @RequestParam(name = "categoryName") Optional<String> categoryName) {
+    (@RequestParam(name = "childCategoryName") Optional<String> childCategoryName,
+     @RequestParam(name = "categoryName") Optional<String> categoryName) {
         List<ChildCategory> childCategoryList;
         if (categoryName.isPresent()) {
             if (childCategoryName.isPresent()) {
@@ -136,6 +137,3 @@ public class ChildCategoryController {
         return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
     }
 }
-
-
-

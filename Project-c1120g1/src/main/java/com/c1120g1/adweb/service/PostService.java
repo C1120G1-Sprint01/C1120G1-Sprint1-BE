@@ -25,6 +25,8 @@ public interface PostService {
 
     Post findById(Integer id);
 
+    void updatePost(Post post);
+
     Page<Post> findAllNewest(Pageable pageable);
 
     void save(Post post);

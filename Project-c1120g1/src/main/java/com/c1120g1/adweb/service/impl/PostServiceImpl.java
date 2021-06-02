@@ -1,6 +1,8 @@
 package com.c1120g1.adweb.service.impl;
 
+import com.c1120g1.adweb.entity.Image;
 import com.c1120g1.adweb.entity.Post;
+import com.c1120g1.adweb.repository.ImageRepository;
 import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.repository.PostRepository;
@@ -23,6 +25,10 @@ public class PostServiceImpl implements PostService {
     private PostRepository repository;
 
     @Autowired
+
+    private ImageRepository imageRepository;
+
+    @Autowired
     private PostService postService;
 
     @Autowired
@@ -30,6 +36,11 @@ public class PostServiceImpl implements PostService {
 
     @Autowired
     private StatusService statusService;
+
+    @Override
+    public Page<Post> findAllByUsername(String username, Pageable pageable) {
+        return repository.findAllByUsername(username, pageable);
+    }
 
     @Override
     public Page<Post> findAllListDetail(Pageable pageable) {
@@ -46,6 +57,16 @@ public class PostServiceImpl implements PostService {
         return repository.findById(id).orElse(null);
     }
 
+    @Override
+    public void updatePost(Post post) {
+        repository.updatePost(post.getDescription(), post.getEmail(), post.getPhone(), post.isPostType(),
+                post.getPosterName(), post.getPrice(), post.getTitle(), post.getChildCategory().getChildCategoryId(),
+                post.getStatus().getStatusId(), post.getWard().getWardId(), post.getPostId());
+
+//        for (Image image : post.getImageSet()) {
+//            imageRepository.update(image.getUrl(), image.getImageId());
+//        }
+    }
 
     @Override
     public Page<Post> findAllListApprove(Pageable pageable) {
@@ -70,11 +91,6 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Post> findAllListWait(Pageable pageable) {
         return repository.findAllListWait(pageable);
-    }
-
-    @Override
-    public Page<Post> findAllByUsername(String username, Pageable pageable) {
-        return repository.findAllByUsername(username, pageable);
     }
 
     @Override
@@ -109,5 +125,6 @@ public class PostServiceImpl implements PostService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date now = new Date();
         return simpleDateFormat.format(now);
+
     }
 }

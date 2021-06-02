@@ -9,8 +9,11 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/posts")
@@ -64,8 +67,8 @@ public class PostController {
 
 
     @GetMapping("/cus-post-list")
-    public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2) Pageable pageable) {
-        String username = "username";
+    public ResponseEntity<Page<Post>> getPostByUsername(@RequestParam String username,
+                                                        @PageableDefault(size = 2) Pageable pageable) {
         Page<Post> postList = postService.findAllByUsername(username, pageable);
         if (postList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -163,6 +166,40 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK); //200
     }
 
+    @PostMapping("/cus-post-edit/{id}")
+    public ResponseEntity<Post> editPost(@Valid @RequestBody Post post, BindingResult bindingResult, @PathVariable Integer id) {
+        if (bindingResult.hasErrors()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        } else {
+            Post postObj = postService.findByIdAndUserId(id);
+
+            if (postObj == null) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                if (post.getStatus().getStatusId() == 2 || post.getStatus().getStatusId() == 4 ||
+                        post.getStatus().getStatusId() == 5) {
+                    postObj.setDescription(post.getDescription());
+                    postObj.setEmail(post.getEmail());
+                    postObj.setPhone(post.getPhone());
+                    postObj.setPostType(post.isPostType());
+                    postObj.setPosterName(post.getPosterName());
+                    postObj.setPrice(post.getPrice());
+                    postObj.setTitle(post.getTitle());
+                    postObj.setChildCategory(post.getChildCategory());
+                    postObj.setStatus(post.getStatus());
+                    postObj.setWard(post.getWard());
+//                postObj.setImageSet(post.getImageSet());
+                    postService.updatePost(postObj);
+                    return new ResponseEntity<>(postObj, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+                }
+
+            }
+        }
+
+    }
+
     @GetMapping("listPost")
     public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
         if (postService.findAllNewest(pageable).isEmpty()) {
@@ -185,3 +222,4 @@ public class PostController {
         return postService.search("%" + title + "%", child_category, province);
     }
 }
+
