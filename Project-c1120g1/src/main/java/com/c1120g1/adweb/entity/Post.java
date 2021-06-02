@@ -7,13 +7,14 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "`post`")
+@Table(name = "post")
 public class Post {
 
     @Id
@@ -61,6 +62,7 @@ public class Post {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
+
     @ManyToOne
     @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "status_id")
@@ -85,4 +87,17 @@ public class Post {
     @JsonIgnoreProperties("post")
     private Set<Image> imageSet;
 
+    @Override
+    public String toString() {
+        return "Post{" +
+                "posterName='" + posterName + '\'' +
+                ", email='" + email + '\'' +
+                ", title='" + title + '\'' +
+                ", postDateTime='" + postDateTime + '\'' +
+                ", enabled=" + enabled +
+                ", status=" + status +
+                ", ward=" + ward +
+                ", imageSet=" + imageSet +
+                '}';
+    }
 }
