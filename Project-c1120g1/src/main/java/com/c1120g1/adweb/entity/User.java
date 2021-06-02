@@ -37,9 +37,6 @@ public class User {
     @Column(name = "phone", columnDefinition = "VARCHAR(20)")
     private String phone;
 
-    @Column(name = "avatarURL", columnDefinition = "VARCHAR(255)")
-    private String avatarURL;
-
     @JsonBackReference
     @Column(name = "avatar_url", columnDefinition = "VARCHAR(255)")
     private String avatarUrl;
