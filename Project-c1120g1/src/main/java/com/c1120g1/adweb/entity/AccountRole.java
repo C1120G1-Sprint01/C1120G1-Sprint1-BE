@@ -8,6 +8,8 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Getter
+@Setter
 @Table( name = "account_role",
         uniqueConstraints = {
                 @UniqueConstraint(name = "ACC_ROLE_UK", columnNames = {"username", "role_id"})

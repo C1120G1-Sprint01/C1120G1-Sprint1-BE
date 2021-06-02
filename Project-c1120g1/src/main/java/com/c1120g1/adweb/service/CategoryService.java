@@ -5,6 +5,7 @@ import com.c1120g1.adweb.entity.Category;
 import java.util.List;
 
 public interface CategoryService {
+
     List<Category> findAllCategory();
 
     Category findCategoryById(Integer id);

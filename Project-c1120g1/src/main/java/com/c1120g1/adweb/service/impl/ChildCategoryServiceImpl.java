@@ -15,6 +15,19 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
     private ChildCategoryRepository repository;
 
     @Override
+<<<<<<< HEAD
+=======
+    public List<ChildCategory> findAllByCategoryId(int categoryId) {
+        return repository.findAllByCategoryId(categoryId);
+    }
+
+    @Override
+    public Page<ChildCategory> findAllChildCategoryPage(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
+
+    @Override
+>>>>>>> b0303d3557f91fac1eba4a09e4f2a3cddfd5d7c5
     public List<ChildCategory> findAllChildCategory() {
         return repository.showAllChildCategory();
     }
@@ -45,4 +58,18 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
     public List<ChildCategory> findAllByChildCategoryNameAndCategoryName(String childCategoryName, String categoryName) {
         return repository.findAllByChildCategoryNameAndCategoryName(childCategoryName,categoryName);
     }
+<<<<<<< HEAD
+=======
+
+    @Override
+    public List<ChildCategory> findAllByCategoryName(String categoryName) {
+        return repository.findAllByCategoryName(categoryName);
+    }
+
+    @Override
+    public List<ChildCategory> findAllByChildCategoryName(String childCategoryName) {
+        return repository.findAllByChildCategoryName(childCategoryName);
+
+    }
+>>>>>>> b0303d3557f91fac1eba4a09e4f2a3cddfd5d7c5
 }

@@ -18,6 +18,9 @@ public class AccountServiceImpl implements AccountService {
     @Autowired
     private AccountRepository repository;
     @Autowired
+
+    private JavaMailSender javaMailSender;
+
     private JavaMailSender emailSender;
 
     @Override
@@ -41,6 +44,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public String generateCode() {
         return ""+ (int)(Math.random()*1000000*1.1);
+    }
+
+    @Override
+    public void sendEmailApprove(String email, String code) {
+        SimpleMailMessage messageApprove = new SimpleMailMessage();
+        messageApprove.setTo(email);
+        messageApprove.setSubject("Email xác nhận bài đăng được phê duyệt");
+        messageApprove.setText("Chúc mừng bạn! Tin của bạn đã được đăng thành công!" +
+                "CODE: " + code +
+                "Thanks and regards!");
+        this.javaMailSender.send(messageApprove);
     }
 
     @Override
