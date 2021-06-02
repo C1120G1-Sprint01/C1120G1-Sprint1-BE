@@ -13,7 +13,12 @@ public class UserServiceImpl implements UserService {
     private UserRepository repository;
 
     @Override
+<<<<<<< HEAD
     public User findAll(User user) {
         return repository.findAll(user);
+=======
+    public User findByEmail(String email) {
+        return repository.findByEmail(email);
+>>>>>>> 45fb757551547e0c3f079cc29a14566456c8840e
     }
 }
