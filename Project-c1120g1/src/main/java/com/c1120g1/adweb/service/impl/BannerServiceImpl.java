@@ -1,13 +1,12 @@
 package com.c1120g1.adweb.service.impl;
 
 import com.c1120g1.adweb.entity.Banner;
-import com.c1120g1.adweb.model.BannerDTO;
+import com.c1120g1.adweb.DTO.BannerDTO;
 import com.c1120g1.adweb.repository.BannerRepository;
 import com.c1120g1.adweb.service.BannerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service

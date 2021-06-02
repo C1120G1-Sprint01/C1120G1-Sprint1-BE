@@ -3,7 +3,7 @@ package com.c1120g1.adweb.controller;
 import com.c1120g1.adweb.entity.Banner;
 import com.c1120g1.adweb.entity.Position;
 import com.c1120g1.adweb.entity.Size;
-import com.c1120g1.adweb.model.BannerDTO;
+import com.c1120g1.adweb.DTO.BannerDTO;
 import com.c1120g1.adweb.service.BannerService;
 import com.c1120g1.adweb.service.PositionService;
 import com.c1120g1.adweb.service.SizeService;
