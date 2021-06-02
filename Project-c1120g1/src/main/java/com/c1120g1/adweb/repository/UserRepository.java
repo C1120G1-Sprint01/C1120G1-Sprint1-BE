@@ -20,11 +20,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 
 //    ngoc - tim kiem full text search
-    @Query(value = "select * from user" +
-                    " inner join ward on user.wardId = ward.ward_id" +
-                    " where concat (user_id, email, name, phone, ward.ward_name) like?1",
+    @Query(value =" select * from user" +
+           " inner join ward on user.ward_id = ward.ward_id" +
+            " where concat (user_id, email, `name`, phone, ward.ward_name) like %?1%",
             nativeQuery =true)
-    List<User> fullSearch(String q);
+    Page<User> fullSearch(String q, Pageable pageable);
 
 //   ngoc - list user su dung DTO class
     @Query("SELECT u FROM User u")
@@ -32,12 +32,12 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 //    ngoc - them moi user
     @Modifying
-    @Query(value = "insert into User (name, email, phone, ward_id, username)" +
-            " values (:name, :email, :phone, :wardId, :username)",
+    @Query(value = "insert into User (`name`, email, phone, ward_id, username, avatar_url)" +
+            " values (:name, :email, :phone, :ward_id, :username, :avatar_url)",
                 nativeQuery = true)
     @Transactional
     void createUser(@Param("name") String name, @Param("email") String email,
-                    @Param("phone") String phone, @Param("wardId") Integer wardId, @Param("username") String username);
+                    @Param("phone") String phone, @Param("ward_id") Integer ward_id, @Param("username") String username, @Param("avatar_url") String avatar_url);
 
 
 
@@ -53,7 +53,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 
     @Modifying
-    @Query(value = "INSERT INTO `user` ( avatar_Url, email, name, phone, username) " +
+    @Query(value = "INSERT INTO `user` ( avatar_url, email, name, phone, username) " +
             "values " + " (:avatarUrl "+":email," + ":name," + ":phone," + ":account)", nativeQuery = true)
     @Transactional
     void saveUser(@Param("avatar")String avatarUrl,

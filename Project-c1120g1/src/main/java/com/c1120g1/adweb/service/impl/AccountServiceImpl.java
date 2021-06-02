@@ -49,6 +49,11 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account checkUserExists(String username) {
+        return repository.checkUserExits(username);
+    }
+
+    @Override
     public String generateCode() {
         return ""+ (int)(Math.random()*1000000*1.1);
     }

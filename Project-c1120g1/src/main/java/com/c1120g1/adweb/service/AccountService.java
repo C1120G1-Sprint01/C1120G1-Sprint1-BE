@@ -17,6 +17,8 @@ public interface AccountService {
 
     Account findByUsername(String username);
 
+    Account checkUserExists(String username);
+
     String generateCode();
 
     void sendEmail(String email, String code);

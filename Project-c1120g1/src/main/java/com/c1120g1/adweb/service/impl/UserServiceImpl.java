@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -31,7 +30,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        repository.save(user);
+        repository.createUser(standardizeName(user.getName()), user.getEmail(),
+                user.getPhone(), user.getWard().getWardId(), user.getAccount().getUsername(), user.getAvatarUrl());
     }
 
 //    ngoc - khong dc xoa nha
@@ -57,9 +57,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> fullSearch(String q) {
-        return repository.fullSearch(q);
+    public Page<User> fullSearch(String q, Pageable pageable) {
+        return repository.fullSearch(q, pageable);
     }
+
 
     // ngoc - chuan hoa ten
     public String standardizeName(String name) {

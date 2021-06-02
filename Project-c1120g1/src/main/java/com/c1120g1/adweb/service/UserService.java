@@ -28,7 +28,8 @@ public interface UserService {
     boolean checkPass(Integer id, String password);
 
 
-    List<User> fullSearch(String q);
+
+    Page<User> fullSearch(String q, Pageable pageable);
 
     User findByEmail(String email);
 

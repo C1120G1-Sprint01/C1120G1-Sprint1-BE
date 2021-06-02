@@ -14,10 +14,15 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,12 +45,11 @@ public class AdminController {
     private AccountService accountService;
     @Autowired
     private WardRepository wardRepository;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+
 
 //    Ngoc - Get list, Pagination
 
-    @GetMapping(value = "/admin/listUser", params = {"page", "size","onSorting","textSorting"})
+    @GetMapping(value = "/admin/listUser", params = {"page", "size", "onSorting", "textSorting"})
     public ResponseEntity<Page<User>> listUser(@RequestParam("page") int page,
                                                @RequestParam("size") int size,
                                                @RequestParam("onSorting") boolean onSorting,
@@ -64,33 +68,28 @@ public class AdminController {
             if (users.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             } else {
-                return new ResponseEntity<>(users,HttpStatus.OK);
+                return new ResponseEntity<>(users, HttpStatus.OK);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-//   Ngoc -  Create new user
+    //   Ngoc -  Create new user
     @PostMapping(value = "/admin/listUser/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
         try {
             List<User> userList = userService.findAll();
             if (!userList.isEmpty()) {
                 Map<String, String> listError = new HashMap<>();
-                List<Account> accountList = accountService.findAllAccount();
-                if (!accountList.isEmpty()) {
-                    for (Account account: accountList) {
-                        if (account.getUsername().equals(userDTO.getUsername())) {
-                            listError.put("existAccount", "Tai khoan ton tai");
-                            break;
-                        }
-                    }
+                Account account = accountService.checkUserExists(userDTO.getUsername());
+                if (account != null) {
+                    listError.put("existAccount", "Tài khoản đã tồn tại trong hệ thống");
                 }
                 if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
                     listError.put("notCorrect", "Password wrong !");
                 }
-                for (User user: userList) {
+                for (User user : userList) {
                     if (user.getEmail().equals(userDTO.getEmail())) {
                         listError.put("existEmail", "Email has register yet !");
                     }
@@ -99,49 +98,64 @@ public class AdminController {
                     }
                 }
                 if (!listError.isEmpty()) {
-                    return  ResponseEntity
+                    return ResponseEntity
                             .badRequest()
                             .body(listError);
                 }
             }
+
+            // chuyen method nay vao trong service
+            BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Account account = new Account();
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+            String registerDate = format.format(new Date());
             account.setUsername(userDTO.getUsername());
             account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            account.setRegisterDate(registerDate);
             accountService.save(account);
 
+            System.out.println("Pw Bcrypt64 : " + account.getPassword());
 
+            // chuyen method nay vao trong service
             User user = new User();
-            user.setAccount(account);
             user.setName(userDTO.getName());
             user.setEmail(userDTO.getEmail());
             user.setPhone(userDTO.getPhone());
             user.setWard(userDTO.getWard());
-            user.setAvatarUrl(user.getAvatarUrl());
-            userService.saveUsers(user);
-            return new ResponseEntity<>(user,HttpStatus.OK);
+            user.setAccount(account);
+            user.setAvatarUrl(userDTO.getAvatarUrl());
+            userService.save(user);
+
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
+            System.out.println("get Exception");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
+    //   ngoc -  check bad request
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            String errorMessage = error.getDefaultMessage();
+            errors.put(fieldName, errorMessage);
+        });
+        return errors;
+    }
 
-//    @GetMapping("/admin/listUser")
-//    public ResponseEntity<List<User>> getAllStudent() {
-//        List<User> userList = this.userService.findAll();
-//        if (userList == null) {
-//            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-//        }
-//        return new ResponseEntity<>(userList, HttpStatus.OK);
-//    }
 
-//    Ngoc - Get User by id
+    //    Ngoc - Get User by id
     @GetMapping("/admin/listUser/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         User user = userService.findById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
-//    Ngoc - Update user
+    //    Ngoc - Update user
     @PutMapping(value = "/admin/listUser/edit/{id}", produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<User> editUser(@PathVariable("id") Integer id, @RequestBody User user) {
         try {
@@ -154,43 +168,14 @@ public class AdminController {
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-//        userEditDTO.setUserId(id);
-//        List<User> userList = userService.findAll();
-//        try {
-//            if (!userList.isEmpty()) {
-//                Map<String, String> listError = new HashMap<>();
-//                for (User user: userList) {
-//                    if (user.getEmail().equals(userEditDTO.getEmail()) && !user.getUserId().equals(userEditDTO.getUserId())) {
-//                        listError.put("existEmail", "Email da ton tai, moi nhap lai email khac !");
-//                    }
-//                    if (user.getPhone().equals(userEditDTO.getPhone()) && !user.getUserId().equals(userEditDTO.getUserId())) {
-//                        listError.put("existPhone", "So dien thoai nay da ton tai, nhap so dien thoai khac ! Xin cam on");
-//                    }
-//
-//                }
-//                if (!listError.isEmpty()) {
-//                    return ResponseEntity
-//                            .badRequest()
-//                            .body(listError);
-//                }
-//            }
-//            userService.saveUser(userEditDTO.getUserId(),
-//                                userEditDTO.getName(),
-//                                userEditDTO.getEmail(),
-//                                userEditDTO.getPhone(),
-//                                userEditDTO.getWard());
-//            return new ResponseEntity<>(HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-//        }
 
     }
 
-//    Ngoc - Delete User
+    //    Ngoc - Delete User
     @DeleteMapping("/admin/listUser/delete/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable("id") Integer id) {
         User userDelete = userService.findById(id);
@@ -198,15 +183,26 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.userService.delete(id);
-        return new ResponseEntity<>(userDelete,HttpStatus.OK);
+        return new ResponseEntity<>(userDelete, HttpStatus.OK);
     }
 
-    @GetMapping("/admin/listUser")
-    public List<User> fullTextSearch(@RequestParam(name = "q") String q) {
-        return this.userService.fullSearch("%"+q+"%");
+    //    Ngoc - full text search
+    @GetMapping(value = "/admin/listUser", params = {"size", "q"})
+    public ResponseEntity<Page<User>> fullTextSearch(@RequestParam(name = "q") String q, @RequestParam("size") int size) {
+        try {
+            Page<User> users = this.userService.fullSearch(q, PageRequest.of(0, size));
+            if (users.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(users, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
-//    get du lieu tu bang ward
+    //    get du lieu tu bang ward
     public ResponseEntity<List<Ward>> getWard() {
         try {
             List<Ward> wards = wardService.getAllWard();
@@ -215,7 +211,6 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
 
 
 }
