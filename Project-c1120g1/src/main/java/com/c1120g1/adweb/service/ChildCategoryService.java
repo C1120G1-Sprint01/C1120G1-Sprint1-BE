@@ -5,6 +5,14 @@ import java.util.List;
 
 public interface ChildCategoryService {
 
+    List<ChildCategory> findAll();
+
+    List<ChildCategory> findAllByCategoryId(int categoryId);
+
+    ChildCategory findById(Integer id);
+
+    List<ChildCategory> getAllChildCategoryByCategoryId(Integer id);
+
     List<ChildCategory> findAllChildCategory();
 
     ChildCategory findChildCategoryById(Integer id);

@@ -136,4 +136,13 @@ public class ChildCategoryController {
         }
         return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
     }
+
+    @GetMapping("api/child-category/{id}")
+    public ResponseEntity<List<ChildCategory>> getChildCategories(@PathVariable(name = "id") Integer id) {
+        List<ChildCategory> categoryList = childCategoryService.getAllChildCategoryByCategoryId(id);
+        if (categoryList.isEmpty()) {
+            return new ResponseEntity<>(categoryList, HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+    }
 }

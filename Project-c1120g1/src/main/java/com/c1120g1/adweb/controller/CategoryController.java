@@ -89,6 +89,15 @@ public class CategoryController {
         }
     }
 
+    @GetMapping("api/category")
+    public ResponseEntity<List<Category>> getCategory() {
+        List<Category> categoryList = categoryService.findAllCategory();
+        if (categoryList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     /**
      * Method: delete category by id
      * Author: TuanLHM
