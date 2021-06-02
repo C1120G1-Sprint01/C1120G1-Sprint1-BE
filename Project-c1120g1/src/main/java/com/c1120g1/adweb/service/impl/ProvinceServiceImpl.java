@@ -17,7 +17,7 @@ public class ProvinceServiceImpl implements ProvinceService {
     private ProvinceRepository repository;
 
     @Override
-    public List<ProvinceDTO> findAll() {
+    public List<ProvinceDTO> findAllDTO() {
         List<Province> provinceList = repository.findAll();
         List<ProvinceDTO> provinceDTOList = new ArrayList<>();
         ProvinceDTO provinceDTO = null;
@@ -29,6 +29,11 @@ public class ProvinceServiceImpl implements ProvinceService {
         }
 
         return provinceDTOList;
+    }
+
+    @Override
+    public List<Province> findAll() {
+        return repository.findAll();
     }
 
 }
