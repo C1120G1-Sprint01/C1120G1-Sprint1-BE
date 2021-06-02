@@ -18,7 +18,7 @@ public class PostController {
      * author: ThinhTHB
      * method: search post by name
      * */
-    @GetMapping("/search/{posterName}")
+    @GetMapping("/api/posts/search/{posterName}")
     public List<Post> searchByName(@PathVariable("posterName") String posterName){
         return postService.searchByName(posterName);
     }
