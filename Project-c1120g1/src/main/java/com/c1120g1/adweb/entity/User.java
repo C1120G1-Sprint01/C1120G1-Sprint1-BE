@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -36,6 +37,10 @@ public class User {
     @Column(name = "phone", columnDefinition = "VARCHAR(20)")
     private String phone;
 
+    @Column(name = "avatarURL", columnDefinition = "VARCHAR(255)")
+    private String avatarURL;
+
+    @JsonBackReference
     @Column(name = "avatar_url", columnDefinition = "VARCHAR(255)")
     private String avatarUrl;
 

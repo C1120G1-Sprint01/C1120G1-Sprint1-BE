@@ -17,7 +17,7 @@ public class WardServiceImpl implements WardService {
 
     @Override
     public List<Ward> findAllByDistrictId(Integer districtId) {
-        return null;
+        return repository.findAllByDistrictId(districtId);
     }
 
     @Override
