@@ -1,4 +1,4 @@
-package com.c1120g1.adweb.entity;
+package com.c1120g1.adweb.DTO;
 
 public class BotDTO {
     private String question;
