@@ -1,9 +1,6 @@
 package com.c1120g1.adweb.controller;
-
 import com.c1120g1.adweb.entity.Post;
-import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.service.PostService;
-import javafx.geometry.Pos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,11 +9,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
+import java.util.List;
 
 @RestController
-@CrossOrigin(value = "*", allowedHeaders = "*")
-@RequestMapping("/admin")
+@RequestMapping("api/posts")
+@CrossOrigin(origins = "http://localhost:4200")
 public class PostController {
 
     @Autowired
@@ -25,7 +22,7 @@ public class PostController {
 //    -----------------------LIST DETAIL------------------------
 
     @GetMapping("/listDetail")
-    public ResponseEntity<Page<Post>> getListPostDetail(@PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<Page<Post>> getListPostDetail(Pageable pageable) {
         Page<Post> listPostDetail = postService.findAllListDetail(pageable);
         if (listPostDetail.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -45,7 +42,7 @@ public class PostController {
     //    -----------------------LIST APPROVE------------------------
 
     @GetMapping("/listApprove")
-    public ResponseEntity<Page<Post>> getListPostApprove(@PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<Page<Post>> getListPostApprove(Pageable pageable) {
         Page<Post> listPostApprove = postService.findAllListApprove(pageable);
         if (listPostApprove.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -56,6 +53,25 @@ public class PostController {
     @GetMapping(value = "/listApprove/{postId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Post> getPostApprove(@PathVariable("postId") Integer postId) {
         Post post = this.postService.findById(postId);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @GetMapping("/cus-post-list")
+    public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2) Pageable pageable) {
+        String username = "username";
+        Page<Post> postList = postService.findAllByUsername(username, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    @GetMapping("/cus-post/{id}")
+    public ResponseEntity<Post> getByIdAndUserId(@PathVariable("id") Integer id) {
+        Post post = postService.findByIdAndUserId(id);
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -95,7 +111,7 @@ public class PostController {
     //    -----------------------LIST WAIT------------------------
 
     @GetMapping("/listWait")
-    public ResponseEntity<Page<Post>> getListPostWait(@PageableDefault(size = 5) Pageable pageable) {
+    public ResponseEntity<Page<Post>> getListPostWait(Pageable pageable) {
         Page<Post> listPostWait = postService.findAllListWait(pageable);
         if (listPostWait.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -130,5 +146,38 @@ public class PostController {
         }
         this.postService.deleteById(postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    //    -----------------------END OF QUANG------------------------
+
+    @GetMapping("{id}")
+    public ResponseEntity<Post> getPostById(@PathVariable("id") Integer id) {
+        Post post = postService.findById(id);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
+        }
+        return new ResponseEntity<>(post, HttpStatus.OK); //200
+    }
+
+    @GetMapping("listPost")
+    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 4) Pageable pageable) {
+        if (postService.findAllNewest(pageable).isEmpty()) {
+            return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.OK);
+    }
+
+    @PostMapping("createPost")
+    public ResponseEntity<Void> createPost(@RequestBody Post post) {
+        postService.save(post);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("search")
+    public List<Post> search(
+            @RequestParam(name = "title") String title,
+            @RequestParam(name = "child_category") String child_category,
+            @RequestParam(name = "province") String province) {
+        return postService.search("%" + title + "%", child_category, province);
     }
 }

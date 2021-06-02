@@ -8,11 +8,26 @@ import java.util.List;
 
 public interface PostService {
     Page<Post> findAllListDetail(Pageable pageable);
-    Post findById(Integer id);
+
     Page<Post> findAllListApprove(Pageable pageable);
+
     void approvePost(Integer id);
+
     void deleteById(Integer id);
-    void save(Post post);
+
     void waitPost(Integer id);
+
     Page<Post> findAllListWait(Pageable pageable);
+
+    Page<Post> findAllByUsername(String username, Pageable pageable);
+
+    Post findByIdAndUserId(Integer id);
+
+    Post findById(Integer id);
+
+    Page<Post> findAllNewest(Pageable pageable);
+
+    void save(Post post);
+
+    List<Post> search(String title, String child_category, String province_name);
 }

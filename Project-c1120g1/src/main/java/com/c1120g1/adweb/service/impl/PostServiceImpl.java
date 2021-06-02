@@ -26,6 +26,16 @@ public class PostServiceImpl implements PostService {
         return repository.findById(id).orElse(null);
     }
 
+    public Page<Post> findAllByUsername(String username, Pageable pageable) {
+        return repository.findAllByUsername(username, pageable);
+    }
+
+    @Override
+    public Post findByIdAndUserId(Integer id) {
+        return repository.findById(id).orElse(null);
+    }
+
+
     @Override
     public Page<Post> findAllListApprove(Pageable pageable) {
         return repository.findAllListApprove(pageable);
@@ -52,7 +62,17 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Page<Post> findAllNewest(Pageable pageable) {
+        return repository.findAllNewest(pageable);
+    }
+
+    @Override
     public void save(Post post) {
         repository.save(post);
+    }
+
+    @Override
+    public List<Post> search(String title, String child_category, String province_name) {
+        return repository.search(title, child_category, province_name);
     }
 }
