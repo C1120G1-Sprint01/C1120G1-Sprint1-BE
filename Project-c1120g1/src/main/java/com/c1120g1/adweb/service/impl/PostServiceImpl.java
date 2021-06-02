@@ -41,11 +41,6 @@ public class PostServiceImpl implements PostService {
         return repository.findById(id).orElse(null);
     }
 
-
-    public Page<Post> findAllByUsername(String username, Pageable pageable) {
-        return repository.findAllByUsername(username, pageable);
-    }
-
     @Override
     public Post findByIdAndUserId(Integer id) {
         return repository.findById(id).orElse(null);
@@ -75,6 +70,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Post> findAllListWait(Pageable pageable) {
         return repository.findAllListWait(pageable);
+    }
+
+    @Override
+    public Page<Post> findAllByUsername(String username, Pageable pageable) {
+        return repository.findAllByUsername(username, pageable);
     }
 
     @Override

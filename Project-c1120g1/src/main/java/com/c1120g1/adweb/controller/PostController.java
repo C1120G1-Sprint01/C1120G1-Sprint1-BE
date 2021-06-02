@@ -61,7 +61,7 @@ public class PostController {
         }
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
-    
+
 
     @GetMapping("/cus-post-list")
     public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2) Pageable pageable) {
