@@ -31,8 +31,14 @@ public class PostServiceImpl implements PostService {
     @Autowired
     private StatusService statusService;
 
-    public Page<Post> findAllByUsername(String username, Pageable pageable) {
-        return repository.findAllByUsername(username, pageable);
+    @Override
+    public Page<Post> findAllListDetail(Pageable pageable) {
+        return repository.findAllListDetail(pageable);
+    }
+
+    @Override
+    public Post findById(Integer id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
@@ -40,9 +46,35 @@ public class PostServiceImpl implements PostService {
         return repository.findById(id).orElse(null);
     }
 
+
     @Override
-    public Post findById(Integer id) {
-        return repository.findById(id).orElse(null);
+    public Page<Post> findAllListApprove(Pageable pageable) {
+        return repository.findAllListApprove(pageable);
+    }
+
+    @Override
+    public void approvePost(Integer id) {
+        repository.approvePost(id);
+    }
+
+    @Override
+    public void deleteById(Integer id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public void waitPost(Integer id) {
+        repository.waitPost(id);
+    }
+
+    @Override
+    public Page<Post> findAllListWait(Pageable pageable) {
+        return repository.findAllListWait(pageable);
+    }
+
+    @Override
+    public Page<Post> findAllByUsername(String username, Pageable pageable) {
+        return repository.findAllByUsername(username, pageable);
     }
 
     @Override
