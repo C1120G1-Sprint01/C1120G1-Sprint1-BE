@@ -60,6 +60,16 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
+    @PutMapping("/listDetail/cancelApprove/{postId}")
+    public ResponseEntity<Post> cancelApprovePost(@PathVariable("postId") Integer postId) {
+        Post currentPost = this.postService.findById(postId);
+        if (currentPost == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        this.postService.cancelApprovePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     //    -----------------------LIST APPROVE------------------------
 
     @GetMapping("/listApprove")
@@ -128,8 +138,8 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        this.postService.deleteById(postId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        this.postService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/listApprove/wait/{postId}")
@@ -178,8 +188,8 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        this.postService.deleteById(postId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        this.postService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //    -----------------------END OF QUANG------------------------
