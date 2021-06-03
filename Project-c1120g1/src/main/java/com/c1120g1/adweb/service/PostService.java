@@ -19,9 +19,13 @@ public interface PostService{
 
     Page<Post> findAllListDetail(Pageable pageable);
 
+    void cancelApprovePost(Integer id);
+
     Page<Post> findAllListApprove(Pageable pageable);
 
     void approvePost(Integer id);
+
+    void deletePost(Integer id);
 
     void deleteById(Integer id);
 

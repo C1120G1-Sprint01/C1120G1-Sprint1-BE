@@ -26,12 +26,18 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value =  "select * " +
                     "from post " +
-                    "where status_id = 1", nativeQuery = true)
+                    "where status_id = 1 and enabled = 1", nativeQuery = true)
     Page<Post> findAllListDetail(Pageable pageable);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(value =  "update post " +
+                    "set status_id = 2 " +
+                    "where post_id = ?1", nativeQuery = true)
+    void cancelApprovePost(Integer id);
 
     @Query(value =   "select * " +
                      "from post " +
-                     "where status_id = 2", nativeQuery = true)
+                     "where status_id = 2 and enabled = 1", nativeQuery = true)
     Page<Post> findAllListApprove(Pageable pageable);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
@@ -41,6 +47,12 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     void approvePost(Integer id);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
+    @Query(value = "update post " +
+            "set enabled = 0 " +
+            "where post_id = ?1", nativeQuery = true)
+    void deletePost(Integer id);
+
+    @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value =  "update post " +
                     "set status_id = 6 " +
                     "where post_id = ?1", nativeQuery = true)
@@ -48,7 +60,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value =  "select * " +
                     "from post " +
-                    "where status_id = 6", nativeQuery = true)
+                    "where status_id = 6 and enabled = 1", nativeQuery = true)
     Page<Post> findAllListWait(Pageable pageable);
 
     @Query(value = "select * " +
