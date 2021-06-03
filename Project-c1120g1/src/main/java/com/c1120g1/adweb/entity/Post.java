@@ -100,4 +100,124 @@ public class Post {
                 ", imageSet=" + imageSet +
                 '}';
     }
+
+    public Integer getPostId() {
+        return postId;
+    }
+
+    public void setPostId(Integer postId) {
+        this.postId = postId;
+    }
+
+    public String getPosterName() {
+        return posterName;
+    }
+
+    public void setPosterName(String posterName) {
+        this.posterName = posterName;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public boolean isPostType() {
+        return postType;
+    }
+
+    public void setPostType(boolean postType) {
+        this.postType = postType;
+    }
+
+    public String getPostDateTime() {
+        return postDateTime;
+    }
+
+    public void setPostDateTime(String postDateTime) {
+        this.postDateTime = postDateTime;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Integer getPrice() {
+        return price;
+    }
+
+    public void setPrice(Integer price) {
+        this.price = price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    public ChildCategory getChildCategory() {
+        return childCategory;
+    }
+
+    public void setChildCategory(ChildCategory childCategory) {
+        this.childCategory = childCategory;
+    }
+
+    public Ward getWard() {
+        return ward;
+    }
+
+    public void setWard(Ward ward) {
+        this.ward = ward;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+
+    public Set<Image> getImageSet() {
+        return imageSet;
+    }
+
+    public void setImageSet(Set<Image> imageSet) {
+        this.imageSet = imageSet;
+    }
 }
