@@ -2,6 +2,7 @@ package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.entity.Post;
 import com.c1120g1.adweb.service.PostService;
+import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,9 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/cus-post-list")
     public ResponseEntity<Page<Post>> getPostByUsername(@PageableDefault(size = 2) Pageable pageable) {
@@ -39,9 +43,13 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
+    /**
+     * Author: ViNTT
+     * Get data for Post Details Page
+     */
     @GetMapping("{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable("id") Integer id) {
-        Post post = postService.findById(id);
+    public ResponseEntity<Post> getPostById(@PathVariable("id") Integer postId) {
+        Post post = postService.findById(postId);
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
         }
@@ -49,7 +57,7 @@ public class PostController {
     }
 
     @GetMapping("listPost")
-    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 4) Pageable pageable) {
+    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
         if (postService.findAllNewest(pageable).isEmpty()) {
             return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
         }
@@ -69,4 +77,35 @@ public class PostController {
             @RequestParam(name = "province") String province) {
         return postService.search("%" + title + "%", child_category, province);
     }
+
+    /**
+     * Author: ViNTT
+     * Get data for List Post By Category Page
+     */
+    @GetMapping("category/{category}")
+    public ResponseEntity<Page<Post>> getPostsByCategoryName(@PathVariable("category") String categoryName,
+                                                             @PageableDefault(size = 2) Pageable pageable) {
+        Page<Post> postList = postService.findAllByCategoryName(categoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    /**
+     * Author: ViNTT
+     * Get data for List Post By Child Category Page
+     */
+    @GetMapping("category/{category}/{childCategory}")
+    public ResponseEntity<Page<Post>> getPostsByCategoryNameAndChildCategoryName(
+            @PathVariable("category") String categoryName,
+            @PathVariable("childCategory") String childCategoryName,
+            @PageableDefault(size = 2) Pageable pageable) {
+        Page<Post> postList = postService.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
 }

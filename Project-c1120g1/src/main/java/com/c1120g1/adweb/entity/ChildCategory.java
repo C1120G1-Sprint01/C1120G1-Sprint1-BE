@@ -1,17 +1,10 @@
 package com.c1120g1.adweb.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import javax.persistence.*;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 @Table(name = "child_category")
 public class ChildCategory {
 
@@ -32,4 +25,48 @@ public class ChildCategory {
     @JsonIgnoreProperties("childCategory")
     private Set<Post> postSet;
 
+    private Boolean deleteFlag;
+
+    public ChildCategory() {
+    }
+
+    public Integer getChildCategoryId() {
+        return childCategoryId;
+    }
+
+    public void setChildCategoryId(Integer childCategoryId) {
+        this.childCategoryId = childCategoryId;
+    }
+
+    public String getChildCategoryName() {
+        return childCategoryName;
+    }
+
+    public void setChildCategoryName(String childCategoryName) {
+        this.childCategoryName = childCategoryName;
+    }
+
+    public Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public Set<Post> getPostSet() {
+        return postSet;
+    }
+
+    public void setPostSet(Set<Post> postSet) {
+        this.postSet = postSet;
+    }
+
+    public Boolean getDeleteFlag() {
+        return deleteFlag;
+    }
+
+    public void setDeleteFlag(Boolean deleteFlag) {
+        this.deleteFlag = deleteFlag;
+    }
 }

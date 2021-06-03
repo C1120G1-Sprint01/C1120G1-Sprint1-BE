@@ -12,6 +12,9 @@ public interface PostService {
 
     Post findByIdAndUserId(Integer id);
 
+    /**
+     * Author: ViNTT
+     */
     Post findById(Integer id);
 
     Page<Post> findAllNewest(Pageable pageable);
@@ -19,5 +22,19 @@ public interface PostService {
     void save(Post post);
 
     List<Post> search(String title, String child_category, String province_name);
+
+    String getPostDateTime();
+
+    /**
+     * Author: ViNTT
+     * Get data for List Post By Child Category Page
+     */
+    Page<Post> findAllByCategoryName(String categoryName, Pageable pageable);
+
+    /**
+     * Author: ViNTT
+     * Get data for List Post By Child Category Page
+     */
+    Page<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
 
 }

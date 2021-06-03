@@ -31,4 +31,25 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value = "select * from post where enabled = 1 order by post_date_time desc", nativeQuery = true)
     Page<Post> findAllNewest(Pageable pageable);
+
+    /**
+     * Author: ViNTT
+     * Get data for List Post By Child Category Page
+     */
+    @Query(value = "SELECT * FROM post " +
+            "INNER JOIN child_category on post.child_category_id = child_category.child_category_id " +
+            "INNER JOIN category on child_category.category_id = category.category_id " +
+            "WHERE category.category_name like ?1", nativeQuery = true)
+    Page<Post> findAllByCategoryName(String categoryName, Pageable pageable);
+
+    /**
+     * Author: ViNTT
+     * Get data for List Post By Child Category Page
+     */
+    @Query(value = "SELECT * FROM post " +
+            "INNER JOIN child_category on post.child_category_id = child_category.child_category_id " +
+            "INNER JOIN category on child_category.category_id = category.category_id " +
+            "WHERE category.category_name like ?1 AND child_category.child_category_name like ?2", nativeQuery = true)
+    Page<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
+
 }
