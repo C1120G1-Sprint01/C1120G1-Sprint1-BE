@@ -32,7 +32,7 @@ public class PostController {
      * author: ThinhTHB
      * method: search post by name
      * */
-    @GetMapping("/api/posts/search/{posterName}")
+    @GetMapping("/search/{posterName}")
     public List<Post> searchByName(@PathVariable("posterName") String posterName) {
         return postService.searchByName(posterName);
     }
