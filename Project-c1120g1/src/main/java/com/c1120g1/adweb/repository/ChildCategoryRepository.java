@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ChildCategoryRepository extends JpaRepository<ChildCategory, Integer> {
 
+    @Query(value = "select * from child_category where child_category.category_id = :categoryId", nativeQuery = true)
+    List<ChildCategory> findAllByCategoryId(int categoryId);
 
     @Query(value = "select * from child_category " +
             "where child_category.category_id = ?1",
@@ -41,4 +43,5 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
 //            "inner join category on category.category_id=child_category.category_id " +
 //            "where (category_name like %?1%)", nativeQuery = true)
     List<ChildCategory> findAllByChildCategoryName(String childCategoryName);
+
 }
