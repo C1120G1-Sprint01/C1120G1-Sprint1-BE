@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class CategoryController {
      *
      * @return
      */
-    @GetMapping("/main-category/category")
+    @GetMapping("/main-category/category/")
     public ResponseEntity<List<Category>> getList() {
         List<Category> categoryList = categoryService.findAllCategory();
         if (categoryList.isEmpty()) {
@@ -54,8 +55,7 @@ public class CategoryController {
 
     @PostMapping("/main-category/category/create-category")
     public ResponseEntity<Void> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
-        System.out.println("Creating Category " + category.getCategoryName());
-        categoryService.save(category);
+        categoryService.addCategory(category);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/category/{id}").buildAndExpand(category.getCategoryId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
@@ -70,11 +70,23 @@ public class CategoryController {
      * @return
      */
 
-    @PutMapping("/main-category/category/edit-category")
-    public ResponseEntity<Category> updateCategory(@RequestBody Category category) {
+    @PutMapping("/main-category/category/edit-category/{id}")
+    public ResponseEntity<Category> updateCategory(@PathVariable Integer id, @RequestBody Category category) {
 
-        categoryService.save(category);
-        return new ResponseEntity<Category>(category, HttpStatus.OK);
+        Category category1 = categoryService.findCategoryById(id);
+
+        if (category1 == null) {
+            return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
+        } else {
+
+            category1.setCategoryName(category.getCategoryName());
+            category1.setChildCategorySet(category.getChildCategorySet());
+            category1.setDeleteFlag(false);
+            category1.setCategoryId(id);
+
+            categoryService.saveCategory(category1);
+            return new ResponseEntity<Category>(category1, HttpStatus.OK);
+        }
     }
 
     @GetMapping("api/category")
@@ -83,7 +95,7 @@ public class CategoryController {
         if (categoryList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     /**
@@ -93,17 +105,15 @@ public class CategoryController {
      * @return
      */
 
-    @DeleteMapping(value = "/delete-category/{id}")
-    public ResponseEntity<Category> deleteCustomer(@PathVariable("id") Integer id) {
+    @GetMapping(value = "/main-category/category/delete-category/{id}")
+    public ResponseEntity deleteCategory(@PathVariable("id") Integer id) {
 
         Category category = categoryService.findCategoryById(id);
-        if (category == null) {
-            return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
+        if (category.getCategoryId() == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            categoryService.deleteCategory(category);
+            return new ResponseEntity<>(HttpStatus.OK);
         }
-
-        categoryService.delete(id);
-        return new ResponseEntity<Category>(HttpStatus.NO_CONTENT);
-
     }
-
 }
