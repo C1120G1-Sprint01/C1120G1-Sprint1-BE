@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.service.impl;
 
-import com.c1120g1.adweb.entity.Ward;
+import      com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.repository.WardRepository;
 import com.c1120g1.adweb.service.WardService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,14 +19,20 @@ public class WardServiceImpl implements WardService {
     public List<Ward> getAllWard() {
         return repository.findAll();
     }
+
     @Override
     public List<Ward> findAllByDistrictId(int districtId) {
+        return null;
+    }
+
+    @Override
+    public List<Ward> findAllByDistrictId(Integer districtId) {
         return repository.findAllByDistrictId(districtId);
 
     }
 
     @Override
-    public List<Ward> findWardByDistrictId(Integer wardId) {
-        return repository.findByDistrictId(wardId);
+    public List<Ward> findWardByDistrictId(Integer districtId) {
+        return repository.findByDistrictId(districtId);
     }
 }

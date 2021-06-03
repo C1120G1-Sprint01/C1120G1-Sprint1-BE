@@ -14,6 +14,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository repository;
 
+    @Override
+    public List<Category> findAll() {
+        return repository.findAll();
+    }
 
     @Override
     public List<Category> findAllCategory() {

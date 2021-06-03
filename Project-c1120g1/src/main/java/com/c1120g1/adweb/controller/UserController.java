@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.controller;
 
 
+
 import com.c1120g1.adweb.dto.UserDTO;
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.User;
@@ -48,6 +49,7 @@ public class UserController {
             if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
+
             List<User> userList = userService.findAll();
             if (!userList.isEmpty()) {
                 Map<String, String> listError = new HashMap<>();
@@ -77,7 +79,6 @@ public class UserController {
             user.setEmail(userDTO.getEmail());
             user.setPhone(userDTO.getPhone());
             userService.save(user);
-
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -95,4 +96,6 @@ public class UserController {
         });
         return errors;
     }
+
 }
+

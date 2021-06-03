@@ -32,6 +32,8 @@ public interface BannerRepository extends JpaRepository<Banner, Integer> {
     @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.banner_id = ?1" ,nativeQuery = true)
     Banner findBannerById(Integer bannerId);
 
-    @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.banner_id = ?1",nativeQuery = true)
+
+//    @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.banner_id = ?1",nativeQuery = true)
+    @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.position_id = ?1",nativeQuery = true)
     List<Banner> showAllBannerByPosition(Integer positionId);
 }

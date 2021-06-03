@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@CrossOrigin(origins = "*", allowedHeaders = "*")
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class AdminController {
     @Autowired
     private UserService userService;
@@ -97,7 +97,7 @@ public class AdminController {
                         listError.put("existPhone", "This phone has register yet !");
                     }
                 }
-                if (!listError.isEmpty()) {
+                 if (!listError.isEmpty()) {
                     return ResponseEntity
                             .badRequest()
                             .body(listError);
@@ -152,7 +152,12 @@ public class AdminController {
     @GetMapping("/admin/listUser/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         User user = userService.findById(id);
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        if (user != null) {
+            System.err.println("user");
+            System.err.println("url " +user.getAvatarUrl());
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     //    Ngoc - Update user
@@ -163,7 +168,7 @@ public class AdminController {
             if (user1 != null) {
                 user.setUserId(id);
                 user.setAccount(user1.getAccount());
-                userService.save(user);
+                userService.updateUser(user);
                 return new ResponseEntity<>(user, HttpStatus.OK);
             } else {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -187,8 +192,10 @@ public class AdminController {
     }
 
     //    Ngoc - full text search
-    @GetMapping(value = "/admin/listUser", params = {"size", "q"})
-    public ResponseEntity<Page<User>> fullTextSearch(@RequestParam(name = "q") String q, @RequestParam("size") int size) {
+//    params = {"size", "q"}
+    @GetMapping(value = "/admin/listUser")
+    public ResponseEntity<Page<User>> fullTextSearch(@RequestParam(name = "q") String q,
+                                                     @RequestParam("size") int size) {
         try {
             Page<User> users = this.userService.fullSearch(q, PageRequest.of(0, size));
             if (users.isEmpty()) {

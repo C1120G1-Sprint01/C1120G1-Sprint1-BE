@@ -17,7 +17,9 @@ public interface UserService {
 
     void save(User user);
 
-    void saveUser(Integer userId, String name, String email, String phone, Ward ward);
+    void updateUser(User user);
+
+    void saveUser(Integer userId, String name, String email, String phone, Ward ward, String avatarUrl);
 
     void saveUsers(User user);
 
@@ -32,5 +34,6 @@ public interface UserService {
     Page<User> fullSearch(String q, Pageable pageable);
 
     User findByEmail(String email);
+
 
 }

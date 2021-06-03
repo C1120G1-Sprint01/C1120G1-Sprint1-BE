@@ -7,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -18,6 +16,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository repository;
+    @Autowired
+    private JavaMailSender javaMailSender;
+
     @Autowired
     private JavaMailSender emailSender;
 
@@ -34,6 +35,7 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+
     @Override
     public List<Account> findAllAccount() {
         return repository.findAll();
@@ -45,7 +47,7 @@ public class AccountServiceImpl implements AccountService {
     }
     @Override
     public Account findByUsername(String username) {
-        return null;
+        return repository.findByUserName(username);
     }
 
     @Override
@@ -59,6 +61,17 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public void sendEmailApprove(String email, String code) {
+        SimpleMailMessage messageApprove = new SimpleMailMessage();
+        messageApprove.setTo(email);
+        messageApprove.setSubject("Email xác nhận bài đăng được phê duyệt");
+        messageApprove.setText("Chúc mừng bạn! Tin của bạn đã được đăng thành công!" +
+                "CODE: " + code +
+                "Thanks and regards!");
+        this.javaMailSender.send(messageApprove);
+    }
+
+    @Override
     public void sendEmail(String email, String code) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
@@ -67,7 +80,6 @@ public class AccountServiceImpl implements AccountService {
                 + "TRANG WEB RAO VẶT C11 gửi mã code bên dưới để lấy lại mật khẩu\n"
                 + "CODE : " + code + "\n"
                 + "Thanks and regards!");
-
         this.emailSender.send(message);
     }
 }

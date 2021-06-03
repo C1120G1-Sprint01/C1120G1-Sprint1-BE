@@ -9,14 +9,12 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
 import org.springframework.stereotype.Repository;
 
 
 @Transactional
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
-
 
 
 //    ngoc - tim kiem full text search
@@ -47,16 +45,19 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             " set u.name = ?2, " +
             "u.email =?3, " +
             "u.phone =?4, " +
-            "u.ward =?5 " +
-            "where u.userId = ?1")
-    void updateUser(Integer userId, String name, String email, String phone, Ward ward);
+            "u.ward =?5, " +
+            "u.avatarUrl =?6" +
+            " where u.userId = ?1")
+    void updateUser(Integer userId, String name, String email, String phone, Ward ward, String avatarUrl);
+
+
 
 
     @Modifying
-    @Query(value = "INSERT INTO `user` ( avatar_url, email, name, phone, username) " +
-            "values " + " (:avatarUrl "+":email," + ":name," + ":phone," + ":account)", nativeQuery = true)
+    @Query(value = "INSERT INTO `user` ( avatar_Url, email, name, phone, username) " +
+            "values " + "(:avatarUrl "+":email," + ":name," + ":phone," + ":account,", nativeQuery = true)
     @Transactional
-    void saveUser(@Param("avatar")String avatarUrl,
+    void saveUser(   @Param("avatar")String avatarUrl,
                         @Param("name") String name,
                         @Param("account") String account,
                         @Param("email") String email,

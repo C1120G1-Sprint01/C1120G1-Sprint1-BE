@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
+
+
 import java.util.List;
 
 @RestController
@@ -22,6 +24,7 @@ public class CategoryController {
     /**
      * Method: get all category
      * Author: TuanLHM
+     *
      * @return
      */
     @GetMapping("/main-category/category")
@@ -36,6 +39,7 @@ public class CategoryController {
     /**
      * Method: get category by id
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -48,6 +52,10 @@ public class CategoryController {
     /**
      * Method: create category
      * Author: TuanLHM
+    /**
+     * Method: create category
+     * Author: TuanLHM
+     *
      * @return
      */
 
@@ -65,6 +73,7 @@ public class CategoryController {
     /**
      * Method: edit category
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -87,6 +96,7 @@ public class CategoryController {
     /**
      * Method: delete category by id
      * Author: TuanLHM
+     *
      * @return
      */
 

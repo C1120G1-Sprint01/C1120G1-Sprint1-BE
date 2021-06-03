@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 
 public interface AccountRepository extends JpaRepository<Account, String> {
+    Account findByUserName(String username);
 
     @Query(value = "SELECT u FROM Account u WHERE u.username = ?1")
     Account getUserById(String username);
@@ -26,6 +27,6 @@ public interface AccountRepository extends JpaRepository<Account, String> {
               @Param("password")String password,
               @Param("register_date")LocalDate register_date);
 
-    @Query(value = "select * from account where username like %?1% ", nativeQuery = true)
+    @Query(value = "select * from account where username = ?1", nativeQuery = true)
     Account checkUserExits(String username);
 }

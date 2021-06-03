@@ -11,11 +11,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository repository;
+
+    @Autowired
+    private WardRepository wardRepository;
+
+
 
 
     @Override
@@ -34,11 +41,17 @@ public class UserServiceImpl implements UserService {
                 user.getPhone(), user.getWard().getWardId(), user.getAccount().getUsername(), user.getAvatarUrl());
     }
 
-//    ngoc - khong dc xoa nha
     @Override
-    public void saveUser(Integer userId, String name, String email, String phone, Ward ward) {
+    public void updateUser(User user) {
+        repository.updateUser(user.getUserId(), standardizeName(user.getName()),
+                user.getEmail(), user.getPhone(), user.getWard(), user.getAvatarUrl());
+    }
+
+    //    ngoc - khong dc xoa nha
+    @Override
+    public void saveUser(Integer userId, String name, String email, String phone, Ward ward, String avatarUrl) {
         name = standardizeName(name);
-        repository.updateUser(userId, name, email, phone, ward);
+        repository.updateUser(userId, name, email, phone, ward, avatarUrl);
     }
 
     @Override
@@ -61,6 +74,11 @@ public class UserServiceImpl implements UserService {
         return repository.fullSearch(q, pageable);
     }
 
+    @Override
+    public User findByEmail(String email) {
+        return repository.findByEmail(email);
+    }
+
 
     // ngoc - chuan hoa ten
     public String standardizeName(String name) {
@@ -81,8 +99,6 @@ public class UserServiceImpl implements UserService {
         return name;
     }
 
-    @Autowired
-    private WardRepository wardRepository;
 
 
     @Override
@@ -94,16 +110,6 @@ public class UserServiceImpl implements UserService {
                 user.getPhone()
         );
     }
-
-
-
-    @Override
-    public User findByEmail(String email) {
-        return repository.findByEmail(email);
-    }
-
-
-
 
 
 }

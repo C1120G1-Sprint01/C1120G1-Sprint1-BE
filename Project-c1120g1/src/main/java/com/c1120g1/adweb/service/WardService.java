@@ -10,8 +10,9 @@ public interface WardService {
 
     List<Ward> findAllByDistrictId(int districtId);
 
-    List<Ward> findWardByDistrictId(Integer wardId);
+    
+    List<Ward> findAllByDistrictId(Integer districtId);
 
-
+    List<Ward> findWardByDistrictId(Integer districtId);
 
 }
