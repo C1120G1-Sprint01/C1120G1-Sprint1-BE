@@ -15,5 +15,8 @@ public interface AccountService {
 
     String generateCode();
 
+    void sendEmailApprove(String email, String code);
+
     void sendEmail(String email, String code);
+
 }
