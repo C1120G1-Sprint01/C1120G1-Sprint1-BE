@@ -13,6 +13,4 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     void updatePasswordUser(String password);
 
     Account findByUsername(String username);
-
-
 }
