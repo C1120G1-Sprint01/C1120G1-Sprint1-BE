@@ -49,7 +49,7 @@ public class UserController {
                         listError.put("existAccount", "Tài khoản đã tồn tại , vui lòng chọ tài khoản khác !");
                     }
                 }
-                if (!userDTO.getNewPassword().equals(userDTO.getConfirmPassword())) {
+                if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
                     listError.put("notCorrect", "Mật khẩu không trùng khớp , vui lòng nhập lại !");
                 }
                 if (userService.findByEmail(userDTO.getEmail()) != null) {
@@ -63,7 +63,7 @@ public class UserController {
             }
             Account account = new Account();
             account.setUsername(userDTO.getUsername());
-            account.setPassword(passwordEncoder.encode(userDTO.getNewPassword()));
+            account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             accountService.saveUserAccount(account);
 
             User user = new User();

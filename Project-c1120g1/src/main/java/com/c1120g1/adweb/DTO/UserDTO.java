@@ -10,19 +10,19 @@ public class UserDTO {
     private String phone;
     private String avatarUrl;
     private String registerDate ;
-    private String newPassword ;
+    private String password ;
     private String confirmPassword ;
     private Ward ward;
 
-    public UserDTO(String name, String username, String email,
-                   String phone, String avatarUrl, String registerDate, String newPassword, String confirmPassword, Ward ward) {
+    public UserDTO(String name, String username,
+                   String email, String phone, String avatarUrl, String registerDate, String password, String confirmPassword, Ward ward) {
         this.name = name;
         this.username = username;
         this.email = email;
         this.phone = phone;
         this.avatarUrl = avatarUrl;
         this.registerDate = registerDate;
-        this.newPassword = newPassword;
+        this.password = password;
         this.confirmPassword = confirmPassword;
         this.ward = ward;
     }
@@ -75,12 +75,12 @@ public class UserDTO {
         this.registerDate = registerDate;
     }
 
-    public String getNewPassword() {
-        return newPassword;
+    public String getPassword() {
+        return password;
     }
 
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getConfirmPassword() {
