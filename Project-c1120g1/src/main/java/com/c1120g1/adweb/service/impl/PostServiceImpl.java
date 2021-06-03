@@ -67,9 +67,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void updatePost(Post post) {
-        repository.updatePost(post.getDescription(), post.getEmail(), post.getPhone(), post.isPostType(),
-                post.getPosterName(), post.getPrice(), post.getTitle(), post.getChildCategory().getChildCategoryId(),
-                post.getStatus().getStatusId(), post.getWard().getWardId(), post.getPostId());
+
+        repository.updatePost(post.getDescription(),
+                post.getEmail(),
+                post.getPhone(),
+                post.isPostType(),
+                post.getPosterName(),
+                post.getPrice(),
+                post.getTitle(),
+                post.getChildCategory().getChildCategoryId(),
+                post.getStatus().getStatusId(),
+                post.getWard().getWardId(), post.getPostId());
 
 //        for (Image image : post.getImageSet()) {
 //            imageRepository.update(image.getUrl(), image.getImageId());
@@ -135,5 +143,10 @@ public class PostServiceImpl implements PostService {
         return simpleDateFormat.format(now);
 
 
+    }
+
+    @Override
+    public Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable) {
+        return repository.findAllByUsernameAndStatusId(username, statusId, pageable);
     }
 }

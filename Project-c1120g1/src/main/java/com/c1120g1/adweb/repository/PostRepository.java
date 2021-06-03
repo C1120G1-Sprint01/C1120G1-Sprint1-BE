@@ -85,6 +85,12 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     @Query(value="select * from post where enabled = 1 order by post_date_time desc", nativeQuery = true)
     Page<Post> findAllNewest(Pageable pageable);
 
+    @Query(value = "select * " +
+            "from post " +
+            "inner join user " +
+            "on post.user_id = user.user_id " +
+            "where user.username = ?1 and post.enabled = true and post.status_id = ?2", nativeQuery = true)
+    Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
 }
 

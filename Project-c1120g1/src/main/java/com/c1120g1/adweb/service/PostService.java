@@ -45,5 +45,7 @@ public interface PostService{
 
     String getPostDateTime();
 
+    Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
+
 
 }
