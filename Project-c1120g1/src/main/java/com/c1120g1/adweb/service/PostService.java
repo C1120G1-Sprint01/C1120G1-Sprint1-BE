@@ -7,12 +7,25 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 
 public interface PostService {
+    Page<Post> findAllListDetail(Pageable pageable);
+
+    Page<Post> findAllListApprove(Pageable pageable);
+
+    void approvePost(Integer id);
+
+    void deleteById(Integer id);
+
+    void waitPost(Integer id);
+
+    Page<Post> findAllListWait(Pageable pageable);
 
     Page<Post> findAllByUsername(String username, Pageable pageable);
 
     Post findByIdAndUserId(Integer id);
 
     Post findById(Integer id);
+
+    void updatePost(Post post);
 
     Page<Post> findAllNewest(Pageable pageable);
 

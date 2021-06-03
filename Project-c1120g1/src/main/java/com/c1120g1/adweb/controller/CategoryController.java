@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
-import org.springframework.web.bind.annotation.GetMapping;
+
 import java.util.List;
 
 @RestController
@@ -22,6 +21,7 @@ public class CategoryController {
     /**
      * Method: get all category
      * Author: TuanLHM
+     *
      * @return
      */
     @GetMapping("/main-category/category")
@@ -36,6 +36,7 @@ public class CategoryController {
     /**
      * Method: get category by id
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -44,10 +45,10 @@ public class CategoryController {
         return new ResponseEntity<>(this.categoryService.findCategoryById(id), HttpStatus.OK);
     }
 
-
     /**
      * Method: create category
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -65,6 +66,7 @@ public class CategoryController {
     /**
      * Method: edit category
      * Author: TuanLHM
+     *
      * @return
      */
 
@@ -77,7 +79,7 @@ public class CategoryController {
 
     @GetMapping("api/category")
     public ResponseEntity<List<Category>> getCategory() {
-        List<Category> categoryList =  categoryService.findAllCategory();
+        List<Category> categoryList = categoryService.findAllCategory();
         if (categoryList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -87,6 +89,7 @@ public class CategoryController {
     /**
      * Method: delete category by id
      * Author: TuanLHM
+     *
      * @return
      */
 

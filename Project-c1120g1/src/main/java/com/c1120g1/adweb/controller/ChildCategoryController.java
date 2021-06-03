@@ -19,6 +19,16 @@ public class ChildCategoryController {
     @Autowired
     private ChildCategoryService childCategoryService;
 
+    @GetMapping("child-category/{categoryId}")
+    public ResponseEntity<List<ChildCategory>> findAllByCategoryId(@PathVariable Integer categoryId) {
+        List<ChildCategory> childCategoryList = childCategoryService.findAllByCategoryId(categoryId);
+
+        if (childCategoryList == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
+    }
+
     /**
      * Method: get all child_category
      * Author: TuanLHM
@@ -113,8 +123,8 @@ public class ChildCategoryController {
 
     @GetMapping("/main-category/child-category/search")
     public ResponseEntity<List<ChildCategory>> searchName
-            (@RequestParam(name = "childCategoryName") Optional<String> childCategoryName,
-             @RequestParam(name = "categoryName") Optional<String> categoryName) {
+    (@RequestParam(name = "childCategoryName") Optional<String> childCategoryName,
+     @RequestParam(name = "categoryName") Optional<String> categoryName) {
         List<ChildCategory> childCategoryList;
         if (categoryName.isPresent()) {
             if (childCategoryName.isPresent()) {
@@ -136,6 +146,3 @@ public class ChildCategoryController {
         return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
     }
 }
-
-
-
