@@ -87,14 +87,14 @@ public class AdminController {
                     listError.put("existAccount", "Tài khoản đã tồn tại trong hệ thống");
                 }
                 if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-                    listError.put("notCorrect", "Password wrong !");
+                    listError.put("notCorrect", "Xác thực mật khẩu sai, mời bạn nhập lại !");
                 }
                 for (User user : userList) {
                     if (user.getEmail().equals(userDTO.getEmail())) {
                         listError.put("existEmail", "Email has register yet !");
                     }
                     if (user.getPhone().equals(userDTO.getPhone())) {
-                        listError.put("existPhone", "This phone has register yet !");
+                        listError.put("existPhone", "Email này đã được đăng ký !");
                     }
                 }
                  if (!listError.isEmpty()) {
