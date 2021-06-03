@@ -2,10 +2,9 @@ package com.c1120g1.adweb.controller;
 
 
 import com.c1120g1.adweb.entity.User;
-import com.c1120g1.adweb.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RestController;
+
+
 
 import com.c1120g1.adweb.DTO.UserDTO;
 import com.c1120g1.adweb.entity.Account;
@@ -27,10 +26,12 @@ import java.util.List;
 import java.util.Map;
 
 
-@RestController
+
+@RequestMapping("api/user")
 @CrossOrigin(origins = "http://localhost:4200/user")
 public class UserController {
 
+    @Autowired
     private UserService userService;
 
     @Autowired
@@ -38,6 +39,15 @@ public class UserController {
 
     @Autowired
     private WardService wardService;
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id){
+        User user =userService.findByUserId(id);
+        if (user ==null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user,HttpStatus.OK);
+    }
 
 
     @PostMapping(value = "/user/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
