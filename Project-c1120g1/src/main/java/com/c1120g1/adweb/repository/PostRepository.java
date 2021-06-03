@@ -5,12 +5,24 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 
+@Repository
 @Transactional
 public interface PostRepository extends JpaRepository<Post, Integer> {
+
+
+    /**
+     * author: ThinhTHB
+     * method: search post by name
+     * */
+    @Query(value = "select p from Post p " +
+            "where p.posterName like %:posterName%")
+    List<Post> searchByName(String posterName);
 
     @Query(value =  "select * " +
                     "from post " +
@@ -81,3 +93,4 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
 }
+

@@ -1,12 +1,22 @@
 package com.c1120g1.adweb.service;
 
 import com.c1120g1.adweb.entity.Post;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface PostService {
+@Service
+public interface PostService{
+
+    /**
+     * author: ThinhTHB
+     * method: search post by name
+     * */
+    List<Post> searchByName(String posterName);
+
     Page<Post> findAllListDetail(Pageable pageable);
 
     Page<Post> findAllListApprove(Pageable pageable);
@@ -36,5 +46,6 @@ public interface PostService {
     String getPostDateTime();
 
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
+
 
 }

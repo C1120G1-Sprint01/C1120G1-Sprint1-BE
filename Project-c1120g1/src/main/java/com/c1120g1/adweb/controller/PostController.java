@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
 import javax.validation.Valid;
 
 @RestController
@@ -25,8 +26,19 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+
     @Autowired
     private UserService userService;
+
+    /**
+     * author: ThinhTHB
+     * method: search post by name
+     * */
+    @GetMapping("/search/{posterName}")
+    public List<Post> searchByName(@PathVariable("posterName") String posterName) {
+        return postService.searchByName(posterName);
+    }
 
 //    -----------------------LIST DETAIL------------------------
 
@@ -219,8 +231,8 @@ public class PostController {
     public List<Post> search(
             @RequestParam(name = "title") String title,
             @RequestParam(name = "child_category") String child_category,
-            @RequestParam(name = "province") String province) {
-        return postService.search("%" + title + "%", child_category, province);
-    }
+            @RequestParam(name = "province") String province){
+            return postService.search("%" + title + "%", child_category, province);
+        }
 }
 
