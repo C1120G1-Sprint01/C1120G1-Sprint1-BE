@@ -11,16 +11,15 @@ import org.springframework.stereotype.Service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 @Service
 public class AccountServiceImpl implements AccountService {
 
     @Autowired
     private AccountRepository repository;
+
     @Autowired
-
-    private JavaMailSender javaMailSender;
-
     private JavaMailSender emailSender;
 
     @Override
@@ -38,12 +37,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account findByUsername(String username) {
-        return null;
+        return repository.findByUsername(username);
     }
 
     @Override
     public String generateCode() {
-        return ""+ (int)(Math.random()*1000000*1.1);
+        return ""+ new Random().nextInt(900000) + 100000;
     }
 
     @Override
@@ -54,18 +53,18 @@ public class AccountServiceImpl implements AccountService {
         messageApprove.setText("Chúc mừng bạn! Tin của bạn đã được đăng thành công!" +
                 "CODE: " + code +
                 "Thanks and regards!");
-        this.javaMailSender.send(messageApprove);
+        this.emailSender.send(messageApprove);
     }
 
     @Override
     public void sendEmail(String email, String code) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(email);
-        message.setSubject("Email lấy lại mật khẩu từ Soren");
-        message.setText("Chào bạn\n"
-                + "TRANG WEB RAO VẶT C11 gửi mã code bên dưới để lấy lại mật khẩu\n"
-                + "CODE : " + code + "\n"
-                + "Thanks and regards!");
+        message.setSubject("Email lấy lại mật khẩu từ Hoangtq");
+        message.setText("Chào bạn!\n"
+                    + "TRANG WEB RAO VẶT C11 gửi mã code OTP bên dưới để lấy lại mật khẩu.\n"
+                    + "Mã CODE bao gồm 6 số : " + code + "\n\n"
+                    + "Thanks and regards!");
 
         this.emailSender.send(message);
     }

@@ -24,7 +24,7 @@ public class DistrictServiceImpl implements DistrictService {
 
     @Override
 
-    public List<DistrictDTO> findAllByProvinceId(int provinceId) {
+    public List<DistrictDTO> findAllByProvinceIdDTO(int provinceId) {
         List<District> districtList = repository.findAllByProvinceId(provinceId);
         List<DistrictDTO> districtDTOList = new ArrayList<>();
         DistrictDTO districtDTO = null;
@@ -39,7 +39,7 @@ public class DistrictServiceImpl implements DistrictService {
     }
 
     public List<District> findAllByProvinceId(Integer provinceId) {
-        return null;
+        return repository.findAllByProvinceId(provinceId);
 
     }
 

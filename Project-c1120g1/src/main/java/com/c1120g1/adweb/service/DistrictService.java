@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface DistrictService {
 
-    List<DistrictDTO> findAllByProvinceId(int provinceId);
+    List<DistrictDTO> findAllByProvinceIdDTO(int provinceId);
 
     List<District> findAllDistrictByProvinceId(Integer provinceId);
 
