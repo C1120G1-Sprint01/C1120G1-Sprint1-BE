@@ -48,6 +48,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public void cancelApprovePost(Integer id) {
+        repository.cancelApprovePost(id);
+    }
+
+    @Override
     public Post findById(Integer id) {
         return repository.findById(id).orElse(null);
     }
@@ -76,6 +81,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void approvePost(Integer id) {
         repository.approvePost(id);
+    }
+
+    @Override
+    public void deletePost(Integer id) {
+        repository.deletePost(id);
     }
 
     @Override
