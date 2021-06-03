@@ -52,7 +52,7 @@ public class SecurityController {
         if (user != null) {
             String code = accountService.generateCode();
             System.out.println("CODE : "+code);
-//            accountService.sendEmail(email, code);
+            accountService.sendEmail(email, code);
             return new ResponseEntity<>(code, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
