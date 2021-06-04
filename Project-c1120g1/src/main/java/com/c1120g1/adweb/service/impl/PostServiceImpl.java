@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.service.impl;
 
+import com.c1120g1.adweb.DTO.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 
 import com.c1120g1.adweb.repository.ImageRepository;
@@ -152,11 +153,20 @@ public class PostServiceImpl implements PostService {
         Date now = new Date();
         return simpleDateFormat.format(now);
 
-
     }
 
     @Override
     public Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable) {
         return repository.findAllByUsernameAndStatusId(username, statusId, pageable);
+    }
+
+    @Override
+    public List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate) {
+        return repository.statisticQuantityPost(startDate,endDate);
+    }
+
+    @Override
+    public Page<Post> findAllPost(Pageable pageable) {
+        return repository.findAllPost(pageable);
     }
 }
