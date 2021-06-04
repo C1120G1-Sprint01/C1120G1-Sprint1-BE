@@ -205,6 +205,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+
 import javax.validation.Valid;
 
 @RestController
@@ -214,8 +215,19 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+
     @Autowired
     private UserService userService;
+
+    /**
+     * author: ThinhTHB
+     * method: search post by name
+     * */
+    @GetMapping("/search/{posterName}")
+    public List<Post> searchByName(@PathVariable("posterName") String posterName) {
+        return postService.searchByName(posterName);
+    }
 
 //    -----------------------LIST DETAIL------------------------
 
@@ -235,6 +247,16 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @PutMapping("/listDetail/cancelApprove/{postId}")
+    public ResponseEntity<Post> cancelApprovePost(@PathVariable("postId") Integer postId) {
+        Post currentPost = this.postService.findById(postId);
+        if (currentPost == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        this.postService.cancelApprovePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //    -----------------------LIST APPROVE------------------------
@@ -305,8 +327,8 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        this.postService.deleteById(postId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        this.postService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/listApprove/wait/{postId}")
@@ -355,8 +377,8 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        this.postService.deleteById(postId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        this.postService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //    -----------------------END OF QUANG------------------------
@@ -408,9 +430,9 @@ public class PostController {
     public List<Post> search(
             @RequestParam(name = "title") String title,
             @RequestParam(name = "child_category") String child_category,
-            @RequestParam(name = "province") String province) {
-        return postService.search("%" + title + "%", child_category, province);
-    }
+            @RequestParam(name = "province") String province){
+            return postService.search("%" + title + "%", child_category, province);
+        }
 }
 
 

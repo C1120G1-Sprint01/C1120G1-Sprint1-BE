@@ -115,8 +115,8 @@
 
 package com.c1120g1.adweb.service.impl;
 
-import com.c1120g1.adweb.entity.Image;
 import com.c1120g1.adweb.entity.Post;
+
 import com.c1120g1.adweb.repository.ImageRepository;
 import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.entity.User;
@@ -128,9 +128,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import java.util.List;
 
 @Service
@@ -140,17 +140,25 @@ public class PostServiceImpl implements PostService {
     private PostRepository repository;
 
     @Autowired
-
     private ImageRepository imageRepository;
-
-    @Autowired
-    private PostService postService;
 
     @Autowired
     private UserService userService;
 
     @Autowired
+    private PostService postService;
+
+    @Autowired
     private StatusService statusService;
+
+    /**
+     * author: ThinhTHB
+     * method: search post by name
+     * */
+    @Override
+    public List<Post> searchByName(String posterName) {
+        return repository.searchByName(posterName);
+    }
 
     @Override
     public Page<Post> findAllByUsername(String username, Pageable pageable) {
@@ -160,6 +168,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Post> findAllListDetail(Pageable pageable) {
         return repository.findAllListDetail(pageable);
+    }
+
+    @Override
+    public void cancelApprovePost(Integer id) {
+        repository.cancelApprovePost(id);
     }
 
     @Override
@@ -199,6 +212,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void approvePost(Integer id) {
         repository.approvePost(id);
+    }
+
+    @Override
+    public void deletePost(Integer id) {
+        repository.deletePost(id);
     }
 
     @Override
@@ -248,6 +266,7 @@ public class PostServiceImpl implements PostService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date now = new Date();
         return simpleDateFormat.format(now);
+
 
     }
 
