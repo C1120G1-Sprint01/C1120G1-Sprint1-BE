@@ -25,7 +25,6 @@ public class PostServiceImpl implements PostService {
     private PostRepository repository;
 
     @Autowired
-
     private ImageRepository imageRepository;
 
     @Autowired
@@ -151,4 +150,5 @@ public class PostServiceImpl implements PostService {
         childCategoryName = childCategoryName.replace("-", " ");
         return repository.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
     }
+
 }
