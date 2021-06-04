@@ -1,7 +1,12 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.entity.Bot;
 import com.c1120g1.adweb.DTO.BotDTO;
+import com.c1120g1.adweb.entity.Account;
+import com.c1120g1.adweb.entity.AccountRole;
+import com.c1120g1.adweb.entity.Bot;
+import com.c1120g1.adweb.entity.Role;
+import com.c1120g1.adweb.service.AccountRoleService;
+import com.c1120g1.adweb.service.AccountService;
 import com.c1120g1.adweb.service.BotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +21,12 @@ import java.util.List;
 public class BotController {
     @Autowired
     BotService botService;
+
+    @Autowired
+    AccountService accountService;
+
+    @Autowired
+    AccountRoleService accountRoleService;
 
     @PostMapping("")
     public ResponseEntity<Bot> getBotByQuestion(@RequestBody String question) {
@@ -47,6 +58,34 @@ public class BotController {
                 bot.setAnswer(botDTO.getAnswer());
                 botService.saveBot(bot);
                 return new ResponseEntity<>(bot, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/account")
+    public ResponseEntity<Account> getAccountByUserName(@RequestBody String userName) {
+        try {
+            Account account = accountService.findByUsername(userName);
+            if (account == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>(account, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/accountRole")
+    public ResponseEntity<Role> getAccountRoleByAccount(@RequestBody Account account) {
+        try {
+            AccountRole accountRole = accountRoleService.findAccountRoleByAccount(account);
+            if (accountRole == null) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            } else {
+                return new ResponseEntity<>(accountRole.getRole(), HttpStatus.OK);
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

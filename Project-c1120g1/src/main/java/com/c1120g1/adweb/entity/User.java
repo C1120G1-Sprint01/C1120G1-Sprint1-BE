@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +27,7 @@ public class User {
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("user")
+    @JsonBackReference
     @JoinColumn(name = "username", referencedColumnName = "username")
     private Account account;
 
@@ -40,12 +41,11 @@ public class User {
     private String avatarUrl;
 
     @ManyToOne
-    @JsonIgnoreProperties({"userSet", "postSet"})
     @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
     private Ward ward;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("ward")
+    @JsonIgnore
     private Set<Post> postSet;
 
 }

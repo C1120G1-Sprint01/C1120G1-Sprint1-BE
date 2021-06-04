@@ -14,6 +14,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 
 import javax.validation.Valid;
 
@@ -24,8 +26,19 @@ public class PostController {
 
     @Autowired
     private PostService postService;
+
+
     @Autowired
     private UserService userService;
+
+    /**
+     * author: ThinhTHB
+     * method: search post by name
+     */
+    @GetMapping("/search/{posterName}")
+    public List<Post> searchByName(@PathVariable("posterName") String posterName) {
+        return postService.searchByName(posterName);
+    }
 
 //    -----------------------LIST DETAIL------------------------
 
@@ -45,6 +58,16 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @PutMapping("/listDetail/cancelApprove/{postId}")
+    public ResponseEntity<Post> cancelApprovePost(@PathVariable("postId") Integer postId) {
+        Post currentPost = this.postService.findById(postId);
+        if (currentPost == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        this.postService.cancelApprovePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //    -----------------------LIST APPROVE------------------------
@@ -67,15 +90,26 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
-
     @GetMapping("/cus-post-list")
     public ResponseEntity<Page<Post>> getPostByUsername(@RequestParam String username,
-                                                        @PageableDefault(size = 2) Pageable pageable) {
-        Page<Post> postList = postService.findAllByUsername(username, pageable);
-        if (postList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+                                                        @PageableDefault(size = 2) Pageable pageable,
+                                                        @RequestParam Optional<Integer> statusId) {
+        try {
+            Page<Post> postList;
+            if (statusId.isPresent()) {
+                postList = postService.findAllByUsernameAndStatusId(username, statusId.get(), pageable);
+            } else {
+                postList = postService.findAllByUsername(username, pageable);
+            }
+            if (postList.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(postList, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
     @GetMapping("/cus-post/{id}")
@@ -103,8 +137,8 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        this.postService.deleteById(postId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        this.postService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PutMapping("/listApprove/wait/{postId}")
@@ -153,57 +187,30 @@ public class PostController {
         if (post == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        this.postService.deleteById(postId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        this.postService.deletePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     //    -----------------------END OF QUANG------------------------
 
-    /**
-     * Author: ViNTT
-     * Get data for Post Details Page
-     */
-    @GetMapping("{id}")
-    public ResponseEntity<Post> getPostById(@PathVariable("id") Integer postId) {
-        Post post = postService.findById(postId);
-        if (post == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
-        }
-        return new ResponseEntity<>(post, HttpStatus.OK); // 200
-    }
-
-    @PostMapping("/cus-post-edit/{id}")
-    public ResponseEntity<Post> editPost(@Valid @RequestBody Post post, BindingResult bindingResult, @PathVariable Integer id) {
-        if (bindingResult.hasErrors()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        } else {
-            Post postObj = postService.findByIdAndUserId(id);
-
-            if (postObj == null) {
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    @PostMapping("/cus-post-edit")
+    public ResponseEntity<Post> editPost(@Valid @RequestBody Post post, BindingResult bindingResult) {
+        try {
+            if (bindingResult.hasErrors()) {
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             } else {
                 if (post.getStatus().getStatusId() == 2 || post.getStatus().getStatusId() == 4 ||
                         post.getStatus().getStatusId() == 5) {
-                    postObj.setDescription(post.getDescription());
-                    postObj.setEmail(post.getEmail());
-                    postObj.setPhone(post.getPhone());
-                    postObj.setPostType(post.isPostType());
-                    postObj.setPosterName(post.getPosterName());
-                    postObj.setPrice(post.getPrice());
-                    postObj.setTitle(post.getTitle());
-                    postObj.setChildCategory(post.getChildCategory());
-                    postObj.setStatus(post.getStatus());
-                    postObj.setWard(post.getWard());
-//                postObj.setImageSet(post.getImageSet());
-                    postService.updatePost(postObj);
-                    return new ResponseEntity<>(postObj, HttpStatus.OK);
+                    postService.updatePost(post);
+                    return new ResponseEntity<>(post, HttpStatus.OK);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
-
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @GetMapping("listPost")
@@ -230,12 +237,38 @@ public class PostController {
 
     /**
      * Author: ViNTT
+     * Get post detail by post id
+     */
+    @GetMapping("{id}")
+    public ResponseEntity<Post> getPostById(@PathVariable("id") Integer postId) {
+        Post post = postService.findById(postId);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
+        }
+        return new ResponseEntity<>(post, HttpStatus.OK); // 200
+    }
+
+    /**
+     * Author: ViNTT
+     * Get data for Post Details Page
+     */
+    @GetMapping("{id}/active")
+    public ResponseEntity<Post> getActivePostById(@PathVariable("id") Integer postId) {
+        Post post = postService.findActivePostById(postId);
+        if (post == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND); // 404
+        }
+        return new ResponseEntity<>(post, HttpStatus.OK); // 200
+    }
+
+    /**
+     * Author: ViNTT
      * Get data for List Post By Category Page
      */
     @GetMapping("category/{category}")
-    public ResponseEntity<Page<Post>> getPostsByCategoryName(@PathVariable("category") String categoryName,
-                                                             @PageableDefault(size = 2) Pageable pageable) {
-        Page<Post> postList = postService.findAllByCategoryName(categoryName, pageable);
+    public ResponseEntity<Page<Post>> getActivePostsByCategoryName(@PathVariable("category") String categoryName,
+                                                                   @PageableDefault(size = 2) Pageable pageable) {
+        Page<Post> postList = postService.findAllActiveByCategoryName(categoryName, pageable);
         if (postList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -247,11 +280,11 @@ public class PostController {
      * Get data for List Post By Child Category Page
      */
     @GetMapping("category/{category}/{childCategory}")
-    public ResponseEntity<Page<Post>> getPostsByCategoryNameAndChildCategoryName(
+    public ResponseEntity<Page<Post>> getActivePostsByCategoryNameAndChildCategoryName(
             @PathVariable("category") String categoryName,
             @PathVariable("childCategory") String childCategoryName,
             @PageableDefault(size = 2) Pageable pageable) {
-        Page<Post> postList = postService.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
+        Page<Post> postList = postService.findAllActiveByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
         if (postList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

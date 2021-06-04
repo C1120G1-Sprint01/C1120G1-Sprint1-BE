@@ -1,7 +1,7 @@
 package com.c1120g1.adweb.service.impl;
 
-import com.c1120g1.adweb.entity.Image;
 import com.c1120g1.adweb.entity.Post;
+
 import com.c1120g1.adweb.repository.ImageRepository;
 import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.entity.User;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import java.util.List;
 
 @Service
@@ -28,13 +29,22 @@ public class PostServiceImpl implements PostService {
     private ImageRepository imageRepository;
 
     @Autowired
-    private PostService postService;
-
-    @Autowired
     private UserService userService;
 
     @Autowired
+    private PostService postService;
+
+    @Autowired
     private StatusService statusService;
+
+    /**
+     * author: ThinhTHB
+     * method: search post by name
+     */
+    @Override
+    public List<Post> searchByName(String posterName) {
+        return repository.searchByName(posterName);
+    }
 
     @Override
     public Page<Post> findAllByUsername(String username, Pageable pageable) {
@@ -46,12 +56,44 @@ public class PostServiceImpl implements PostService {
         return repository.findAllListDetail(pageable);
     }
 
+    @Override
+    public void cancelApprovePost(Integer id) {
+        repository.cancelApprovePost(id);
+    }
+
     /**
      * Author: ViNTT
      */
     @Override
-    public Post findById(Integer id) {
-        return repository.findById(id).orElse(null);
+    public Post findById(Integer postId) {
+        return repository.findById(postId).orElse(null);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Post findActivePostById(Integer postId) {
+        return repository.findActivePostById(postId);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Page<Post> findAllActiveByCategoryName(String categoryName, Pageable pageable) {
+        categoryName = categoryName.replace("-", " ");
+        return repository.findAllActiveByCategoryName(categoryName, pageable);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Page<Post> findAllActiveByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable) {
+        categoryName = categoryName.replace("-", " ");
+        childCategoryName = childCategoryName.replace("-", " ");
+        return repository.findAllActiveByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
     }
 
     @Override
@@ -61,9 +103,17 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void updatePost(Post post) {
-        repository.updatePost(post.getDescription(), post.getEmail(), post.getPhone(), post.isPostType(),
-                post.getPosterName(), post.getPrice(), post.getTitle(), post.getChildCategory().getChildCategoryId(),
-                post.getStatus().getStatusId(), post.getWard().getWardId(), post.getPostId());
+
+        repository.updatePost(post.getDescription(),
+                post.getEmail(),
+                post.getPhone(),
+                post.isPostType(),
+                post.getPosterName(),
+                post.getPrice(),
+                post.getTitle(),
+                post.getChildCategory().getChildCategoryId(),
+                post.getStatus().getStatusId(),
+                post.getWard().getWardId(), post.getPostId());
 
 //        for (Image image : post.getImageSet()) {
 //            imageRepository.update(image.getUrl(), image.getImageId());
@@ -78,6 +128,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public void approvePost(Integer id) {
         repository.approvePost(id);
+    }
+
+    @Override
+    public void deletePost(Integer id) {
+        repository.deletePost(id);
     }
 
     @Override
@@ -127,28 +182,11 @@ public class PostServiceImpl implements PostService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date now = new Date();
         return simpleDateFormat.format(now);
-
     }
 
-    /**
-     * Author: ViNTT
-     * Get data for List Post By Child Category Page
-     */
     @Override
-    public Page<Post> findAllByCategoryName(String categoryName, Pageable pageable) {
-        categoryName = categoryName.replace("-", " ");
-        return repository.findAllByCategoryName(categoryName, pageable);
-    }
-
-    /**
-     * Author: ViNTT
-     * Get data for List Post By Child Category Page
-     */
-    @Override
-    public Page<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable) {
-        categoryName = categoryName.replace("-", " ");
-        childCategoryName = childCategoryName.replace("-", " ");
-        return repository.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
+    public Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable) {
+        return repository.findAllByUsernameAndStatusId(username, statusId, pageable);
     }
 
 }

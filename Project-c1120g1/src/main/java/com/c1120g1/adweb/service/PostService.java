@@ -1,17 +1,31 @@
 package com.c1120g1.adweb.service;
 
 import com.c1120g1.adweb.entity.Post;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface PostService {
+@Service
+public interface PostService{
+
+    /**
+     * author: ThinhTHB
+     * method: search post by name
+     * */
+    List<Post> searchByName(String posterName);
+
     Page<Post> findAllListDetail(Pageable pageable);
+
+    void cancelApprovePost(Integer id);
 
     Page<Post> findAllListApprove(Pageable pageable);
 
     void approvePost(Integer id);
+
+    void deletePost(Integer id);
 
     void deleteById(Integer id);
 
@@ -22,11 +36,6 @@ public interface PostService {
     Page<Post> findAllByUsername(String username, Pageable pageable);
 
     Post findByIdAndUserId(Integer id);
-
-    /**
-     * Author: ViNTT
-     */
-    Post findById(Integer id);
 
     void updatePost(Post post);
 
@@ -40,14 +49,24 @@ public interface PostService {
 
     /**
      * Author: ViNTT
-     * Get data for List Post By Child Category Page
      */
-    Page<Post> findAllByCategoryName(String categoryName, Pageable pageable);
+    Post findById(Integer postId);
 
     /**
      * Author: ViNTT
-     * Get data for List Post By Child Category Page
      */
-    Page<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
+    Post findActivePostById(Integer postId);
+
+    /**
+     * Author: ViNTT
+     */
+    Page<Post> findAllActiveByCategoryName(String categoryName, Pageable pageable);
+
+    /**
+     * Author: ViNTT
+     */
+    Page<Post> findAllActiveByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
+
+    Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
 }

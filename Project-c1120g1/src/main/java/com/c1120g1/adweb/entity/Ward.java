@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,16 +25,15 @@ public class Ward {
     private String wardName;
 
     @ManyToOne
-    @JsonIgnoreProperties("wardSet")
     @JoinColumn(name = "district_id", referencedColumnName = "district_id", nullable = false)
     private District district;
 
     @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("ward")
+    @JsonIgnore
     private Set<User> userSet;
 
     @OneToMany(mappedBy = "ward", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("ward")
+    @JsonIgnore
     private Set<Post> postSet;
 
 }

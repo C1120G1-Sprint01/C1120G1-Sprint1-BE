@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -63,27 +63,23 @@ public class Post {
     private String description;
 
     @ManyToOne
-    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "status_id")
     private Status status;
 
     @ManyToOne
-    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "child_category_id", nullable = false, referencedColumnName = "child_category_id")
     private ChildCategory childCategory;
 
     @ManyToOne
-    @JsonIgnoreProperties({"postSet", "userSet"})
     @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
     private Ward ward;
 
     @ManyToOne
-    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("post")
+    @JsonManagedReference
     private Set<Image> imageSet;
 
     @Override
@@ -99,4 +95,5 @@ public class Post {
                 ", imageSet=" + imageSet +
                 '}';
     }
+
 }
