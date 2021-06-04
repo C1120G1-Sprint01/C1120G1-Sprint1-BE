@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.repository;
 
+import com.c1120g1.adweb.DTO.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -132,5 +133,20 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where user.username = ?1 and post.enabled = true and post.status_id = ?2", nativeQuery = true)
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
-}
+    @Query(value = "SELECT post_date_time as timePost, " +
+            "COUNT(case when status_id=1 then 1 end  ) as countPostSuccess, \n" +
+            "COUNT(case when status_id=2 then 1 end  ) as countPostFailure \n" +
+            "FROM post\n" +
+            "GROUP BY post_date_time\n" +
+            "HAVING  date(post_date_time) between ?1 and ?2", nativeQuery = true)
+    List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate);
 
+    @Query(value = "select * from post where enabled = 1 order by post_date_time desc", nativeQuery = true)
+    Page<Post> findAllPost(Pageable pageable);
+
+    @Modifying
+    @Query(value = "UPDATE post \n" +
+            "SET enabled = 0 \n" +
+            "WHERE post_id = ?1 and enabled = 1;", nativeQuery = true)
+    void deleteById(Integer id);
+}

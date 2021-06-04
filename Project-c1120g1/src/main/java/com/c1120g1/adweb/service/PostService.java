@@ -1,8 +1,10 @@
 package com.c1120g1.adweb.service;
 
+import com.c1120g1.adweb.DTO.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -69,4 +71,8 @@ public interface PostService{
 
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
+    List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate);
+
+
+    Page<Post> findAllPost(Pageable pageable);
 }
