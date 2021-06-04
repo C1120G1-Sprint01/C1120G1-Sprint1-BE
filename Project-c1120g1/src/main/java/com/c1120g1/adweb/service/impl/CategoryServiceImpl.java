@@ -14,6 +14,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Autowired
     private CategoryRepository repository;
 
+    @Override
+    public List<Category> findAll() {
+        return repository.findAll();
+    }
 
     @Override
     public List<Category> findAllCategory() {
@@ -34,6 +38,5 @@ public class CategoryServiceImpl implements CategoryService {
     public void delete(Integer id) {
         repository.deleteById(id);
     }
-
 
 }

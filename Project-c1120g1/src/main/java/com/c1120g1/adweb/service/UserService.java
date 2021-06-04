@@ -8,12 +8,12 @@ import java.util.List;
 @Service
 public interface UserService {
 
-    User findAll(User user);
+//    User findAll(User user);
 
 
     User findByEmail(String email);
 
-    void saveUser(User user);
+    void saveUserCus(User user);
 
     List<User> findAllUser();
 
@@ -21,5 +21,5 @@ public interface UserService {
 
     void save(User user);
 
-    User findByUserId(Integer id);
+    User findByUsername(String username);
 }

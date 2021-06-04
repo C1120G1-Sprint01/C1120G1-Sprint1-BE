@@ -25,6 +25,8 @@ public interface PostService {
 
     Post findById(Integer id);
 
+    void updatePost(Post post);
+
     Page<Post> findAllNewest(Pageable pageable);
 
     void save(Post post);
@@ -32,5 +34,7 @@ public interface PostService {
     List<Post> search(String title, String child_category, String province_name);
 
     String getPostDateTime();
+
+    Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
 }

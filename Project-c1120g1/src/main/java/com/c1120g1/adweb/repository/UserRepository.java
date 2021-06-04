@@ -13,19 +13,24 @@ import javax.transaction.Transactional;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    User findAll(User user);
 
     @Modifying
-    @Query(value = "INSERT INTO `user` ( avatar_Url, email, name, phone, username) " +
-            "values " + "(:avatarUrl "+":email," + ":name," + ":phone," + ":account,", nativeQuery = true)
+    @Query(value = "INSERT INTO user ( avatar_Url, email, name, phone, username, ward_id) " +
+            "values " + "(:avatarUrl, "+":email," + ":name," + ":phone," + ":username," +":wardId) ",
+            nativeQuery = true)
     @Transactional
-    void saveUser(   @Param("avatar")String avatarUrl,
+    void saveUserCus(   @Param("avatarUrl")String avatarUrl,
                         @Param("name") String name,
-                        @Param("account") String account,
+                        @Param("username") String username,
                         @Param("email") String email,
-                        @Param("phone") String phone);
+                        @Param("phone") String phone,
+                        @Param("wardId") Integer wardId);
 
     User findByEmail(String email);
 
-    User findByUserId(Integer id);
+    @Query(value =  "select * from `user`" +
+                    "inner join account on account.username = user.username\n" +
+                    "where account.username = ?1",
+            nativeQuery = true)
+    User findByUsername(String username);
 }

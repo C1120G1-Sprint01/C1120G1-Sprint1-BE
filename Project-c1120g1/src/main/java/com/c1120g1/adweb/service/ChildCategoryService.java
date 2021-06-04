@@ -8,6 +8,8 @@ import java.util.List;
 
 public interface ChildCategoryService {
 
+    List<ChildCategory> findAllByCategoryId(int categoryId);
+
     ChildCategory findById(Integer id);
 
     List<ChildCategory> getAllChildCategoryByCategoryId(Integer id);

@@ -20,12 +20,13 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public void saveUser(User user) {
-        repository.saveUser(user.getAvatarUrl(),
+    public void saveUserCus(User user) {
+        repository.saveUserCus(user.getAvatarUrl(),
                 standardizeName(user.getName()),
                 user.getAccount().getUsername(),
                 user.getEmail(),
-                user.getPhone()
+                user.getPhone(),
+                user.getWard().getWardId()
         );
     }
 
@@ -34,10 +35,6 @@ public class UserServiceImpl implements UserService {
         return repository.findAll();
     }
 
-    @Override
-    public User findAll(User user) {
-        return repository.findAll(user);
-    }
 
     @Override
     public User findByEmail(String email) {
@@ -55,9 +52,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUserId(Integer id) {
-        return repository.findByUserId(id);
+    public User findByUsername(String username) {
+        return repository.findByUsername(username);
     }
+
 
     public String standardizeName(String name) {
         name = name.toLowerCase();

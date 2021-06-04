@@ -1,12 +1,13 @@
 package com.c1120g1.adweb.controller;
 
 
+
+
+import com.c1120g1.adweb.DTO.UserDTO;
 import com.c1120g1.adweb.entity.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
-
-import com.c1120g1.adweb.DTO.UserDTO;
 import com.c1120g1.adweb.entity.Account;
 
 import com.c1120g1.adweb.service.AccountService;
@@ -26,9 +27,8 @@ import java.util.List;
 import java.util.Map;
 
 
-
-@RequestMapping("api/user")
-@CrossOrigin(origins = "http://localhost:4200/user")
+@RestController
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class UserController {
 
     @Autowired
@@ -40,13 +40,13 @@ public class UserController {
     @Autowired
     private WardService wardService;
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id){
-        User user =userService.findByUserId(id);
-        if (user ==null){
+    @GetMapping("/user/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable("username") String username) {
+        User user = userService.findByUsername(username);
+        if (user == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(user,HttpStatus.OK);
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
 
@@ -92,13 +92,14 @@ public class UserController {
             user.setAccount(account);
             user.setEmail(userDTO.getEmail());
             user.setPhone(userDTO.getPhone());
-            userService.saveUser(user);
+            userService.saveUserCus(user);
 
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(
