@@ -39,8 +39,6 @@ public interface PostService{
 
     Post findByIdAndUserId(Integer id);
 
-    Post findById(Integer id);
-
     void updatePost(Post post);
 
     Page<Post> findAllNewest(Pageable pageable);
@@ -51,8 +49,27 @@ public interface PostService{
 
     String getPostDateTime();
 
-    Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
+    /**
+     * Author: ViNTT
+     */
+    Post findById(Integer postId);
 
+    /**
+     * Author: ViNTT
+     */
+    Post findActivePostById(Integer postId);
+
+    /**
+     * Author: ViNTT
+     */
+    Page<Post> findAllActiveByCategoryName(String categoryName, Pageable pageable);
+
+    /**
+     * Author: ViNTT
+     */
+    Page<Post> findAllActiveByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
+
+    Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
     List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate);
 
