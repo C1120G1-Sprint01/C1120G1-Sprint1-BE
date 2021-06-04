@@ -120,4 +120,5 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "WHERE post_id = ?1 and enabled = 1;", nativeQuery = true)
     void deleteById(Integer id);
 }
+//Dong
 
