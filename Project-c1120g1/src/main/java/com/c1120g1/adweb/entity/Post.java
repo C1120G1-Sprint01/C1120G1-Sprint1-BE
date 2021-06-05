@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -62,29 +62,24 @@ public class Post {
     @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
-
     @ManyToOne
-    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "status_id", nullable = false, referencedColumnName = "status_id")
     private Status status;
 
     @ManyToOne
-    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "child_category_id", nullable = false, referencedColumnName = "child_category_id")
     private ChildCategory childCategory;
 
     @ManyToOne
-    @JsonIgnoreProperties({"postSet", "userSet"})
     @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
     private Ward ward;
 
     @ManyToOne
-    @JsonIgnoreProperties("postSet")
     @JoinColumn(name = "user_id", nullable = false, referencedColumnName = "user_id")
     private User user;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("post")
+    @JsonManagedReference
     private Set<Image> imageSet;
 
     @Override
@@ -101,123 +96,4 @@ public class Post {
                 '}';
     }
 
-    public Integer getPostId() {
-        return postId;
-    }
-
-    public void setPostId(Integer postId) {
-        this.postId = postId;
-    }
-
-    public String getPosterName() {
-        return posterName;
-    }
-
-    public void setPosterName(String posterName) {
-        this.posterName = posterName;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public boolean isPostType() {
-        return postType;
-    }
-
-    public void setPostType(boolean postType) {
-        this.postType = postType;
-    }
-
-    public String getPostDateTime() {
-        return postDateTime;
-    }
-
-    public void setPostDateTime(String postDateTime) {
-        this.postDateTime = postDateTime;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
-    }
-
-    public Integer getPrice() {
-        return price;
-    }
-
-    public void setPrice(Integer price) {
-        this.price = price;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public ChildCategory getChildCategory() {
-        return childCategory;
-    }
-
-    public void setChildCategory(ChildCategory childCategory) {
-        this.childCategory = childCategory;
-    }
-
-    public Ward getWard() {
-        return ward;
-    }
-
-    public void setWard(Ward ward) {
-        this.ward = ward;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Set<Image> getImageSet() {
-        return imageSet;
-    }
-
-    public void setImageSet(Set<Image> imageSet) {
-        this.imageSet = imageSet;
-    }
 }

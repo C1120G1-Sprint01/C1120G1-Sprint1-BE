@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.service.impl;
 
+import com.c1120g1.adweb.DTO.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 
 import com.c1120g1.adweb.repository.ImageRepository;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,7 +41,7 @@ public class PostServiceImpl implements PostService {
     /**
      * author: ThinhTHB
      * method: search post by name
-     * */
+     */
     @Override
     public List<Post> searchByName(String posterName) {
         return repository.searchByName(posterName);
@@ -60,9 +62,39 @@ public class PostServiceImpl implements PostService {
         repository.cancelApprovePost(id);
     }
 
+    /**
+     * Author: ViNTT
+     */
     @Override
-    public Post findById(Integer id) {
-        return repository.findById(id).orElse(null);
+    public Post findById(Integer postId) {
+        return repository.findById(postId).orElse(null);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Post findActivePostById(Integer postId) {
+        return repository.findActivePostById(postId);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Page<Post> findAllActiveByCategoryName(String categoryName, Pageable pageable) {
+        categoryName = categoryName.replace("-", " ");
+        return repository.findAllActiveByCategoryName(categoryName, pageable);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Page<Post> findAllActiveByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable) {
+        categoryName = categoryName.replace("-", " ");
+        childCategoryName = childCategoryName.replace("-", " ");
+        return repository.findAllActiveByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
     }
 
     @Override
@@ -151,12 +183,20 @@ public class PostServiceImpl implements PostService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date now = new Date();
         return simpleDateFormat.format(now);
-
-
     }
 
     @Override
     public Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable) {
         return repository.findAllByUsernameAndStatusId(username, statusId, pageable);
+    }
+
+    @Override
+    public List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate) {
+        return repository.statisticQuantityPost(startDate,endDate);
+    }
+
+    @Override
+    public Page<Post> findAllPost(Pageable pageable) {
+        return repository.findAllPost(pageable);
     }
 }
