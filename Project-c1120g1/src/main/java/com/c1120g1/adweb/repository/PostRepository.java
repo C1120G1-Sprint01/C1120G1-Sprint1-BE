@@ -134,8 +134,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
     @Query(value = "SELECT post_date_time as timePost, " +
-            "COUNT(case when status_id=1 then 1 end  ) as countPostSuccess, \n" +
-            "COUNT(case when status_id=2 then 1 end  ) as countPostFailure \n" +
+            "COUNT(case when status_id=4 then 1 end  ) as countPostSuccess, \n" +
+            "COUNT(case when status_id=5 then 1 end  ) as countPostFailure \n" +
             "FROM post\n" +
             "GROUP BY post_date_time\n" +
             "HAVING  date(post_date_time) between ?1 and ?2", nativeQuery = true)
