@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Integer> {
 
-    @Query(value = "SELECT * FROM ad_web_db.category where category.delete_flag = 0", nativeQuery = true)
+    @Query(value = "SELECT * FROM ad_web_db.category where category.delete_flag = 1", nativeQuery = true)
     List<Category> showAllCategory();
 }

@@ -19,6 +19,8 @@ public interface UserService {
 
     User findById(Integer id);
 
+    User findByUsername(String username);
+
     void delete(Integer id);
 
     boolean checkPass(Integer id, String password);
@@ -30,6 +32,5 @@ public interface UserService {
     void saveUserCus(User user);
 
     List<User> findAllUser();
-
 
 }

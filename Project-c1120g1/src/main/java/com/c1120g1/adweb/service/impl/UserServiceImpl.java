@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
         name = standardizeName(name);
         repository.updateUser(userId, name, email, phone, ward);
     }
+
     @Override
     public void saveUserCus(User user) {
         repository.saveUserCus(user.getAvatarUrl(),
@@ -64,6 +65,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Integer id) {
         return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+        return repository.findByUsername(username);
     }
 
     @Override

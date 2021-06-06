@@ -1,5 +1,7 @@
 package com.c1120g1.adweb.service;
 
+import com.c1120g1.adweb.dto.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.entity.Post;
 
 import org.springframework.data.domain.Page;
@@ -19,6 +21,8 @@ public interface PostService{
 
     Page<Post> findAllListDetail(Pageable pageable);
 
+    Page<Post> searchByTitle(String title, Pageable pageable);
+
     void cancelApprovePost(Integer id);
 
     Page<Post> findAllListApprove(Pageable pageable);
@@ -37,19 +41,42 @@ public interface PostService{
 
     Post findByIdAndUserId(Integer id);
 
-    Post findById(Integer id);
-
-    void updatePost(Post post);
+    void updatePost(PostDTO postDTO);
 
     Page<Post> findAllNewest(Pageable pageable);
 
-    void save(Post post);
+    /**
+     * Author: ThuanNN, ViNTT
+     */
+    void saveNewPost(Post post, String username);
 
     List<Post> search(String title, String child_category, String province_name);
 
     String getPostDateTime();
 
+    /**
+     * Author: ViNTT
+     */
+    Post findById(Integer postId);
+
+    /**
+     * Author: ViNTT
+     */
+    Post findActivePostById(Integer postId);
+
+    /**
+     * Author: ViNTT
+     */
+    Page<Post> findAllActiveByCategoryName(String categoryName, Pageable pageable);
+
+    /**
+     * Author: ViNTT
+     */
+    Page<Post> findAllActiveByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
+
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
+    List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate);
 
+    Page<Post> findAllPost(Pageable pageable);
 }

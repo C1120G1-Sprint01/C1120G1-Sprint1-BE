@@ -1,8 +1,12 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.DTO.UserDTO;
-import com.c1120g1.adweb.entity.*;
 import com.c1120g1.adweb.service.*;
+import com.c1120g1.adweb.entity.Account;
+import com.c1120g1.adweb.entity.User;
+import com.c1120g1.adweb.entity.Ward;
+import com.c1120g1.adweb.service.AccountService;
+import com.c1120g1.adweb.service.UserService;
+import com.c1120g1.adweb.service.WardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -37,14 +41,14 @@ public class UserController {
 
 
     @PostMapping(value = "/user/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> createUser(@RequestBody com.c1120g1.adweb.dto.UserDTO userDTO) {
         try {
             List<User> userList = userService.findAll();
             if (!userList.isEmpty()) {
                 Map<String, String> listError = new HashMap<>();
                 List<Account> accountList = accountService.findAllAccount();
-                if (!accountList.isEmpty()){
-                    if (accountService.getAccountByUsername(userDTO.getUsername())!=null) {
+                if (!accountList.isEmpty()) {
+                    if (accountService.getAccountByUsername(userDTO.getUsername()) != null) {
                         listError.put("existAccount", "Tài khoản đã tồn tại , vui lòng chọ tài khoản khác !");
                     }
                 }
@@ -117,6 +121,15 @@ public class UserController {
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/user/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable(name = "username") String username){
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
