@@ -19,6 +19,8 @@ public interface UserService {
 
     User findById(Integer id);
 
+    User findByUsername(String username);
+
     void delete(Integer id);
 
     boolean checkPass(Integer id, String password);

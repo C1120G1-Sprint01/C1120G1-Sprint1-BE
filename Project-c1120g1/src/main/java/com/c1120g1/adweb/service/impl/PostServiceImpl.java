@@ -1,12 +1,11 @@
 package com.c1120g1.adweb.service.impl;
 
 import com.c1120g1.adweb.dto.PostStatisticDTO;
-import com.c1120g1.adweb.entity.Image;
 import com.c1120g1.adweb.entity.Post;
-
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.repository.ImageRepository;
 import com.c1120g1.adweb.entity.Status;
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.repository.PostRepository;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.StatusService;
@@ -18,9 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import java.util.List;
-import java.util.Set;
 
 @Service
 public class PostServiceImpl implements PostService {
@@ -57,6 +54,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Post> findAllListDetail(Pageable pageable) {
         return repository.findAllListDetail(pageable);
+    }
+
+    @Override
+    public Page<Post> searchByTitle(String title, Pageable pageable) {
+        return repository.searchByTitle(title, pageable);
     }
 
     @Override
@@ -105,26 +107,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(Post post) {
-
-        repository.updatePost(post.getDescription(),
-                post.getEmail(),
-                post.getPhone(),
-                post.isPostType(),
-                post.getPosterName(),
-                post.getPrice(),
-                post.getTitle(),
-                post.getChildCategory().getChildCategoryId(),
-                post.getStatus().getStatusId(),
-                post.getWard().getWardId(), post.getPostId());
-//        if (findById(post.getPostId()) != null) {
-//            repository.save(post);
-//        }
-
-
-//        for (Image image : post.getImageSet()) {
-//            imageRepository.update(image.getUrl(), image.getImageId());
-//        }
+    public void updatePost(PostDTO postDTO) {
+        repository.updatePost(postDTO.getPost().getDescription(),
+                postDTO.getPost().getEmail(),
+                postDTO.getPost().getPhone(),
+                postDTO.getPost().isPostType(),
+                postDTO.getPost().getPosterName(),
+                postDTO.getPost().getPrice(),
+                postDTO.getPost().getTitle(),
+                postDTO.getPost().getChildCategory().getChildCategoryId(),
+                postDTO.getPost().getStatus().getStatusId(),
+                postDTO.getPost().getWard().getWardId(), postDTO.getPost().getPostId());
+        if (postDTO.getImages().length != 0) {
+            imageRepository.delete(postDTO.getPost().getPostId());
+        }
+        for (String url : postDTO.getImages()) {
+            imageRepository.save(url, postDTO.getPost().getPostId());
+        }
     }
 
     @Override

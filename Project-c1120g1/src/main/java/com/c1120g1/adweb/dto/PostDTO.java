@@ -14,5 +14,6 @@ public class PostDTO {
 
     private Post post;
     private String username;
+    private String[] images;
 
 }

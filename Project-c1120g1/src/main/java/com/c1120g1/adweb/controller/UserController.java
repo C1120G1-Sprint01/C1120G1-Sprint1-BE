@@ -116,6 +116,15 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user/{username}")
+    public ResponseEntity<User> getUserByUsername(@PathVariable(name = "username") String username){
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(

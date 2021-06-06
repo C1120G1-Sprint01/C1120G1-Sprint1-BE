@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.service;
 
 import com.c1120g1.adweb.dto.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.entity.Post;
 
 import org.springframework.data.domain.Page;
@@ -20,6 +21,8 @@ public interface PostService{
 
     Page<Post> findAllListDetail(Pageable pageable);
 
+    Page<Post> searchByTitle(String title, Pageable pageable);
+
     void cancelApprovePost(Integer id);
 
     Page<Post> findAllListApprove(Pageable pageable);
@@ -38,7 +41,7 @@ public interface PostService{
 
     Post findByIdAndUserId(Integer id);
 
-    void updatePost(Post post);
+    void updatePost(PostDTO postDTO);
 
     Page<Post> findAllNewest(Pageable pageable);
 
@@ -74,7 +77,6 @@ public interface PostService{
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
     List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate);
-
 
     Page<Post> findAllPost(Pageable pageable);
 }

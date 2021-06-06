@@ -10,6 +10,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
+
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 
@@ -54,7 +56,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public String generateCode() {
-        return "" + (int) (Math.random() * 1000000 * 1.1);
+        return "" + (new Random().nextInt(900000) + 100000);
     }
 
     @Override

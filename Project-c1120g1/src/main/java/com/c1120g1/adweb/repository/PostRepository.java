@@ -29,6 +29,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where status_id = 1 and enabled = 1", nativeQuery = true)
     Page<Post> findAllListDetail(Pageable pageable);
 
+    @Query(value =  "select * " +
+                    "from post " +
+                    "where status_id = 1 and enabled = 1 and title like %?1%", nativeQuery = true)
+    Page<Post> searchByTitle(String title, Pageable pageable);
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "update post " +
             "set status_id = 2 " +
@@ -70,7 +75,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where user.username = ?1 and post.enabled = true order by post.status_id", nativeQuery = true)
     Page<Post> findAllByUsername(String username, Pageable pageable);
 
-    @Transactional
     @Modifying
     @Query(value = "update post " +
             "set description = ?1, email = ?2, " +
@@ -134,8 +138,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
     @Query(value = "SELECT post_date_time as timePost, " +
-            "COUNT(case when status_id=1 then 1 end  ) as countPostSuccess, \n" +
-            "COUNT(case when status_id=2 then 1 end  ) as countPostFailure \n" +
+            "COUNT(case when status_id=4 then 1 end  ) as countPostSuccess, \n" +
+            "COUNT(case when status_id=5 then 1 end  ) as countPostFailure \n" +
             "FROM post\n" +
             "GROUP BY post_date_time\n" +
             "HAVING  date(post_date_time) between ?1 and ?2", nativeQuery = true)
