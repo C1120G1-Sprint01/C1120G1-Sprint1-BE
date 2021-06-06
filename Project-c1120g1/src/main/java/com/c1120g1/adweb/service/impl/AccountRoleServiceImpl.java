@@ -27,6 +27,11 @@ public class AccountRoleServiceImpl implements AccountRoleService {
     }
 
     @Override
+    public void saveAccountRoleUser(String username, Integer roleId) {
+        repository.saveAccountRole(username, roleId);
+    }
+
+    @Override
     public AccountRole findAccountRoleByAccount(Account account) {
         return repository.findAccountRoleByAccount(account);
     }

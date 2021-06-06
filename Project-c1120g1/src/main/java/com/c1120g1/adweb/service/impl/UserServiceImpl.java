@@ -1,7 +1,10 @@
 package com.c1120g1.adweb.service.impl;
 
+import com.c1120g1.adweb.dto.UserStatisticsDTO;
+
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
+
 import com.c1120g1.adweb.repository.UserRepository;
 import com.c1120g1.adweb.repository.WardRepository;
 import com.c1120g1.adweb.service.UserService;
@@ -43,6 +46,7 @@ public class UserServiceImpl implements UserService {
         name = standardizeName(name);
         repository.updateUser(userId, name, email, phone, ward);
     }
+
     @Override
     public void saveUserCus(User user) {
         repository.saveUserCus(user.getAvatarUrl(),
@@ -113,4 +117,12 @@ public class UserServiceImpl implements UserService {
         return name;
     }
 
+    /**
+     * author: ThinhTHB
+     * method: get List User Statistics
+     * */
+    @Override
+    public List<UserStatisticsDTO> statisticUser(String startDate, String endDate) {
+        return repository.userStatistics(startDate, endDate);
+    }
 }

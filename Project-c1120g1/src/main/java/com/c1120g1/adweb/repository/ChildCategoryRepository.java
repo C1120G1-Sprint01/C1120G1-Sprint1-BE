@@ -17,7 +17,8 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
     @Query(value = "SELECT * FROM ad_web_db.child_category where child_category.delete_flag = 1", nativeQuery = true)
     List<ChildCategory> showAllChildCategory();
 
-    @Query(value = "select * from child_category where child_category.category_id = :categoryId", nativeQuery = true)
+    @Query(value = "select * from child_category " +
+            "where child_category.category_id = :categoryId and child_category.delete_flag = 1", nativeQuery = true)
     List<ChildCategory> findAllByCategoryId(int categoryId);
 
     //
@@ -25,6 +26,11 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
             "where child_category.category_id = ?1",
             nativeQuery = true)
     List<ChildCategory> getAllChildCategoryByCategoryId(Integer id);
+
+    @Query(value = "select * " +
+            "from child_category " +
+            "where (child_category.child_category_name=?1 and child_category.category_id=?2)",nativeQuery = true)
+    List<ChildCategory> searchAllChildCategory(String childCategoryName,Integer categoryId);
 }
 //
 //    //    @Query(value = "select child_category.child_category_name, category.category_name" +

@@ -33,6 +33,4 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     @Query(value = "select * from account where username = ?1", nativeQuery = true)
     Account checkUserExists(String username);
 
-
-
 }

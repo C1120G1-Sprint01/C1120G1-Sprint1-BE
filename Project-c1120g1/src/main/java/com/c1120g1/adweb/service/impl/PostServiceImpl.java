@@ -1,11 +1,11 @@
 package com.c1120g1.adweb.service.impl;
 
-import com.c1120g1.adweb.dto.PostDTO;
-import com.c1120g1.adweb.DTO.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
-import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.repository.ImageRepository;
+import com.c1120g1.adweb.entity.Status;
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.repository.PostRepository;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.StatusService;
@@ -118,11 +118,9 @@ public class PostServiceImpl implements PostService {
                 postDTO.getPost().getChildCategory().getChildCategoryId(),
                 postDTO.getPost().getStatus().getStatusId(),
                 postDTO.getPost().getWard().getWardId(), postDTO.getPost().getPostId());
-
         if (postDTO.getImages().length != 0) {
             imageRepository.delete(postDTO.getPost().getPostId());
         }
-
         for (String url : postDTO.getImages()) {
             imageRepository.save(url, postDTO.getPost().getPostId());
         }
@@ -163,33 +161,66 @@ public class PostServiceImpl implements PostService {
         return repository.findAllNewest(pageable);
     }
 
+    //    ThuanNN
+//    @Override
+//    public void save(String username, Post post) {
+//        String postDateTime = postService.getPostDateTime();
+//        post.setPostDateTime(postDateTime);
+//        Status status = statusService.findById(1);
+//        post.setStatus(status);
+////        Set<Image> imagesSet = new HashSet<>();
+////        if (post.getImageSet() == null){
+////            Image img = new Image("img_default", "https://fakeimg.pl/100x100/?text=C1120G1");
+////            imagesSet.add(img);
+////            post.setImageSet(imagesSet);
+////        }
+//        repository.save(post);
+//    }
+
+    /**
+     * Author: ThuanNN, ViNTT
+     */
     @Override
-    public void save(Post post) {
+    public void saveNewPost(Post post, String username) {
         String postDateTime = postService.getPostDateTime();
-        System.out.println(postDateTime);
-
-        User user = userService.findById(1);
-        System.out.println(user);
-        post.setUser(user);
-
-        Status status = statusService.findById(1);
-        post.setStatus(status);
+        Status status = statusService.findById(2);
+        User user = userService.findByUsername(username);
 
         post.setPostDateTime(postDateTime);
+        post.setEnabled(true);
+        post.setStatus(status);
+        post.setUser(user);
 
         repository.save(post);
     }
 
+    //    ThuanNN
     @Override
-    public List<Post> search(String title, String child_category, String province_name) {
-        return repository.search(title, child_category, province_name);
+    public Page<Post> search(String keyword, Integer category, Integer province, Pageable pageable) {
+        return repository.search(keyword, category, province, pageable);
     }
 
+    //    ThuanNN
     @Override
     public String getPostDateTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();
         return simpleDateFormat.format(now);
+    }
+
+    //    ViNTT
+    @Override
+    public Page<Post> findAllByCategoryName(String categoryName, Pageable pageable) {
+        categoryName = categoryName.replace("-", " ");
+        return repository.findAllByCategoryName(categoryName, pageable);
+    }
+
+    //    ViNTT
+    @Override
+    public Page<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable) {
+        categoryName = categoryName.replace("-", " ");
+        childCategoryName = childCategoryName.replace("-", " ");
+        return repository.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
     }
 
     @Override
@@ -198,8 +229,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> searchPostByTitle(String title) {
+        return repository.searchPostByTitle(title);
+    }
+
+    @Override
     public List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate) {
-        return repository.statisticQuantityPost(startDate,endDate);
+        return repository.statisticQuantityPost(startDate, endDate);
     }
 
     @Override
