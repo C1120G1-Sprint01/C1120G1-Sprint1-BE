@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,11 +23,12 @@ public class District {
     @Column(name = "district_name", columnDefinition = "VARCHAR(50)")
     private String districtName;
 
-    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "province_id", referencedColumnName = "province_id", nullable = false)
     private Province province;
 
     @OneToMany(mappedBy = "district", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Ward> wardSet;
+
 }
