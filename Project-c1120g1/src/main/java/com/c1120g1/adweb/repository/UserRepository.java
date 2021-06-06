@@ -67,9 +67,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByEmail(String email);
 
+
     @Query(value =  "select * from `user`" +
                     "inner join account on account.username = user.username\n" +
                     "where account.username = ?1",
+
+//    @Query( value = "select * from user " +
+//                    "where username = ?1",
+//
             nativeQuery = true)
     User findByUsername(String username);
 }

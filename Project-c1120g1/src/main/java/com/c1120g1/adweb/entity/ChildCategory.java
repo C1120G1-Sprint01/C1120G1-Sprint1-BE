@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,12 +24,11 @@ public class ChildCategory {
     private String childCategoryName;
 
     @ManyToOne
-    @JsonIgnoreProperties("childCategorySet")
     @JoinColumn(name = "category_id", nullable = false, referencedColumnName = "category_id")
     private Category category;
 
     @OneToMany(mappedBy = "childCategory", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("childCategory")
+    @JsonIgnore
     private Set<Post> postSet;
 
     private Boolean deleteFlag;
