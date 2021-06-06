@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.repository;
 
-import com.c1120g1.adweb.DTO.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,6 +28,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "from post " +
             "where status_id = 1 and enabled = 1", nativeQuery = true)
     Page<Post> findAllListDetail(Pageable pageable);
+
+    @Query(value =  "select * " +
+                    "from post " +
+                    "where status_id = 1 and enabled = 1 and title like %?1%", nativeQuery = true)
+    Page<Post> searchByTitle(String title, Pageable pageable);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "update post " +

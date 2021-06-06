@@ -1,7 +1,7 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.dto.PostDTO;
-import com.c1120g1.adweb.DTO.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.service.PostService;
@@ -61,6 +61,15 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    @GetMapping("/listDetail/searchByTitle")
+    public ResponseEntity<Page<Post>> searchByTitle(@RequestParam String title, Pageable pageable) {
+        Page<Post> listPostDetail = this.postService.searchByTitle(title, pageable);
+        if (listPostDetail.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(listPostDetail, HttpStatus.OK);
     }
 
     @PutMapping("/listDetail/cancelApprove/{postId}")
@@ -226,17 +235,33 @@ public class PostController {
     }
 
     //    ThuanNN
-    @PostMapping("createPost/{username}")
-    public ResponseEntity<Void> createPost(@PathVariable(name = "username") String username,
-                                           @RequestBody Post post) {
-        User user = userService.findByUsername(username);
-        if (user == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        post.setUser(user);
-        postService.save(username, post);
+//    @PostMapping("createPost/{username}")
+//    public ResponseEntity<Void> createPost(@PathVariable(name = "username") String username,
+//                                           @RequestBody Post post) {
+//        User user = userService.findByUsername(username);
+//        if (user == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        post.setUser(user);
+//        postService.save(username, post);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+    /**
+     * Author: ThuanNN, ViNTT
+     * Save new post
+     */
+    @PostMapping("createPost")
+    public ResponseEntity<Void> createPost(@RequestBody PostDTO postDTO) {
+        try {
+            Post post = postDTO.getPost();
+            String username = postDTO.getUsername();
+            postService.saveNewPost(post, username);
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
     //    ThuanNN

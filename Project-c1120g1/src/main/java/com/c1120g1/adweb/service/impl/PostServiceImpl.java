@@ -1,11 +1,11 @@
 package com.c1120g1.adweb.service.impl;
 
-import com.c1120g1.adweb.dto.PostDTO;
-import com.c1120g1.adweb.DTO.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
-import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.repository.ImageRepository;
+import com.c1120g1.adweb.entity.Status;
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.repository.PostRepository;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.StatusService;
@@ -54,6 +54,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Post> findAllListDetail(Pageable pageable) {
         return repository.findAllListDetail(pageable);
+    }
+
+    @Override
+    public Page<Post> searchByTitle(String title, Pageable pageable) {
+        return repository.searchByTitle(title, pageable);
     }
 
     @Override
@@ -113,11 +118,9 @@ public class PostServiceImpl implements PostService {
                 postDTO.getPost().getChildCategory().getChildCategoryId(),
                 postDTO.getPost().getStatus().getStatusId(),
                 postDTO.getPost().getWard().getWardId(), postDTO.getPost().getPostId());
-
         if (postDTO.getImages().length != 0) {
             imageRepository.delete(postDTO.getPost().getPostId());
         }
-
         for (String url : postDTO.getImages()) {
             imageRepository.save(url, postDTO.getPost().getPostId());
         }
@@ -159,18 +162,35 @@ public class PostServiceImpl implements PostService {
     }
 
     //    ThuanNN
+//    @Override
+//    public void save(String username, Post post) {
+//        String postDateTime = postService.getPostDateTime();
+//        post.setPostDateTime(postDateTime);
+//        Status status = statusService.findById(1);
+//        post.setStatus(status);
+////        Set<Image> imagesSet = new HashSet<>();
+////        if (post.getImageSet() == null){
+////            Image img = new Image("img_default", "https://fakeimg.pl/100x100/?text=C1120G1");
+////            imagesSet.add(img);
+////            post.setImageSet(imagesSet);
+////        }
+//        repository.save(post);
+//    }
+
+    /**
+     * Author: ThuanNN, ViNTT
+     */
     @Override
-    public void save(String username, Post post) {
+    public void saveNewPost(Post post, String username) {
         String postDateTime = postService.getPostDateTime();
+        Status status = statusService.findById(2);
+        User user = userService.findByUsername(username);
+
         post.setPostDateTime(postDateTime);
-        Status status = statusService.findById(1);
+        post.setEnabled(true);
         post.setStatus(status);
-//        Set<Image> imagesSet = new HashSet<>();
-//        if (post.getImageSet() == null){
-//            Image img = new Image("img_default", "https://fakeimg.pl/100x100/?text=C1120G1");
-//            imagesSet.add(img);
-//            post.setImageSet(imagesSet);
-//        }
+        post.setUser(user);
+
         repository.save(post);
     }
 
@@ -210,7 +230,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate) {
-        return repository.statisticQuantityPost(startDate,endDate);
+        return repository.statisticQuantityPost(startDate, endDate);
     }
 
     @Override

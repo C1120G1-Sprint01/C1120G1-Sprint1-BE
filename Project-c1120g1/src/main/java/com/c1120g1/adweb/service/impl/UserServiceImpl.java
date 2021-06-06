@@ -41,6 +41,7 @@ public class UserServiceImpl implements UserService {
         name = standardizeName(name);
         repository.updateUser(userId, name, email, phone, ward);
     }
+
     @Override
     public void saveUserCus(User user) {
         repository.saveUserCus(user.getAvatarUrl(),

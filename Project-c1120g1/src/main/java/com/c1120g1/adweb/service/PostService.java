@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.service;
 
-import com.c1120g1.adweb.DTO.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.entity.Post;
 import org.springframework.data.domain.Page;
@@ -19,6 +19,8 @@ public interface PostService {
     List<Post> searchByName(String posterName);
 
     Page<Post> findAllListDetail(Pageable pageable);
+
+    Page<Post> searchByTitle(String title, Pageable pageable);
 
     void cancelApprovePost(Integer id);
 
@@ -43,7 +45,12 @@ public interface PostService {
     Page<Post> findAllNewest(Pageable pageable);
 
     //    ThuanNN
-    void save(String username, Post post);
+//    void save(String username, Post post);
+
+    /**
+     * Author: ThuanNN, ViNTT
+     */
+    void saveNewPost(Post post, String username);
 
     //    ThuanNN
     Page<Post> search(String keyword, Integer category, Integer province, Pageable pageable);

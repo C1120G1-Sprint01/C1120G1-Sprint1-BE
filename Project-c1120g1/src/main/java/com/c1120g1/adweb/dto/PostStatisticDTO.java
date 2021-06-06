@@ -1,4 +1,4 @@
-package com.c1120g1.adweb.DTO;
+package com.c1120g1.adweb.dto;
 
 import java.time.LocalDate;
 
