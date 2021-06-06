@@ -4,6 +4,7 @@ import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 import com.c1120g1.adweb.entity.User;
+import com.c1120g1.adweb.service.AccountService;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class PostController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AccountService accountService;
 
     /**
      * author: ThinhTHB
@@ -140,6 +144,12 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.approvePost(postId);
+        User userApprove = currentPost.getUser();
+        if (userApprove != null) {
+            String toEmail = userApprove.getEmail();
+            this.accountService.sendEmailApprove(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -150,6 +160,12 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.deletePost(postId);
+        User userDelete = post.getUser();
+        if (userDelete != null) {
+            String toEmail = userDelete.getEmail();
+            this.accountService.sendEmailDelete(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -190,6 +206,12 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.approvePost(postId);
+        User userApprove = currentPost.getUser();
+        if (userApprove != null) {
+            String toEmail = userApprove.getEmail();
+            this.accountService.sendEmailApprove(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -200,6 +222,12 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.deletePost(postId);
+        User userDelete = post.getUser();
+        if (userDelete != null) {
+            String toEmail = userDelete.getEmail();
+            this.accountService.sendEmailDelete(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
