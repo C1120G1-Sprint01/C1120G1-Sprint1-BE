@@ -1,11 +1,11 @@
 package com.c1120g1.adweb.service.impl;
 
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.DTO.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
-
-import com.c1120g1.adweb.repository.ImageRepository;
 import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.entity.User;
+import com.c1120g1.adweb.repository.ImageRepository;
 import com.c1120g1.adweb.repository.PostRepository;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.StatusService;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import java.util.List;
 
 @Service
@@ -103,22 +102,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(Post post) {
+    public void updatePost(PostDTO postDTO) {
+        repository.updatePost(postDTO.getPost().getDescription(),
+                postDTO.getPost().getEmail(),
+                postDTO.getPost().getPhone(),
+                postDTO.getPost().isPostType(),
+                postDTO.getPost().getPosterName(),
+                postDTO.getPost().getPrice(),
+                postDTO.getPost().getTitle(),
+                postDTO.getPost().getChildCategory().getChildCategoryId(),
+                postDTO.getPost().getStatus().getStatusId(),
+                postDTO.getPost().getWard().getWardId(), postDTO.getPost().getPostId());
 
-        repository.updatePost(post.getDescription(),
-                post.getEmail(),
-                post.getPhone(),
-                post.isPostType(),
-                post.getPosterName(),
-                post.getPrice(),
-                post.getTitle(),
-                post.getChildCategory().getChildCategoryId(),
-                post.getStatus().getStatusId(),
-                post.getWard().getWardId(), post.getPostId());
+        if (postDTO.getImages().length != 0) {
+            imageRepository.delete(postDTO.getPost().getPostId());
+        }
 
-//        for (Image image : post.getImageSet()) {
-//            imageRepository.update(image.getUrl(), image.getImageId());
-//        }
+        for (String url : postDTO.getImages()) {
+            imageRepository.save(url, postDTO.getPost().getPostId());
+        }
     }
 
     @Override

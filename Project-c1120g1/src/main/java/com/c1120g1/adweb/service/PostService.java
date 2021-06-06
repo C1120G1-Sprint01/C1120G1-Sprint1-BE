@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.service;
 
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.DTO.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 
@@ -39,7 +40,7 @@ public interface PostService{
 
     Post findByIdAndUserId(Integer id);
 
-    void updatePost(Post post);
+    void updatePost(PostDTO postDTO);
 
     Page<Post> findAllNewest(Pageable pageable);
 
