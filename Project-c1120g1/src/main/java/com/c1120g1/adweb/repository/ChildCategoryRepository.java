@@ -17,7 +17,8 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
     @Query(value = "SELECT * FROM ad_web_db.child_category where child_category.delete_flag = 1", nativeQuery = true)
     List<ChildCategory> showAllChildCategory();
 
-    @Query(value = "select * from child_category where child_category.category_id = :categoryId", nativeQuery = true)
+    @Query(value = "select * from child_category " +
+            "where child_category.category_id = :categoryId and child_category.delete_flag = 1", nativeQuery = true)
     List<ChildCategory> findAllByCategoryId(int categoryId);
 
     //

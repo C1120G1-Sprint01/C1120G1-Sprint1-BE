@@ -1,11 +1,10 @@
 package com.c1120g1.adweb.service;
 
+import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.dto.PostDTO;
-import com.c1120g1.adweb.DTO.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +45,10 @@ public interface PostService{
 
     Page<Post> findAllNewest(Pageable pageable);
 
-    void save(Post post);
+    /**
+     * Author: ThuanNN, ViNTT
+     */
+    void saveNewPost(Post post, String username);
 
     List<Post> search(String title, String child_category, String province_name);
 
@@ -75,7 +77,6 @@ public interface PostService{
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
     List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate);
-
 
     Page<Post> findAllPost(Pageable pageable);
 }

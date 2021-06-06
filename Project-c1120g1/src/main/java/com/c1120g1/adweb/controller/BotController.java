@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.DTO.BotDTO;
+import com.c1120g1.adweb.dto.BotDTO;
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.AccountRole;
 import com.c1120g1.adweb.entity.Bot;
