@@ -48,9 +48,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "where u.userId = ?1")
     void updateUser(Integer userId, String name, String email, String phone, Ward ward);
 
-    /**
-     * Author: ViNTT
-     */
     @Query(value = "SELECT * FROM `user` " +
             "WHERE username = ?1", nativeQuery = true)
     User findByUsername(String username);

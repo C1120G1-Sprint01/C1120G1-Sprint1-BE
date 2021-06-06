@@ -57,14 +57,6 @@ public class UserServiceImpl implements UserService {
         return repository.findAll();
     }
 
-    /**
-     * Author: ViNTT
-     */
-    @Override
-    public User findByUsername(String username) {
-        return repository.findByUsername(username);
-    }
-
     @Override
     public User findByEmail(String email) {
         return repository.findByEmail(email);

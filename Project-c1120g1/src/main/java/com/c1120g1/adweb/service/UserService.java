@@ -33,8 +33,4 @@ public interface UserService {
 
     List<User> findAllUser();
 
-    /**
-     * Author: ViNTT
-     */
-    User findByUsername(String username);
 }
