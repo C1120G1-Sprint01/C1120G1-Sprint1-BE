@@ -32,6 +32,12 @@ public class SecurityController {
     @Autowired
     private AccountService accountService;
 
+    /**
+     * Method: authentication login method
+     * Author: HoangTQ
+     * @param authLogin
+     * @return
+     */
     @PostMapping("/api/login")
     public ResponseEntity<?> login(@RequestBody AuthLogin authLogin) {
         System.out.println(authLogin.getPassword());
@@ -45,6 +51,12 @@ public class SecurityController {
         return ResponseEntity.ok(jwtResponse);
     }
 
+    /**
+     * Method: checking email, if email in system then send code to email, else return status NOT_FOUND
+     * Author: HoangTQ
+     * @param email
+     * @return
+     */
     @GetMapping("/api/checkEmail/{email}")
     public ResponseEntity<String> checkEmail(@PathVariable(name = "email") String email) {
         System.out.println("Email : " + email);
@@ -52,13 +64,19 @@ public class SecurityController {
         if (user != null) {
             String code = accountService.generateCode();
             System.out.println("CODE : "+code);
-//            accountService.sendEmail(email, code);
+            accountService.sendEmail(email, code);
             return new ResponseEntity<>(code, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
+    /**
+     * Method: set New Password
+     * Author: HoangTQ
+     * @param email
+     * @param newPw
+     * @return
+     */
     @GetMapping("api/setNewPw/{email}/{newPw}")
     public ResponseEntity<Void> setNewPassword(@PathVariable(name = "email") String email,
                                @PathVariable(name = "newPw") String newPw){

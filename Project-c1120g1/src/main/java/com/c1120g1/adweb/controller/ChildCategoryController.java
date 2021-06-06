@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @CrossOrigin(value = "*", allowedHeaders = "*")
@@ -19,6 +18,16 @@ public class ChildCategoryController {
     @Autowired
     private ChildCategoryService childCategoryService;
 
+    @GetMapping("child-category/{categoryId}")
+    public ResponseEntity<List<ChildCategory>> findAllByCategoryId(@PathVariable Integer categoryId) {
+        List<ChildCategory> childCategoryList = childCategoryService.findAllByCategoryId(categoryId);
+
+        if (childCategoryList == null) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
+    }
+
     /**
      * Method: get all child_category
      * Author: TuanLHM
@@ -26,7 +35,7 @@ public class ChildCategoryController {
      * @return
      */
 
-    @GetMapping("/main-category/child-category/")
+    @GetMapping("/main-category/child-category")
     public ResponseEntity<List<ChildCategory>> getList() {
         List<ChildCategory> childCategoryList = childCategoryService.findAllChildCategory();
         if (childCategoryList.isEmpty()) {
@@ -56,10 +65,76 @@ public class ChildCategoryController {
 
     @PostMapping("/main-category/child-category/create-child-category")
     public ResponseEntity<Void> createChildCategory(@RequestBody ChildCategory childCategory, UriComponentsBuilder ucBuilder) {
-        childCategoryService.save(childCategory);
+        childCategoryService.addChildCategory(childCategory);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/child_category/{id}").buildAndExpand(childCategory.getChildCategoryId()).toUri());
         return new ResponseEntity<Void>(headers, HttpStatus.CREATED);
+    }
+
+    /**
+     * Method: edit child_category
+     * Author: TuanLHM
+     *
+     * @return
+     */
+
+    @PutMapping(value = "/main-category/child-category/edit-child-category/{id}")
+    public ResponseEntity<ChildCategory> updateChildCategory(@PathVariable Integer id, @RequestBody ChildCategory childCategory) {
+
+        ChildCategory childCategory1 = childCategoryService.findChildCategoryById(id);
+
+        if (childCategory1 == null) {
+            return new ResponseEntity<ChildCategory>(HttpStatus.NOT_FOUND);
+        } else {
+            childCategory1.setChildCategoryName(childCategory.getChildCategoryName());
+            childCategory1.setCategory(childCategory.getCategory());
+            childCategory1.setPostSet(childCategory.getPostSet());
+            childCategory1.setDeleteFlag(false);
+            childCategory1.setChildCategoryId(id);
+
+            childCategoryService.saveChildCategory(childCategory1);
+            return new ResponseEntity<ChildCategory>(childCategory1, HttpStatus.OK);
+        }
+    }
+
+    /**
+     * Method: delete child_category
+     * Author: TuanLHM
+     *
+     * @return
+     */
+
+    @GetMapping(value = "/main-category/child-category/delete-child-category/{id}")
+    public ResponseEntity<?> deleteChildCategory(@PathVariable("id") Integer id) {
+
+        ChildCategory childCategory = childCategoryService.findChildCategoryById(id);
+        if (childCategory == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } else {
+            childCategoryService.deleteChildCategory(childCategory);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+    }
+
+
+    /**
+     * Method: search child_category
+     * Author: TuanLHM
+     *
+     * @return
+     */
+
+    @GetMapping("/main-category/child-category/search")
+    public ResponseEntity<List<ChildCategory>> searchName(@RequestParam(name = "childCategoryName") String childCategoryName,
+                                                          @RequestParam(name = "categoryName") String categoryName) {
+        List<ChildCategory> childCategoryList;
+
+        childCategoryList = childCategoryService.findAllByChildCategoryNameAndCategoryName(childCategoryName, categoryName);
+
+        if (childCategoryList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
     }
 
     @GetMapping("api/child-category/{id}")
@@ -70,72 +145,4 @@ public class ChildCategoryController {
         }
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
-
-    /**
-     * Method: edit child_category
-     * Author: TuanLHM
-     *
-     * @return
-     */
-
-    @PutMapping(value = "/main-category/child-category/edit-child-category")
-    public ResponseEntity<ChildCategory> updateChildCategory(@RequestBody ChildCategory childCategory) {
-        childCategoryService.save(childCategory);
-        return new ResponseEntity<ChildCategory>(childCategory, HttpStatus.OK);
-    }
-
-    /**
-     * Method: delete child_category
-     * Author: TuanLHM
-     *
-     * @return
-     */
-
-    @DeleteMapping(value = "/main-category/child-category/delete-child-category/{id}")
-    public ResponseEntity deleteChildCategory(@PathVariable("id") Integer id) {
-
-        ChildCategory childCategory = childCategoryService.findChildCategoryById(id);
-        if (childCategory.getChildCategoryId() == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } else {
-            childCategory.setDeleteFlag(true);
-            childCategoryService.save(childCategory);
-            return new ResponseEntity<>(HttpStatus.OK);
-        }
-    }
-
-    /**
-     * Method: search child_category
-     * Author: TuanLHM
-     *
-     * @return
-     */
-
-    @GetMapping("/main-category/child-category/search")
-    public ResponseEntity<List<ChildCategory>> searchName
-            (@RequestParam(name = "childCategoryName") Optional<String> childCategoryName,
-             @RequestParam(name = "categoryName") Optional<String> categoryName) {
-        List<ChildCategory> childCategoryList;
-        if (categoryName.isPresent()) {
-            if (childCategoryName.isPresent()) {
-                childCategoryList = childCategoryService.findAllByChildCategoryNameAndCategoryName(childCategoryName.get(), categoryName.get());
-            } else {
-                childCategoryList = childCategoryService.findAllByCategoryName(categoryName.get());
-            }
-        } else {
-            if (childCategoryName.isPresent()) {
-                childCategoryList = childCategoryService.findAllByChildCategoryName(childCategoryName.get());
-            } else {
-                childCategoryList = childCategoryService.findAllChildCategory();
-            }
-        }
-
-        if (childCategoryList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
-    }
 }
-
-
-
