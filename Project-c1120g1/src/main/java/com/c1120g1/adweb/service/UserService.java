@@ -17,4 +17,7 @@ public interface UserService {
     User findById(Integer id);
 
     void save(User user);
+
+//    ThuanNN
+    User findByUsername(String username);
 }

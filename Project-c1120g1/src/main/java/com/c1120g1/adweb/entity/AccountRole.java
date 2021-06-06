@@ -1,17 +1,11 @@
 package com.c1120g1.adweb.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@Table( name = "account_role",
+@Table(name = "account_role",
         uniqueConstraints = {
                 @UniqueConstraint(name = "ACC_ROLE_UK", columnNames = {"username", "role_id"})
         })

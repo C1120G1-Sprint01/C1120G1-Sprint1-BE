@@ -66,7 +66,10 @@ public class ChildCategoryController {
     public ResponseEntity<List<ChildCategory>> getChildCategories(@PathVariable(name = "id") Integer id) {
         List<ChildCategory> categoryList = childCategoryService.getAllChildCategoryByCategoryId(id);
         if (categoryList.isEmpty()) {
-            return new ResponseEntity<>(categoryList, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        for (ChildCategory child : categoryList) {
+            System.out.println(child.getChildCategoryName());
         }
         return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }

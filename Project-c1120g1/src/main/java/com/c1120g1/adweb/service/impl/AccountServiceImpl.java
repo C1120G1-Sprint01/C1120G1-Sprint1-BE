@@ -33,9 +33,10 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
+//    ThuanNN: edit return null
     @Override
     public Account findByUsername(String username) {
-        return null;
+        return repository.findByUsername(username);
     }
 
     @Override

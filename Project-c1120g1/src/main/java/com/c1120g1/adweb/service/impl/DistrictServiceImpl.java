@@ -14,14 +14,15 @@ public class DistrictServiceImpl implements DistrictService {
     @Autowired
     private DistrictRepository repository;
 
-
+    //    ThuanNN: edit return null
     @Override
     public List<District> findAllDistrictByProvinceId(Integer provinceId) {
-        return null;
+        return repository.findAllByProvinceId(provinceId);
     }
 
+    //    ThuanNN: edit return null
     @Override
     public List<District> findAllByProvinceId(Integer provinceId) {
-        return null;
+        return repository.findAllByProvinceId(provinceId);
     }
 }

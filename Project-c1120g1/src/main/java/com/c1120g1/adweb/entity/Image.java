@@ -22,12 +22,16 @@ public class Image {
     @Column(name = "image_name", columnDefinition = "VARCHAR(50)")
     private String imageName;
 
-    @Column(name = "url", columnDefinition = "VARCHAR(255)")
+    @Column(name = "url", columnDefinition = "LONGTEXT")
     private String url;
 
     @ManyToOne
     @JsonIgnoreProperties("imageSet")
-    @JoinColumn(name = "post_id", nullable = false, referencedColumnName = "post_id")
+    @JoinColumn(name = "post_id", referencedColumnName = "post_id")
     private Post post;
 
+    public Image(String imageName, String url) {
+        this.imageName = imageName;
+        this.url = url;
+    }
 }

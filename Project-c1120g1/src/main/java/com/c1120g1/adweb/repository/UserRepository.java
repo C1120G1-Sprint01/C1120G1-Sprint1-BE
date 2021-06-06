@@ -25,4 +25,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 
     User findByEmail(String email);
+
+//    ThuanNN
+    @Query(value =  "select * from `user` " +
+                    "inner join `account` on `account`.username = `user`.username " +
+                    "where `account`.username = ?1",
+            nativeQuery = true)
+    User findByUsername(String username);
 }

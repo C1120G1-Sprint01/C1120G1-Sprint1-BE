@@ -1,6 +1,7 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.entity.Post;
+import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("api/posts")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class PostController {
 
     @Autowired
@@ -52,25 +51,63 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK); //200
     }
 
+    //    ThuanNN
     @GetMapping("listPost")
     public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
         if (postService.findAllNewest(pageable).isEmpty()) {
-            return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.OK);
     }
 
-    @PostMapping("createPost")
-    public ResponseEntity<Void> createPost(@RequestBody Post post) {
-        postService.save(post);
+    //    ThuanNN
+    @PostMapping("createPost/{username}")
+    public ResponseEntity<Void> createPost(@PathVariable(name = "username") String username,
+                                           @RequestBody Post post) {
+        User user = userService.findByUsername(username);
+        if (user == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        post.setUser(user);
+        postService.save(username, post);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("search")
-    public List<Post> search(
-            @RequestParam(name = "title") String title,
-            @RequestParam(name = "child_category") String child_category,
-            @RequestParam(name = "province") String province) {
-        return postService.search("%" + title + "%", child_category, province);
+    //    ThuanNN
+    @GetMapping("search/{keyword}/{category}/{province}")
+    public ResponseEntity<Page<Post>> search(@PathVariable(name = "keyword") String keyword,
+                                             @PathVariable(name = "category") String category,
+                                             @PathVariable(name = "province") String province,
+                                             @PageableDefault(value = 5) Pageable pageable) {
+        Page<Post> pagePost = postService.search(keyword, Integer.parseInt(category), Integer.parseInt(province), pageable);
+        if (pagePost.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(pagePost, HttpStatus.OK);
+    }
+
+    //    ViNTT
+    @GetMapping("category/{category}")
+    public ResponseEntity<Page<Post>> getPostsByCategoryName(@PathVariable("category") String categoryName,
+                                                             @PageableDefault(size = 2) Pageable pageable) {
+        Page<Post> postList = postService.findAllByCategoryName(categoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    //    ViNTT
+    @GetMapping("category/{category}/{childCategory}")
+    public ResponseEntity<Page<Post>> getPostsByCategoryNameAndChildCategoryName(
+            @PathVariable("category") String categoryName,
+            @PathVariable("childCategory") String childCategoryName,
+            @PageableDefault(size = 2) Pageable pageable) {
+        Page<Post> postList = postService.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 }
