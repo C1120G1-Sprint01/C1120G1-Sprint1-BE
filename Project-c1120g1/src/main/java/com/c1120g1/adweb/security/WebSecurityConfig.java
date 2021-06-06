@@ -54,11 +54,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/login").permitAll().and().
-                authorizeRequests().antMatchers("/admin", "/api/admin/*").access("hasRole('ROLE_ADMIN')").and().
-//                authorizeRequests().antMatchers("/admin").access("hasAnyRole('ROLE_ADMIN','ROLE_MEMBER')").and().
-        authorizeRequests().antMatchers("/member").access("hasRole('ROLE_MEMBER')").and().
-                authorizeRequests().antMatchers("/user").access("hasRole('ROLE_USER')")
+                .antMatchers("/login", "/", "/post/:id").permitAll().and()
+//                authorizeRequests().antMatchers("/admin", "/admin/*", "/admin/**")
+//                .access("hasRole('ROLE_ADMIN')").and().
+//                authorizeRequests().antMatchers("/user", "/user/*", "/user/**")
+//                .access("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')").and()
+                .exceptionHandling().accessDeniedPage("/403")
                 .and().cors();
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
     }

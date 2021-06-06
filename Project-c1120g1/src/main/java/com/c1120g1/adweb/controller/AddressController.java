@@ -1,5 +1,7 @@
 package com.c1120g1.adweb.controller;
 
+import com.c1120g1.adweb.dto.DistrictDTO;
+import com.c1120g1.adweb.dto.ProvinceDTO;
 import com.c1120g1.adweb.entity.District;
 import com.c1120g1.adweb.entity.Province;
 import com.c1120g1.adweb.entity.Ward;
@@ -28,30 +30,30 @@ public class AddressController {
     WardService wardService;
 
     @GetMapping("/province")
-    public ResponseEntity<List<Province>> getAllProvince() {
-        List<Province> provinceList = provinceService.findAll();
+    public ResponseEntity<List<ProvinceDTO>> getAllProvince() {
+        List<ProvinceDTO> provinceDTOList = provinceService.findAllDTO();
 
-        if (provinceList.isEmpty()) {
+        if (provinceDTOList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(provinceList, HttpStatus.OK);
+        return new ResponseEntity<>(provinceDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/district/{provinceId}")
-    public ResponseEntity<List<District>> getAllDistrictByProvinceId(@PathVariable Integer provinceId) {
-        List<District> districtList = districtService.findAllByProvinceId(provinceId);
+    public ResponseEntity<List<DistrictDTO>> getAllDistrictByProvinceId(@PathVariable Integer provinceId) {
+        List<DistrictDTO> districtDTOList = districtService.findAllByProvinceIdDTO(provinceId);
 
-        if (districtList.isEmpty()) {
+        if (districtDTOList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(districtList, HttpStatus.OK);
+        return new ResponseEntity<>(districtDTOList, HttpStatus.OK);
     }
 
     @GetMapping("/ward/{districtId}")
     public ResponseEntity<List<Ward>> getAllWardByDistrictId(@PathVariable Integer districtId) {
         List<Ward> wardList = wardService.findAllByDistrictId(districtId);
 
-        if(wardList.isEmpty()) {
+        if (wardList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(wardList, HttpStatus.OK);
@@ -61,7 +63,7 @@ public class AddressController {
     public ResponseEntity<List<Province>> getAllProvinceTest() {
         List<Province> provinceList1 = provinceService.findAll();
         if (provinceList1.isEmpty()) {
-            return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(provinceList1, HttpStatus.OK);
     }
@@ -70,16 +72,17 @@ public class AddressController {
     public ResponseEntity<List<District>> getAllDistrictByProvinceIdTest(@PathVariable Integer provinceId) {
         List<District> districtList1 = districtService.findAllDistrictByProvinceId(provinceId);
         if (districtList1.isEmpty()) {
-            return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return  new ResponseEntity<>(districtList1, HttpStatus.OK);
+        return new ResponseEntity<>(districtList1, HttpStatus.OK);
     }
+
     @GetMapping("/wardTest/{districtId}")
     public ResponseEntity<List<Ward>> getWardByDistrictId(@PathVariable Integer districtId) {
         List<Ward> wardList1 = wardService.findWardByDistrictId(districtId);
         if (wardList1.isEmpty()) {
-            return  new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return  new ResponseEntity<>(wardList1, HttpStatus.OK);
+        return new ResponseEntity<>(wardList1, HttpStatus.OK);
     }
 }

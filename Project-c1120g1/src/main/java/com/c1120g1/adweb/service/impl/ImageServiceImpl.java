@@ -12,15 +12,25 @@ public class ImageServiceImpl implements ImageService {
     @Autowired
     private ImageRepository repository;
 
-//    ThuanNN
+    //    ThuanNN
     @Override
     public void saveImage(String url) {
         repository.saveImage("image default", url);
     }
 
-//    ThuanNN
+    //    ThuanNN
     @Override
     public Image findByUrl(String url) {
         return repository.findByUrl(url);
+    }
+
+    @Override
+    public void save(String url, Integer postId) {
+        repository.save(url, postId);
+    }
+
+    @Override
+    public void delete(Integer postId) {
+        repository.delete(postId);
     }
 }

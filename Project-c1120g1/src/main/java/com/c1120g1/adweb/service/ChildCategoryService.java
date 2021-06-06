@@ -1,31 +1,28 @@
 package com.c1120g1.adweb.service;
 
 import com.c1120g1.adweb.entity.ChildCategory;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
 
 public interface ChildCategoryService {
+
+    List<ChildCategory> findAll();
+
+    List<ChildCategory> findAllByCategoryId(int categoryId);
 
     ChildCategory findById(Integer id);
 
     List<ChildCategory> getAllChildCategoryByCategoryId(Integer id);
 
-    Page<ChildCategory> findAllChildCategoryPage(Pageable pageable);
-
     List<ChildCategory> findAllChildCategory();
 
     ChildCategory findChildCategoryById(Integer id);
 
-    void save(ChildCategory childCategory);
+    void addChildCategory(ChildCategory childCategory);
 
-    void delete(Integer id);
+    void saveChildCategory(ChildCategory childCategory);
+
+    void deleteChildCategory(ChildCategory childCategory);
 
     List<ChildCategory> findAllByChildCategoryNameAndCategoryName(String childCategoryName, String categoryName);
-
-    List<ChildCategory> findAllByCategoryName(String categoryName);
-
-    List<ChildCategory> findAllByChildCategoryName(String childCategoryName);
 
 }

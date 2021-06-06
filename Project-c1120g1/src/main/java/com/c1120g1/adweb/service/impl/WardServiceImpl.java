@@ -14,15 +14,22 @@ public class WardServiceImpl implements WardService {
     @Autowired
     private WardRepository repository;
 
-    //    ThuanNN: edit return null
+    @Override
+    public List<Ward> getAllWard() {
+        return repository.findAll();
+    }
+
+    @Override
+    public List<Ward> findAllByDistrictId(int districtId) {
+        return repository.findAllByDistrictId(districtId);
+    }
     @Override
     public List<Ward> findAllByDistrictId(Integer districtId) {
         return repository.findAllByDistrictId(districtId);
     }
 
-    //    ThuanNN: edit return null
     @Override
-    public List<Ward> findWardByDistrictId(Integer districtId) {
-        return repository.findAllByDistrictId(districtId);
+    public List<Ward> findWardByDistrictId(Integer wardId) {
+        return repository.findByDistrictId(wardId);
     }
 }
