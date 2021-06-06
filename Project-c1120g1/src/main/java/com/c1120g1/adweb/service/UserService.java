@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-@Service
+
 public interface UserService {
     //    Danh sach user phan trang, sort
     Page<User> findAllUser(Pageable pageable);
@@ -33,5 +33,5 @@ public interface UserService {
 
     List<User> findAllUser();
 
-
+    void updateUser(User user);
 }

@@ -31,4 +31,6 @@ public interface AccountService {
 
     void sendEmail(String email, String code);
 
+    Account checkUserExists(String username);
+
 }

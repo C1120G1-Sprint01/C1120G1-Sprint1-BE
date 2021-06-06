@@ -108,5 +108,10 @@ public class AccountServiceImpl implements AccountService {
 
         this.emailSender.send(message);
     }
+
+    @Override
+    public Account checkUserExists(String username) {
+        return repository.checkUserExists(username);
+    }
 }
 

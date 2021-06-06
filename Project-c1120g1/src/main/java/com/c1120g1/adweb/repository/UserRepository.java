@@ -20,9 +20,9 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
 
     //    ngoc - tim kiem full text search
-    @Query(value = "select * from user" +
-            "inner join ward on user.wardId = ward.ward_id" +
-            "where concat (user_id, email, name, phone, ward.ward_name) like?1",
+    @Query(value = "select * from user " +
+            "inner join ward on user.ward_id = ward.ward_id " +
+            "where concat (user_id, email, name, phone, ward.ward_name) like concat('%',?1,'%') ",
             nativeQuery =true)
     List<User> fullSearch(String q);
 
@@ -32,12 +32,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     //    ngoc - them moi user
     @Modifying
-    @Query(value = "insert into User (name, email, phone, ward_id, username)" +
-            "values (:name, :email, :phone, :wardId, :username)",
+    @Query(value = "insert into User (name, email, phone, ward_id, username, avatar_url) " +
+                    "values (:name, :email, :phone, :wardId, :username, :avatarUrl) ",
             nativeQuery = true)
     @Transactional
     void createUser(@Param("name") String name, @Param("email") String email,
-                    @Param("phone") String phone, @Param("wardId") Integer wardId, @Param("username") String username);
+                    @Param("phone") String phone, @Param("wardId") Integer wardId,
+                    @Param("username") String username, @Param("avatarUrl") String avatarUrl);
 
 
 
@@ -67,7 +68,18 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findByEmail(String email);
 
     @Query( value = "select * from user " +
-                    "where username = ?1",
+                    "where username = ?1 ",
             nativeQuery = true)
     User findByUsername(String username);
+
+    @Modifying
+    @Query(value ="update User u" +
+            " set u.name = ?2, " +
+            "u.email =?3, " +
+            "u.phone =?4, " +
+            "u.ward =?5, " +
+            "u.avatarUrl =?6" +
+            " where u.userId = ?1")
+    void updateUser(Integer userId, String name, String email, String phone, Ward ward, String avatarUrl);
+
 }
