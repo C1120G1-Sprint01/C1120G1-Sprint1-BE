@@ -3,7 +3,6 @@ package com.c1120g1.adweb.controller;
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.AccountRole;
 import com.c1120g1.adweb.entity.Bot;
-import com.c1120g1.adweb.DTO.BotDTO;
 import com.c1120g1.adweb.entity.Role;
 import com.c1120g1.adweb.service.AccountRoleService;
 import com.c1120g1.adweb.service.AccountService;
@@ -48,7 +47,7 @@ public class BotController {
     }
 
     @PostMapping("/study")
-    public ResponseEntity<Bot> studyForBot(@RequestBody BotDTO botDTO) {
+    public ResponseEntity<Bot> studyForBot(@RequestBody com.c1120g1.adweb.dto.BotDTO botDTO) {
         try {
             if (botDTO == null) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

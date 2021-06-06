@@ -1,5 +1,6 @@
-package com.c1120g1.adweb.DTO;
+package com.c1120g1.adweb.dto;
 
+import com.c1120g1.adweb.entity.Ward;
 
 public class UserDTO {
 
@@ -7,11 +8,24 @@ public class UserDTO {
     private String username ;
     private String email;
     private String phone;
-    private Integer wardId ;
     private String avatarUrl;
     private String registerDate ;
     private String password ;
     private String confirmPassword ;
+    private Ward ward;
+
+    public UserDTO(String name, String username,
+                   String email, String phone, String avatarUrl, String registerDate, String password, String confirmPassword, Ward ward) {
+        this.name = name;
+        this.username = username;
+        this.email = email;
+        this.phone = phone;
+        this.avatarUrl = avatarUrl;
+        this.registerDate = registerDate;
+        this.password = password;
+        this.confirmPassword = confirmPassword;
+        this.ward = ward;
+    }
 
     public String getName() {
         return name;
@@ -45,14 +59,6 @@ public class UserDTO {
         this.phone = phone;
     }
 
-    public Integer getWardId() {
-        return wardId;
-    }
-
-    public void setWardId(Integer wardId) {
-        this.wardId = wardId;
-    }
-
     public String getAvatarUrl() {
         return avatarUrl;
     }
@@ -83,5 +89,13 @@ public class UserDTO {
 
     public void setConfirmPassword(String confirmPassword) {
         this.confirmPassword = confirmPassword;
+    }
+
+    public Ward getWard() {
+        return ward;
+    }
+
+    public void setWard(Ward ward) {
+        this.ward = ward;
     }
 }

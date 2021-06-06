@@ -1,11 +1,18 @@
 package com.c1120g1.adweb.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@Table( name = "`account`",
+@Getter
+@Setter
+@NoArgsConstructor
+@Table(name = "`account`",
         uniqueConstraints = {
                 @UniqueConstraint(name = "ACC_UK", columnNames = "username")
         })
@@ -22,7 +29,7 @@ public class Account {
     private String registerDate;
 
     @OneToOne(mappedBy = "account")
-    @JsonIgnoreProperties("account")
+    @JsonManagedReference
     private User user;
 
     public String getUsername() {
@@ -56,5 +63,4 @@ public class Account {
     public void setUser(User user) {
         this.user = user;
     }
-
 }
