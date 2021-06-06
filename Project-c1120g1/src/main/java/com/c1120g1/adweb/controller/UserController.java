@@ -14,13 +14,9 @@ import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.service.AccountService;
-import com.c1120g1.adweb.service.UserService;
 import com.c1120g1.adweb.service.WardService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-//import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -29,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -41,8 +36,8 @@ public class UserController {
     @Autowired
     private AccountService accountService;
 
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private WardService wardService;
@@ -61,48 +56,48 @@ public class UserController {
     }
 
 
-//    @PostMapping(value = "/user/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-//    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
-//        try {
-//            List<User> userList = userService.findAll();
-//            if (!userList.isEmpty()) {
-//                Map<String, String> listError = new HashMap<>();
-//                List<Account> accountList = accountService.findAllAccount();
-//                if (!accountList.isEmpty()) {
-//                    if (accountService.getAccountByUsername(userDTO.getUsername()) != null) {
-//                        listError.put("existAccount", "Tài khoản đã tồn tại , vui lòng chọ tài khoản khác !");
-//                    }
-//                }
-//                if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
-//                    listError.put("notCorrect", "Mật khẩu không trùng khớp , vui lòng nhập lại !");
-//                }
-//                if (userService.findByEmail(userDTO.getEmail()) != null) {
-//                    listError.put("existEmail", "Email đã tồn tại , vui lòng nhập email khác!");
-//                }
-//                if (!listError.isEmpty()) {
-//                    return ResponseEntity
-//                            .badRequest()
-//                            .body(listError);
-//                }
-//            }
-//            Account account = new Account();
-//            account.setUsername(userDTO.getUsername());
-//            account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-//            accountService.saveUserAccount(account);
-//
-//            User user = new User();
-//            user.setName(userDTO.getName());
-//            user.setEmail(userDTO.getEmail());
-//            user.setPhone(userDTO.getPhone());
-//            user.setWard(userDTO.getWard());
-//            user.setAvatarUrl(userDTO.getAvatarUrl());
-//            user.setAccount(account);
-//            userService.saveUserCus(user);
-//            return new ResponseEntity<>(user, HttpStatus.OK);
-//        } catch (Exception e) {
-//            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-//        }
-//    }
+    @PostMapping(value = "/user/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+        try {
+            List<User> userList = userService.findAll();
+            if (!userList.isEmpty()) {
+                Map<String, String> listError = new HashMap<>();
+                List<Account> accountList = accountService.findAllAccount();
+                if (!accountList.isEmpty()) {
+                    if (accountService.getAccountByUsername(userDTO.getUsername()) != null) {
+                        listError.put("existAccount", "Tài khoản đã tồn tại , vui lòng chọ tài khoản khác !");
+                    }
+                }
+                if (!userDTO.getPassword().equals(userDTO.getConfirmPassword())) {
+                    listError.put("notCorrect", "Mật khẩu không trùng khớp , vui lòng nhập lại !");
+                }
+                if (userService.findByEmail(userDTO.getEmail()) != null) {
+                    listError.put("existEmail", "Email đã tồn tại , vui lòng nhập email khác!");
+                }
+                if (!listError.isEmpty()) {
+                    return ResponseEntity
+                            .badRequest()
+                            .body(listError);
+                }
+            }
+            Account account = new Account();
+            account.setUsername(userDTO.getUsername());
+            account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+            accountService.saveUserAccount(account);
+
+            User user = new User();
+            user.setName(userDTO.getName());
+            user.setEmail(userDTO.getEmail());
+            user.setPhone(userDTO.getPhone());
+            user.setWard(userDTO.getWard());
+            user.setAvatarUrl(userDTO.getAvatarUrl());
+            user.setAccount(account);
+            userService.saveUserCus(user);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
 
     @PostMapping("/user/getPass/{username}/{password}")
