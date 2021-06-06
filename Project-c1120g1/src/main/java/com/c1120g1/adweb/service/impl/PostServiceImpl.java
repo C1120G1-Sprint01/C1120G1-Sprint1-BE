@@ -1,11 +1,11 @@
 package com.c1120g1.adweb.service.impl;
 
-import com.c1120g1.adweb.dto.PostDTO;
-import com.c1120g1.adweb.DTO.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
-import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.repository.ImageRepository;
+import com.c1120g1.adweb.entity.Status;
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.repository.PostRepository;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.StatusService;
@@ -118,11 +118,9 @@ public class PostServiceImpl implements PostService {
                 postDTO.getPost().getChildCategory().getChildCategoryId(),
                 postDTO.getPost().getStatus().getStatusId(),
                 postDTO.getPost().getWard().getWardId(), postDTO.getPost().getPostId());
-
         if (postDTO.getImages().length != 0) {
             imageRepository.delete(postDTO.getPost().getPostId());
         }
-
         for (String url : postDTO.getImages()) {
             imageRepository.save(url, postDTO.getPost().getPostId());
         }
@@ -163,19 +161,19 @@ public class PostServiceImpl implements PostService {
         return repository.findAllNewest(pageable);
     }
 
+    /**
+     * Author: ThuanNN, ViNTT
+     */
     @Override
-    public void save(Post post) {
+    public void saveNewPost(Post post, String username) {
         String postDateTime = postService.getPostDateTime();
-        System.out.println(postDateTime);
-
-        User user = userService.findById(1);
-        System.out.println(user);
-        post.setUser(user);
-
-        Status status = statusService.findById(1);
-        post.setStatus(status);
+        Status status = statusService.findById(2);
+        User user = userService.findByUsername(username);
 
         post.setPostDateTime(postDateTime);
+        post.setEnabled(true);
+        post.setStatus(status);
+        post.setUser(user);
 
         repository.save(post);
     }
@@ -199,7 +197,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate) {
-        return repository.statisticQuantityPost(startDate,endDate);
+        return repository.statisticQuantityPost(startDate, endDate);
     }
 
     @Override
