@@ -1,12 +1,8 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.DTO.UserDTO;
-import com.c1120g1.adweb.entity.Account;
-import com.c1120g1.adweb.entity.User;
-import com.c1120g1.adweb.entity.Ward;
-import com.c1120g1.adweb.service.AccountService;
-import com.c1120g1.adweb.service.UserService;
-import com.c1120g1.adweb.service.WardService;
+import com.c1120g1.adweb.entity.*;
+import com.c1120g1.adweb.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -36,6 +32,9 @@ public class UserController {
     @Autowired
     private WardService wardService;
 
+    @Autowired
+    private AccountRoleService accountRoleService;
+
 
     @PostMapping(value = "/user/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
@@ -61,10 +60,13 @@ public class UserController {
                             .body(listError);
                 }
             }
+
+
             Account account = new Account();
             account.setUsername(userDTO.getUsername());
             account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             accountService.saveUserAccount(account);
+
 
             User user = new User();
             user.setName(userDTO.getName());
@@ -74,6 +76,7 @@ public class UserController {
             user.setAvatarUrl(userDTO.getAvatarUrl());
             user.setAccount(account);
             userService.saveUserCus(user);
+            accountRoleService.saveAccountRoleUser(user.getAccount().getUsername(),1);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
