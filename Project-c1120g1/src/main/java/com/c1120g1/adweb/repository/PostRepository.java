@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.repository;
 
-import com.c1120g1.adweb.DTO.PostStatisticDTO;
+import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

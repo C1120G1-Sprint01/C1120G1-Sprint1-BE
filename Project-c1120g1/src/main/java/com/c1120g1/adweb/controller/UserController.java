@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.DTO.UserDTO;
+import com.c1120g1.adweb.dto.UserDTO;
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
@@ -44,8 +44,8 @@ public class UserController {
             if (!userList.isEmpty()) {
                 Map<String, String> listError = new HashMap<>();
                 List<Account> accountList = accountService.findAllAccount();
-                if (!accountList.isEmpty()){
-                    if (accountService.getAccountByUsername(userDTO.getUsername())!=null) {
+                if (!accountList.isEmpty()) {
+                    if (accountService.getAccountByUsername(userDTO.getUsername()) != null) {
                         listError.put("existAccount", "Tài khoản đã tồn tại , vui lòng chọ tài khoản khác !");
                     }
                 }

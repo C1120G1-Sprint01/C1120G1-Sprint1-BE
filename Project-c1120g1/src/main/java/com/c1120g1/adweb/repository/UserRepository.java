@@ -39,8 +39,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     void createUser(@Param("name") String name, @Param("email") String email,
                     @Param("phone") String phone, @Param("wardId") Integer wardId, @Param("username") String username);
 
-
-
     //    ngoc - edit user
     @Modifying
     @Query(value ="update User u" +
@@ -50,7 +48,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "u.ward =?5 " +
             "where u.userId = ?1")
     void updateUser(Integer userId, String name, String email, String phone, Ward ward);
-
 
     @Modifying
     @Query(value = "INSERT INTO `user` ( avatar_Url, email, `name`, phone, username, ward_id) " +
@@ -65,4 +62,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                         @Param("wardId") Integer wardId);
 
     User findByEmail(String email);
+
+    /**
+     * Author: ViNTT
+     */
+    @Query(value = "SELECT * FROM `user` " +
+            "WHERE username LIKE ?1", nativeQuery = true)
+    User findByUsername(String username);
 }
