@@ -398,6 +398,23 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+//    @GetMapping("search")
+//    public List<Post> search(
+//            @RequestParam(name = "title") String title,
+//            @RequestParam(name = "child_category") String child_category,
+//            @RequestParam(name = "province") String province) {
+//        return postService.search("%" + title + "%", child_category, province);
+//    }
+
+    @GetMapping("search/title")
+    public ResponseEntity<List<Post>> searchByTitle(@RequestParam(name = "keySearch") String title) {
+        List<Post> postList = postService.searchPostByTitle(title);
+
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
     @GetMapping(value = "/statistic", params = {"startDate", "endDate"})
     public ResponseEntity<List<PostStatisticDTO>> getListStatisticQuantity(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
         List<PostStatisticDTO> postList = postService.statisticQuantityPost(startDate, endDate);
