@@ -9,8 +9,4 @@ public interface UserStatisticsDTO {
     String getTimeRegister();
     int getCountNewUser();
 
-
-
-
-
 }
