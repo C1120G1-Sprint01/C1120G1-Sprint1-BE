@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.controller;
 
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.entity.Post;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.UserService;
@@ -13,11 +14,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
-
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("api/posts")
@@ -34,7 +33,7 @@ public class PostController {
     /**
      * author: ThinhTHB
      * method: search post by name
-     * */
+     */
     @GetMapping("/search/{posterName}")
     public List<Post> searchByName(@PathVariable("posterName") String posterName) {
         return postService.searchByName(posterName);
@@ -204,15 +203,15 @@ public class PostController {
     }
 
     @PostMapping("/cus-post-edit")
-    public ResponseEntity<Post> editPost(@Valid @RequestBody Post post, BindingResult bindingResult) {
+    public ResponseEntity<PostDTO> editPost(@Valid @RequestBody PostDTO postDTO, BindingResult bindingResult) {
         try {
             if (bindingResult.hasErrors()) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             } else {
-                if (post.getStatus().getStatusId() == 2 || post.getStatus().getStatusId() == 4 ||
-                        post.getStatus().getStatusId() == 5) {
-                    postService.updatePost(post);
-                    return new ResponseEntity<>(post, HttpStatus.OK);
+                if (postDTO.getPost().getStatus().getStatusId() == 2 || postDTO.getPost().getStatus().getStatusId() == 4 ||
+                        postDTO.getPost().getStatus().getStatusId() == 5) {
+                    postService.updatePost(postDTO);
+                    return new ResponseEntity<>(postDTO, HttpStatus.OK);
                 } else {
                     return new ResponseEntity<>(HttpStatus.FORBIDDEN);
                 }
@@ -241,8 +240,8 @@ public class PostController {
     public List<Post> search(
             @RequestParam(name = "title") String title,
             @RequestParam(name = "child_category") String child_category,
-            @RequestParam(name = "province") String province){
-            return postService.search("%" + title + "%", child_category, province);
-        }
+            @RequestParam(name = "province") String province) {
+        return postService.search("%" + title + "%", child_category, province);
+    }
 }
 

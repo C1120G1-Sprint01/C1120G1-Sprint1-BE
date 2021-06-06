@@ -10,4 +10,14 @@ public class ImageServiceImpl implements ImageService {
 
     @Autowired
     private ImageRepository repository;
+
+    @Override
+    public void save(String url, Integer postId) {
+        repository.save(url, postId);
+    }
+
+    @Override
+    public void delete(Integer postId) {
+        repository.delete(postId);
+    }
 }

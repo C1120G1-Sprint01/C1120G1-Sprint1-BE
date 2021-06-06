@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.service;
 
+import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.entity.Post;
 
 import org.springframework.data.domain.Page;
@@ -39,7 +40,7 @@ public interface PostService{
 
     Post findById(Integer id);
 
-    void updatePost(Post post);
+    void updatePost(PostDTO postDTOst);
 
     Page<Post> findAllNewest(Pageable pageable);
 

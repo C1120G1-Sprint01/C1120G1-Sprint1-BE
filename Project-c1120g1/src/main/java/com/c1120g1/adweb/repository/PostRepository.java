@@ -70,7 +70,6 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where user.username = ?1 and post.enabled = true order by post.status_id", nativeQuery = true)
     Page<Post> findAllByUsername(String username, Pageable pageable);
 
-    @Transactional
     @Modifying
     @Query(value = "update post " +
             "set description = ?1, email = ?2, " +
