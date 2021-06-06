@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +26,7 @@ public class Image {
     private String url;
 
     @ManyToOne
-    @JsonIgnoreProperties("imageSet")
+    @JsonBackReference
     @JoinColumn(name = "post_id", nullable = false, referencedColumnName = "post_id")
     private Post post;
 
