@@ -31,7 +31,4 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 
     @Query(value = "update Account u set u.password = ?1 where u.username = ?2")
     void updatePasswordUser(String password);
-
-
-
 }

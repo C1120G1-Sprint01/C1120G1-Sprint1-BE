@@ -89,6 +89,7 @@ public class CategoryController {
         }
     }
 
+//    ThuanNN
     @GetMapping("api/category")
     public ResponseEntity<List<Category>> getCategory() {
         List<Category> categoryList = categoryService.findAllCategory();

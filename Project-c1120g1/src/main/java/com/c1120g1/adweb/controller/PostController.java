@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/posts")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class PostController {
 
     @Autowired
@@ -253,13 +253,28 @@ public class PostController {
         }
     }
 
+    //    ThuanNN
     @GetMapping("listPost")
     public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
         if (postService.findAllNewest(pageable).isEmpty()) {
-            return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.OK);
     }
+
+    //    ThuanNN
+//    @PostMapping("createPost/{username}")
+//    public ResponseEntity<Void> createPost(@PathVariable(name = "username") String username,
+//                                           @RequestBody Post post) {
+//        User user = userService.findByUsername(username);
+//        if (user == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        post.setUser(user);
+//        postService.save(username, post);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * Author: ThuanNN, ViNTT
@@ -277,12 +292,17 @@ public class PostController {
         }
     }
 
-    @GetMapping("search")
-    public List<Post> search(
-            @RequestParam(name = "title") String title,
-            @RequestParam(name = "child_category") String child_category,
-            @RequestParam(name = "province") String province) {
-        return postService.search("%" + title + "%", child_category, province);
+    //    ThuanNN
+    @GetMapping("search/{keyword}/{category}/{province}")
+    public ResponseEntity<Page<Post>> search(@PathVariable(name = "keyword") String keyword,
+                                             @PathVariable(name = "category") String category,
+                                             @PathVariable(name = "province") String province,
+                                             @PageableDefault(value = 5) Pageable pageable) {
+        Page<Post> pagePost = postService.search(keyword, Integer.parseInt(category), Integer.parseInt(province), pageable);
+        if (pagePost.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(pagePost, HttpStatus.OK);
     }
 
     /**
@@ -387,4 +407,3 @@ public class PostController {
         return new ResponseEntity<>(postList, HttpStatus.OK); //200
     }
 }
-

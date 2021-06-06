@@ -1,4 +1,5 @@
 package com.c1120g1.adweb.service;
+
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
 import org.springframework.data.domain.Page;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.c1120g1.adweb.dto.UserStatisticsDTO;
 
 import java.util.List;
+
 @Service
 public interface UserService {
 

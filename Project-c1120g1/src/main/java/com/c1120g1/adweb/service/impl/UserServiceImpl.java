@@ -117,5 +117,4 @@ public class UserServiceImpl implements UserService {
     public List<UserStatisticsDTO> statisticUser(String startDate, String endDate) {
         return repository.userStatistics(startDate, endDate);
     }
-
 }

@@ -116,14 +116,12 @@ public class ChildCategoryController {
         }
     }
 
-
     /**
      * Method: search child_category
      * Author: TuanLHM
      *
      * @return
      */
-
     @GetMapping("/main-category/child-category/search")
     public ResponseEntity<List<ChildCategory>> searchName(@RequestParam(name = "childCategoryName") String childCategoryName,
                                                           @RequestParam(name = "categoryName") String categoryName) {

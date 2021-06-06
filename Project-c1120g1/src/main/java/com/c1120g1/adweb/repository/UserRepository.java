@@ -78,6 +78,4 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                      @Param("wardId") Integer wardId);
 
     User findByEmail(String email);
-
-
 }
