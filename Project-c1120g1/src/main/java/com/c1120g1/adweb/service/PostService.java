@@ -47,5 +47,6 @@ public interface PostService{
 
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
+    List<Post> searchPostByTitle(String title);
 
 }

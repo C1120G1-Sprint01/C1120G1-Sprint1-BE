@@ -92,5 +92,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where user.username = ?1 and post.enabled = true and post.status_id = ?2", nativeQuery = true)
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
+    @Query(value = "select * " +
+            "from post " +
+            "where (post.title like concat('%',?1,'%'))",nativeQuery = true)
+    List<Post> searchPostByTitle(String title);
 }
 

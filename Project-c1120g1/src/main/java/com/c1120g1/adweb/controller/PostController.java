@@ -1,5 +1,6 @@
 package com.c1120g1.adweb.controller;
 
+import com.c1120g1.adweb.entity.Category;
 import com.c1120g1.adweb.entity.Post;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.UserService;
@@ -34,7 +35,7 @@ public class PostController {
     /**
      * author: ThinhTHB
      * method: search post by name
-     * */
+     */
     @GetMapping("/search/{posterName}")
     public List<Post> searchByName(@PathVariable("posterName") String posterName) {
         return postService.searchByName(posterName);
@@ -231,8 +232,18 @@ public class PostController {
     public List<Post> search(
             @RequestParam(name = "title") String title,
             @RequestParam(name = "child_category") String child_category,
-            @RequestParam(name = "province") String province){
-            return postService.search("%" + title + "%", child_category, province);
+            @RequestParam(name = "province") String province) {
+        return postService.search("%" + title + "%", child_category, province);
+    }
+
+    @GetMapping("search/title")
+    public ResponseEntity<List<Post>> searchByTitle(@RequestParam(name = "keySearch") String title){
+        List<Post> postList = postService.searchPostByTitle(title);
+
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
 }
 

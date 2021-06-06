@@ -1,11 +1,13 @@
 package com.c1120g1.adweb.controller;
 
 import com.c1120g1.adweb.entity.Category;
+import com.c1120g1.adweb.entity.ChildCategory;
 import com.c1120g1.adweb.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +27,7 @@ public class CategoryController {
      *
      * @return
      */
-    @GetMapping("/main-category/category/")
+    @GetMapping("/main-category/category")
     public ResponseEntity<List<Category>> getList() {
         List<Category> categoryList = categoryService.findAllCategory();
         if (categoryList.isEmpty()) {
@@ -54,7 +56,11 @@ public class CategoryController {
      */
 
     @PostMapping("/main-category/category/create-category")
-    public ResponseEntity<Void> createCategory(@RequestBody Category category, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> createCategory(@RequestBody Category category, BindingResult bindingResult, UriComponentsBuilder ucBuilder) {
+        this.categoryService.checkDup(category, bindingResult);
+        if (bindingResult.hasErrors()){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         categoryService.addCategory(category);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/category/{id}").buildAndExpand(category.getCategoryId()).toUri());
@@ -75,13 +81,13 @@ public class CategoryController {
 
         Category category1 = categoryService.findCategoryById(id);
 
-        if (category1 == null) {
+        if (category1 == null || id == null) {
             return new ResponseEntity<Category>(HttpStatus.NOT_FOUND);
         } else {
 
             category1.setCategoryName(category.getCategoryName());
             category1.setChildCategorySet(category.getChildCategorySet());
-            category1.setDeleteFlag(false);
+            category1.setDeleteFlag(true);
             category1.setCategoryId(id);
 
             categoryService.saveCategory(category1);
@@ -115,5 +121,35 @@ public class CategoryController {
             categoryService.deleteCategory(category);
             return new ResponseEntity<>(HttpStatus.OK);
         }
+    }
+
+    /**
+     * Method: search category
+     * Author: TuanLHM
+     *
+     * @return
+     */
+
+    @GetMapping("/main-category/category/search")
+    public ResponseEntity<List<Category>> searchName(@RequestParam(name = "categoryName") String categoryName) {
+        List<Category> categoryList;
+
+        categoryList = categoryService.findAllCategoryByCategoryName(categoryName);
+
+        if (categoryList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categoryList, HttpStatus.OK);
+    }
+
+    @GetMapping("/main-category/category/searchAbsolute")
+    public ResponseEntity<List<Category>> searchAbsolute(@RequestParam(name = "categoryName") String categoryName) {
+
+        List<Category> categoryList = categoryService.searchAllCategory(categoryName);
+
+        if (categoryList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(categoryList, HttpStatus.OK);
     }
 }
