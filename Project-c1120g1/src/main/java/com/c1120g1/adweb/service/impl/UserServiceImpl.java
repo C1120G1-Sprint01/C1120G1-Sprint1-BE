@@ -36,7 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        repository.save(user);
+        repository.createUser(standardizeName(user.getName()), user.getEmail(),
+                user.getPhone(), user.getWard().getWardId(),
+                user.getAccount().getUsername(),user.getAvatarUrl());
     }
 
     @Override
@@ -58,6 +60,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllUser() {
         return repository.findAll();
+    }
+
+    @Override
+    public void updateUser(User user) {
+        repository.updateUser(user.getUserId(), standardizeName(user.getName()),
+                user.getEmail(), user.getPhone(), user.getWard(),user.getAvatarUrl());
     }
 
     @Override

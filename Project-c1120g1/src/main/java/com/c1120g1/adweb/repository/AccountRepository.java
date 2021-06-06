@@ -14,13 +14,11 @@ public interface AccountRepository extends JpaRepository<Account, String> {
     Account findByUsername(String username);
 
     @Modifying
-    @Query(value = "insert into account (username, password, register_date)" +
+    @Query(value = "insert into account (username, password, register_date) " +
             "values (:username, :password, :register_date)",
             nativeQuery = true)
     @Transactional
     void saveUserAccount(@Param("username")String username, @Param("password")String password, @Param("register_date")LocalDate register_date);
-
-
 
     @Query(value = "select * from `account` where username = ?1 ", nativeQuery = true)
     Account getAccountByUsername(String username);
@@ -31,4 +29,8 @@ public interface AccountRepository extends JpaRepository<Account, String> {
 
     @Query(value = "update Account u set u.password = ?1 where u.username = ?2")
     void updatePasswordUser(String password);
+
+    @Query(value = "select * from account where username = ?1", nativeQuery = true)
+    Account checkUserExists(String username);
+
 }
