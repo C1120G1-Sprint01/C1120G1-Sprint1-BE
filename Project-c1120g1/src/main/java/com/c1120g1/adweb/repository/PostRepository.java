@@ -29,6 +29,11 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where status_id = 1 and enabled = 1", nativeQuery = true)
     Page<Post> findAllListDetail(Pageable pageable);
 
+    @Query(value =  "select * " +
+                    "from post " +
+                    "where status_id = 1 and enabled = 1 and title like %?1%", nativeQuery = true)
+    Page<Post> searchByTitle(String title, Pageable pageable);
+
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = "update post " +
             "set status_id = 2 " +

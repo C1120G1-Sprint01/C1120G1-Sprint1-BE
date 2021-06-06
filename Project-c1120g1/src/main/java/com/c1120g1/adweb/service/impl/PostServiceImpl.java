@@ -57,6 +57,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public Page<Post> searchByTitle(String title, Pageable pageable) {
+        return repository.searchByTitle(title, pageable);
+    }
+
+    @Override
     public void cancelApprovePost(Integer id) {
         repository.cancelApprovePost(id);
     }

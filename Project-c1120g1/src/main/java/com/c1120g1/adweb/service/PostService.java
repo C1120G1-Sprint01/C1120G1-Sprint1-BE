@@ -22,6 +22,8 @@ public interface PostService{
 
     Page<Post> findAllListDetail(Pageable pageable);
 
+    Page<Post> searchByTitle(String title, Pageable pageable);
+
     void cancelApprovePost(Integer id);
 
     Page<Post> findAllListApprove(Pageable pageable);

@@ -62,6 +62,15 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
+    @GetMapping("/listDetail/searchByTitle")
+    public ResponseEntity<Page<Post>> searchByTitle(@RequestParam String title, Pageable pageable) {
+        Page<Post> listPostDetail = this.postService.searchByTitle(title, pageable);
+        if (listPostDetail.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(listPostDetail, HttpStatus.OK);
+    }
+
     @PutMapping("/listDetail/cancelApprove/{postId}")
     public ResponseEntity<Post> cancelApprovePost(@PathVariable("postId") Integer postId) {
         Post currentPost = this.postService.findById(postId);
