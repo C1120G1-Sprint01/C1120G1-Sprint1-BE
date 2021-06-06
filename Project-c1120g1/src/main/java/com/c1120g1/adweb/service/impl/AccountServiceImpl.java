@@ -86,14 +86,24 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void sendEmailApprove(String email, String code) {
+    public void sendEmailApprove(String email) {
         SimpleMailMessage messageApprove = new SimpleMailMessage();
         messageApprove.setTo(email);
         messageApprove.setSubject("Email xác nhận bài đăng được phê duyệt");
-        messageApprove.setText("Chúc mừng bạn! Tin của bạn đã được đăng thành công!" +
-                "CODE: " + code +
-                "Thanks and regards!");
+        messageApprove.setText( "Chúc mừng bạn! Tin của bạn đã được đăng thành công!" +
+                                " Thanks and regards!");
         this.emailSender.send(messageApprove);
+    }
+
+    @Override
+    public void sendEmailDelete(String email) {
+        SimpleMailMessage messageDelete = new SimpleMailMessage();
+        messageDelete.setTo(email);
+        messageDelete.setSubject("Email thông báo xoá bài đăng");
+        messageDelete.setText( "Xin thông báo! Tin của bạn đã bị xoá do vi phạm!" +
+                " Nếu có bất kì thắc mắc nào, bạn có thể liên hệ với Admin qua thanh chat. \n" +
+                " Thanks and regards!");
+        this.emailSender.send(messageDelete);
     }
 
     @Override
