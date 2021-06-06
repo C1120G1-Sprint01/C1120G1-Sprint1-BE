@@ -1,10 +1,11 @@
 package com.c1120g1.adweb.service.impl;
 
+import com.c1120g1.adweb.dto.PostDTO;
+import com.c1120g1.adweb.DTO.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
-
-import com.c1120g1.adweb.repository.ImageRepository;
 import com.c1120g1.adweb.entity.Status;
 import com.c1120g1.adweb.entity.User;
+import com.c1120g1.adweb.repository.ImageRepository;
 import com.c1120g1.adweb.repository.PostRepository;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.StatusService;
@@ -13,9 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
 import java.util.List;
 
 @Service
@@ -39,7 +40,7 @@ public class PostServiceImpl implements PostService {
     /**
      * author: ThinhTHB
      * method: search post by name
-     * */
+     */
     @Override
     public List<Post> searchByName(String posterName) {
         return repository.searchByName(posterName);
@@ -65,9 +66,39 @@ public class PostServiceImpl implements PostService {
         repository.cancelApprovePost(id);
     }
 
+    /**
+     * Author: ViNTT
+     */
     @Override
-    public Post findById(Integer id) {
-        return repository.findById(id).orElse(null);
+    public Post findById(Integer postId) {
+        return repository.findById(postId).orElse(null);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Post findActivePostById(Integer postId) {
+        return repository.findActivePostById(postId);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Page<Post> findAllActiveByCategoryName(String categoryName, Pageable pageable) {
+        categoryName = categoryName.replace("-", " ");
+        return repository.findAllActiveByCategoryName(categoryName, pageable);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public Page<Post> findAllActiveByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable) {
+        categoryName = categoryName.replace("-", " ");
+        childCategoryName = childCategoryName.replace("-", " ");
+        return repository.findAllActiveByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
     }
 
     @Override
@@ -76,22 +107,25 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void updatePost(Post post) {
+    public void updatePost(PostDTO postDTO) {
+        repository.updatePost(postDTO.getPost().getDescription(),
+                postDTO.getPost().getEmail(),
+                postDTO.getPost().getPhone(),
+                postDTO.getPost().isPostType(),
+                postDTO.getPost().getPosterName(),
+                postDTO.getPost().getPrice(),
+                postDTO.getPost().getTitle(),
+                postDTO.getPost().getChildCategory().getChildCategoryId(),
+                postDTO.getPost().getStatus().getStatusId(),
+                postDTO.getPost().getWard().getWardId(), postDTO.getPost().getPostId());
 
-        repository.updatePost(post.getDescription(),
-                post.getEmail(),
-                post.getPhone(),
-                post.isPostType(),
-                post.getPosterName(),
-                post.getPrice(),
-                post.getTitle(),
-                post.getChildCategory().getChildCategoryId(),
-                post.getStatus().getStatusId(),
-                post.getWard().getWardId(), post.getPostId());
+        if (postDTO.getImages().length != 0) {
+            imageRepository.delete(postDTO.getPost().getPostId());
+        }
 
-//        for (Image image : post.getImageSet()) {
-//            imageRepository.update(image.getUrl(), image.getImageId());
-//        }
+        for (String url : postDTO.getImages()) {
+            imageRepository.save(url, postDTO.getPost().getPostId());
+        }
     }
 
     @Override
@@ -156,12 +190,20 @@ public class PostServiceImpl implements PostService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         Date now = new Date();
         return simpleDateFormat.format(now);
-
-
     }
 
     @Override
     public Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable) {
         return repository.findAllByUsernameAndStatusId(username, statusId, pageable);
+    }
+
+    @Override
+    public List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate) {
+        return repository.statisticQuantityPost(startDate,endDate);
+    }
+
+    @Override
+    public Page<Post> findAllPost(Pageable pageable) {
+        return repository.findAllPost(pageable);
     }
 }
