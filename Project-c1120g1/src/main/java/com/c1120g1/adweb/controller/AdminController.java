@@ -1,7 +1,8 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.DTO.UserDTO;
+import com.c1120g1.adweb.dto.UserDTO;
 import com.c1120g1.adweb.entity.Account;
+import com.c1120g1.adweb.entity.Role;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.repository.WardRepository;
@@ -11,14 +12,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin(value = "*", allowedHeaders = "*")
@@ -38,6 +39,8 @@ public class AdminController {
     private AccountService accountService;
     @Autowired
     private WardRepository wardRepository;
+    @Autowired
+    private AccountRoleService accountRoleService;
 
 
 //    Ngoc - Get list, Pagination
@@ -80,7 +83,6 @@ public class AdminController {
                             .body(listError);
                 }
             }
-
             // chuyen method nay vao trong service
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Account account = new Account();
@@ -90,6 +92,7 @@ public class AdminController {
             account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             account.setRegisterDate(registerDate);
             accountService.saveUserAccount(account);
+
 
             System.out.println("Pw Bcrypt64 : " + account.getPassword());
 
@@ -101,7 +104,9 @@ public class AdminController {
             user.setWard(userDTO.getWard());
             user.setAccount(account);
             user.setAvatarUrl(userDTO.getAvatarUrl());
+            accountRoleService.saveAccountRoleUser(user.getAccount().getUsername(),1);
             userService.save(user);
+
 
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
