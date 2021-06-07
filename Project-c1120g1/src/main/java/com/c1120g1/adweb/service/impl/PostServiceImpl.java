@@ -108,6 +108,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void updatePost(PostDTO postDTO) {
+        String postDateTime = postService.getPostDateTime();
         repository.updatePost(postDTO.getPost().getDescription(),
                 postDTO.getPost().getEmail(),
                 postDTO.getPost().getPhone(),
@@ -117,7 +118,9 @@ public class PostServiceImpl implements PostService {
                 postDTO.getPost().getTitle(),
                 postDTO.getPost().getChildCategory().getChildCategoryId(),
                 postDTO.getPost().getStatus().getStatusId(),
-                postDTO.getPost().getWard().getWardId(), postDTO.getPost().getPostId());
+                postDTO.getPost().getWard().getWardId(),
+                postDateTime,
+                postDTO.getPost().getPostId());
         if (postDTO.getImages().length != 0) {
             imageRepository.delete(postDTO.getPost().getPostId());
         }
