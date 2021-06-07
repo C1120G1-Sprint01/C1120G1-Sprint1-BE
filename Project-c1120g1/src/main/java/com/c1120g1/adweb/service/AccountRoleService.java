@@ -9,4 +9,5 @@ public interface AccountRoleService {
     List<AccountRole> findByAccount(Account account);
     AccountRole findAccountRoleByAccount(Account account);
     AccountRole findById(Integer accountRoleId);
+    void saveAccountRoleUser(String username , Integer roleId);
 }

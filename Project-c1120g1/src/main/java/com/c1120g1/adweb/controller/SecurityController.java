@@ -17,6 +17,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @RestController
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class SecurityController {
@@ -90,5 +92,18 @@ public class SecurityController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }
+
+    @GetMapping("/api/loginGoogle")
+    public ResponseEntity<Principal> user(Principal principal) {
+        if (principal == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(principal, HttpStatus.OK);
+    }
+
+    @GetMapping("/403")
+    public ResponseEntity<Void> deniedPage(){
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 }

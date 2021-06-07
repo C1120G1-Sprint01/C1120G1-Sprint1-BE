@@ -1,16 +1,25 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.DTO.UserDTO;
+
+import com.c1120g1.adweb.dto.UserStatisticsDTO;
+import com.c1120g1.adweb.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import com.c1120g1.adweb.dto.UserDTO;
+
+import com.c1120g1.adweb.service.*;
+
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.service.AccountService;
-import com.c1120g1.adweb.service.UserService;
 import com.c1120g1.adweb.service.WardService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.validation.FieldError;
@@ -19,6 +28,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 @RestController
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -35,17 +45,32 @@ public class UserController {
 
     @Autowired
     private WardService wardService;
+  
+    @Autowired
+    private AccountRoleService accountRoleService;
 
+    /**
+     * author: ThinhTHB
+     * method: get List User Statistics
+     * */
+    @GetMapping(value = "/statistic", params = {"startDate", "endDate"})
+    public ResponseEntity<List<UserStatisticsDTO>> getListUserStatistic(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
+        List<UserStatisticsDTO> userList = userService.statisticUser(startDate, endDate);
+        if (userList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(userList, HttpStatus.OK);
+    }
 
     @PostMapping(value = "/user/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> createUser(@RequestBody com.c1120g1.adweb.dto.UserDTO userDTO) {
         try {
             List<User> userList = userService.findAll();
             if (!userList.isEmpty()) {
                 Map<String, String> listError = new HashMap<>();
                 List<Account> accountList = accountService.findAllAccount();
-                if (!accountList.isEmpty()){
-                    if (accountService.getAccountByUsername(userDTO.getUsername())!=null) {
+                if (!accountList.isEmpty()) {
+                    if (accountService.getAccountByUsername(userDTO.getUsername()) != null) {
                         listError.put("existAccount", "Tài khoản đã tồn tại , vui lòng chọ tài khoản khác !");
                     }
                 }
@@ -61,10 +86,13 @@ public class UserController {
                             .body(listError);
                 }
             }
+
+
             Account account = new Account();
             account.setUsername(userDTO.getUsername());
             account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             accountService.saveUserAccount(account);
+
 
             User user = new User();
             user.setName(userDTO.getName());
@@ -74,6 +102,7 @@ public class UserController {
             user.setAvatarUrl(userDTO.getAvatarUrl());
             user.setAccount(account);
             userService.saveUserCus(user);
+            accountRoleService.saveAccountRoleUser(user.getAccount().getUsername(),1);
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

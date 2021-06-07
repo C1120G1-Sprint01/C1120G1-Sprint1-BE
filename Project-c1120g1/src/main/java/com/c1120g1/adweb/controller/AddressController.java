@@ -59,7 +59,7 @@ public class AddressController {
         return new ResponseEntity<>(wardList, HttpStatus.OK);
     }
 
-    @GetMapping("/provinceTest")
+    @GetMapping("/provinces")
     public ResponseEntity<List<Province>> getAllProvinceTest() {
         List<Province> provinceList1 = provinceService.findAll();
         if (provinceList1.isEmpty()) {
@@ -68,7 +68,7 @@ public class AddressController {
         return new ResponseEntity<>(provinceList1, HttpStatus.OK);
     }
 
-    @GetMapping("/provinceTest/districtTest/{provinceId}")
+    @GetMapping("/districts/{provinceId}")
     public ResponseEntity<List<District>> getAllDistrictByProvinceIdTest(@PathVariable Integer provinceId) {
         List<District> districtList1 = districtService.findAllDistrictByProvinceId(provinceId);
         if (districtList1.isEmpty()) {
@@ -77,7 +77,7 @@ public class AddressController {
         return new ResponseEntity<>(districtList1, HttpStatus.OK);
     }
 
-    @GetMapping("/wardTest/{districtId}")
+    @GetMapping("/wards/{districtId}")
     public ResponseEntity<List<Ward>> getWardByDistrictId(@PathVariable Integer districtId) {
         List<Ward> wardList1 = wardService.findWardByDistrictId(districtId);
         if (wardList1.isEmpty()) {
