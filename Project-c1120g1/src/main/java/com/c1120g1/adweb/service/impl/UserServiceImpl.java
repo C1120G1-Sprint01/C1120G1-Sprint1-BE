@@ -1,7 +1,10 @@
 package com.c1120g1.adweb.service.impl;
 
+import com.c1120g1.adweb.dto.UserStatisticsDTO;
+
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
+
 import com.c1120g1.adweb.repository.UserRepository;
 import com.c1120g1.adweb.repository.WardRepository;
 import com.c1120g1.adweb.service.UserService;
@@ -33,7 +36,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void save(User user) {
-        repository.save(user);
+        repository.createUser(standardizeName(user.getName()), user.getEmail(),
+                user.getPhone(), user.getWard().getWardId(),
+                user.getAccount().getUsername(),user.getAvatarUrl());
     }
 
     @Override
@@ -55,6 +60,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<User> findAllUser() {
         return repository.findAll();
+    }
+
+    @Override
+    public void updateUser(User user) {
+        repository.updateUser(user.getUserId(), standardizeName(user.getName()),
+                user.getEmail(), user.getPhone(), user.getWard(),user.getAvatarUrl());
     }
 
     @Override
@@ -106,9 +117,12 @@ public class UserServiceImpl implements UserService {
         return name;
     }
 
+    /**
+     * author: ThinhTHB
+     * method: get List User Statistics
+     * */
     @Override
-    public void updateUser(User user) {
-        repository.updateUser(user.getUserId(), standardizeName(user.getName()),
-                user.getEmail(), user.getPhone(), user.getWard(),user.getAvatarUrl());
+    public List<UserStatisticsDTO> statisticUser(String startDate, String endDate) {
+        return repository.userStatistics(startDate, endDate);
     }
 }

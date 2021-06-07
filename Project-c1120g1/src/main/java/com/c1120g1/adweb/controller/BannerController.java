@@ -3,7 +3,7 @@ package com.c1120g1.adweb.controller;
 import com.c1120g1.adweb.entity.Banner;
 import com.c1120g1.adweb.entity.Position;
 import com.c1120g1.adweb.entity.Size;
-import com.c1120g1.adweb.model.BannerDTO;
+import com.c1120g1.adweb.DTO.BannerDTO;
 import com.c1120g1.adweb.service.BannerService;
 import com.c1120g1.adweb.service.PositionService;
 import com.c1120g1.adweb.service.SizeService;
@@ -44,13 +44,14 @@ public class BannerController {
     /**
      * Method: get all banner by position
      * Author: HanTH
+     *
      * @param positionId
      * @return
      */
     @GetMapping("admin/banner/position/{positionId}")
-    public ResponseEntity<?> showAllAdvertiseBannerByPosition(@PathVariable Integer positionId){
+    public ResponseEntity<?> showAllAdvertiseBannerByPosition(@PathVariable Integer positionId) {
         try {
-            List<Banner> listBanner = bannerService.showAllBannerByPosition(positionId);
+            List<Banner> listBanner = bannerService.showAllBannerByPosition( positionId );
             return new ResponseEntity<>( listBanner, HttpStatus.OK );
         } catch (Exception e) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST );

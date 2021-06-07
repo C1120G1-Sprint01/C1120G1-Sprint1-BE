@@ -26,6 +26,11 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
             "where child_category.category_id = ?1",
             nativeQuery = true)
     List<ChildCategory> getAllChildCategoryByCategoryId(Integer id);
+
+    @Query(value = "select * " +
+            "from child_category " +
+            "where (child_category.child_category_name=?1 and child_category.category_id=?2)",nativeQuery = true)
+    List<ChildCategory> searchAllChildCategory(String childCategoryName,Integer categoryId);
 }
 //
 //    //    @Query(value = "select child_category.child_category_name, category.category_name" +

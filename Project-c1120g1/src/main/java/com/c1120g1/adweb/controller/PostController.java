@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/posts")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class PostController {
 
     @Autowired
@@ -253,13 +253,29 @@ public class PostController {
         }
     }
 
-    @GetMapping("listPost")
-    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
+    //    ThuanNN
+    @GetMapping("listPost/{count}")
+    public ResponseEntity<Page<Post>> getAllPost(@PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
         if (postService.findAllNewest(pageable).isEmpty()) {
-            return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.OK);
     }
+
+    //    ThuanNN
+//    @PostMapping("createPost/{username}")
+//    public ResponseEntity<Void> createPost(@PathVariable(name = "username") String username,
+//                                           @RequestBody Post post) {
+//        User user = userService.findByUsername(username);
+//        if (user == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        post.setUser(user);
+//        postService.save(username, post);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * Author: ThuanNN, ViNTT
@@ -277,12 +293,17 @@ public class PostController {
         }
     }
 
-    @GetMapping("search")
-    public List<Post> search(
-            @RequestParam(name = "title") String title,
-            @RequestParam(name = "child_category") String child_category,
-            @RequestParam(name = "province") String province) {
-        return postService.search("%" + title + "%", child_category, province);
+    //    ThuanNN
+    @GetMapping("search/{keyword}/{category}/{province}")
+    public ResponseEntity<Page<Post>> search(@PathVariable(name = "keyword") String keyword,
+                                             @PathVariable(name = "category") String category,
+                                             @PathVariable(name = "province") String province,
+                                             @PageableDefault(value = 5) Pageable pageable) {
+        Page<Post> pagePost = postService.search(keyword, Integer.parseInt(category), Integer.parseInt(province), pageable);
+        if (pagePost.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(pagePost, HttpStatus.OK);
     }
 
     /**
@@ -341,6 +362,43 @@ public class PostController {
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
+    /**
+     * ThuanNN
+     * @param categoryName
+     * @param count
+     * @return ResponseEntity<Page<Post>>
+     */
+    @GetMapping("categories/{category}/{count}")
+    public ResponseEntity<Page<Post>> getAllActivePostsByCategoryName(@PathVariable("category") String categoryName,
+                                                                      @PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
+        Page<Post> postList = postService.findAllActiveByCategoryName(categoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    /**
+     * ThuanNN
+     * @param categoryName
+     * @param childCategoryName
+     * @param count
+     * @return ResponseEntity<Page<Post>>
+     */
+    @GetMapping("categories/{category}/{childCategory}/{count}")
+    public ResponseEntity<Page<Post>> getAllActivePostsByCategoryNameAndChildCategoryName(
+            @PathVariable("category") String categoryName,
+            @PathVariable("childCategory") String childCategoryName,
+            @PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
+        Page<Post> postList = postService.findAllActiveByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
     // method of Dong
     @GetMapping(value = "/list", params = {"page", "size", "onSorting", "textSorting"})
     public ResponseEntity<Page<Post>> listPost(@RequestParam("page") int page, @RequestParam("size") int size,
@@ -378,6 +436,23 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+//    @GetMapping("search")
+//    public List<Post> search(
+//            @RequestParam(name = "title") String title,
+//            @RequestParam(name = "child_category") String child_category,
+//            @RequestParam(name = "province") String province) {
+//        return postService.search("%" + title + "%", child_category, province);
+//    }
+
+    @GetMapping("search/title")
+    public ResponseEntity<List<Post>> searchByTitle(@RequestParam(name = "keySearch") String title) {
+        List<Post> postList = postService.searchPostByTitle(title);
+
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
     @GetMapping(value = "/statistic", params = {"startDate", "endDate"})
     public ResponseEntity<List<PostStatisticDTO>> getListStatisticQuantity(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
         List<PostStatisticDTO> postList = postService.statisticQuantityPost(startDate, endDate);
@@ -387,4 +462,3 @@ public class PostController {
         return new ResponseEntity<>(postList, HttpStatus.OK); //200
     }
 }
-

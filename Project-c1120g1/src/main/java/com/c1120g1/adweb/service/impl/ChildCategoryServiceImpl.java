@@ -5,6 +5,7 @@ import com.c1120g1.adweb.repository.ChildCategoryRepository;
 import com.c1120g1.adweb.service.ChildCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 
@@ -46,7 +47,7 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
 
     @Override
     public void addChildCategory(ChildCategory childCategory) {
-        childCategory.setDeleteFlag(false);
+        childCategory.setDeleteFlag(true);
         repository.save(childCategory);
     }
 
@@ -57,12 +58,26 @@ public class ChildCategoryServiceImpl implements ChildCategoryService {
 
     @Override
     public void deleteChildCategory(ChildCategory childCategory) {
-        childCategory.setDeleteFlag(true);
+        childCategory.setDeleteFlag(false);
         repository.save(childCategory);
     }
 
     @Override
     public List<ChildCategory> findAllByChildCategoryNameAndCategoryName(String childCategoryName, String categoryName) {
         return repository.findAllByChildCategoryNameAndCategoryName(childCategoryName,categoryName);
+    }
+
+    @Override
+    public void checkDup(ChildCategory childCategory, Errors errors) {
+        for (ChildCategory child : findAllChildCategory()){
+            if (child.getChildCategoryName().equals(childCategory.getChildCategoryName())) {
+                errors.rejectValue("childCategoryName","checkDupChildCategory");
+            }
+        }
+    }
+
+    @Override
+    public List<ChildCategory> searchAllChildCategory(String childCategoryName, Integer categoryId) {
+        return repository.searchAllChildCategory(childCategoryName, categoryId);
     }
 }
