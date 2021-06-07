@@ -31,7 +31,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value =  "select * " +
                     "from post " +
-                    "where status_id = 1 and enabled = 1 and title like %?1%", nativeQuery = true)
+                    "where status_id = 1 and enabled = 1 and title like concat('%',?1,'%')", nativeQuery = true)
     Page<Post> searchByTitle(String title, Pageable pageable);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
@@ -123,7 +123,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
      */
     @Query(value = "select * from post " +
             "where enabled = 1 and status_id = 1 " +
-            "order by post_date_time desc", nativeQuery = true)
+            "order by post_date_time desc ", nativeQuery = true)
     Page<Post> findAllNewest(Pageable pageable);
 
     /**
@@ -140,7 +140,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "INNER JOIN child_category on post.child_category_id = child_category.child_category_id " +
             "INNER JOIN category on child_category.category_id = category.category_id " +
             "WHERE category.category_name LIKE ?1 AND post.enabled = 1 AND post.status_id = 1 " +
-            "ORDER BY post.post_date_time DESC", nativeQuery = true)
+            "ORDER BY post.post_date_time DESC ", nativeQuery = true)
     Page<Post> findAllActiveByCategoryName(String categoryName, Pageable pageable);
 
     /**
@@ -150,7 +150,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "INNER JOIN child_category on post.child_category_id = child_category.child_category_id " +
             "INNER JOIN category on child_category.category_id = category.category_id " +
             "WHERE category.category_name like ?1 AND child_category.child_category_name like ?2 AND post.enabled = 1 AND post.status_id = 1 " +
-            "ORDER BY post.post_date_time DESC", nativeQuery = true)
+            "ORDER BY post.post_date_time DESC ", nativeQuery = true)
     Page<Post> findAllActiveByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
 
     @Query(value = "select * " +

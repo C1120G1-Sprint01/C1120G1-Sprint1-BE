@@ -5,6 +5,7 @@ import com.c1120g1.adweb.entity.Ward;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.c1120g1.adweb.dto.UserStatisticsDTO;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface UserService {
 
     void save(User user);
 
-    void saveUser(Integer userId, String name, String email, String phone, Ward ward);
+    void validate(User user, Errors errors);
 
     User findById(Integer id);
 
@@ -36,7 +37,6 @@ public interface UserService {
 
     List<User> findAllUser();
 
-
     void updateUser(User user);
 
     /**
@@ -44,6 +44,5 @@ public interface UserService {
      * method: get List User Statistics
      * */
     List<UserStatisticsDTO> statisticUser(String startDate, String endDate);
-
 
 }

@@ -166,4 +166,16 @@ public class UserController {
         });
         return errors;
     }
+
+    @GetMapping("/api/registerEmail/{email}")
+    public ResponseEntity<User> getEmail(@PathVariable(name = "email") String email){
+        User user = this.userService.findByEmail(email);
+        if (user != null) {
+            String toEmail = user.getEmail();
+            accountService.sendEmailConfirmRegister(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

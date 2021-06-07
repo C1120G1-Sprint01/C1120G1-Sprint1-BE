@@ -19,7 +19,8 @@ public class DistrictServiceImpl implements DistrictService {
     //    ThuanNN: edit return null
     @Override
     public List<District> findAllDistrictByProvinceId(Integer provinceId) {
-        return repository.findAllByProvinceId(provinceId);
+
+        return repository.findAllDistrictByProvinceId(provinceId);
     }
 
     @Override

@@ -124,5 +124,14 @@ public class AccountServiceImpl implements AccountService {
     public Account checkUserExists(String username) {
         return repository.checkUserExists(username);
     }
+
+    @Override
+    public void sendEmailConfirmRegister(String email) {
+        SimpleMailMessage messageConfirm = new SimpleMailMessage();
+        messageConfirm.setTo(email);
+        messageConfirm.setSubject("Email xác thực việc đăng kí");
+        messageConfirm.setText("<a routerLink = 'localhost:4200/user/registerEmail' target='_blank'>Click vào đây để xác thực việc đăng ký</a>");
+        this.emailSender.send(messageConfirm);
+    }
 }
 

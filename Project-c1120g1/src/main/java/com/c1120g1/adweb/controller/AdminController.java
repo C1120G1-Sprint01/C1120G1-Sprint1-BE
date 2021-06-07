@@ -1,6 +1,5 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.dto.UserDTO;
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
@@ -14,11 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @RestController
 @CrossOrigin(value = "*", allowedHeaders = "*")
@@ -40,6 +37,8 @@ public class AdminController {
 
     @Autowired
     private WardRepository wardRepository;
+    @Autowired
+    private AccountRoleService accountRoleService;
 
 
 //    Ngoc - Get list, Pagination
@@ -56,7 +55,10 @@ public class AdminController {
 
     //   Ngoc -  Create new user
     @PostMapping(value = "/admin/listUser/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<?> createUser(@RequestBody com.c1120g1.adweb.dto.UserDTO userDTO) {
+
+//    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+
         try {
             List<User> userList = userService.findAll();
             if (!userList.isEmpty()) {
@@ -82,7 +84,6 @@ public class AdminController {
                             .body(listError);
                 }
             }
-
             // chuyen method nay vao trong service
             BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
             Account account = new Account();
@@ -91,8 +92,8 @@ public class AdminController {
             account.setUsername(userDTO.getUsername());
             account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             account.setRegisterDate(registerDate);
+            accountService.save(account);
             accountService.saveUserAccount(account);
-
             System.out.println("Pw Bcrypt64 : " + account.getPassword());
 
             // chuyen method nay vao trong service
@@ -103,7 +104,9 @@ public class AdminController {
             user.setWard(userDTO.getWard());
             user.setAccount(account);
             user.setAvatarUrl(userDTO.getAvatarUrl());
+            accountRoleService.saveAccountRoleUser(user.getAccount().getUsername(),1);
             userService.save(user);
+
 
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
@@ -197,6 +200,4 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
