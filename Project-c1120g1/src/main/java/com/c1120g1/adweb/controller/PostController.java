@@ -254,8 +254,9 @@ public class PostController {
     }
 
     //    ThuanNN
-    @GetMapping("listPost")
-    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
+    @GetMapping("listPost/{count}")
+    public ResponseEntity<Page<Post>> getAllPost(@PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
         if (postService.findAllNewest(pageable).isEmpty()) {
             return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
         }
@@ -354,6 +355,43 @@ public class PostController {
             @PathVariable("category") String categoryName,
             @PathVariable("childCategory") String childCategoryName,
             @PageableDefault(size = 2) Pageable pageable) {
+        Page<Post> postList = postService.findAllActiveByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    /**
+     * ThuanNN
+     * @param categoryName
+     * @param count
+     * @return ResponseEntity<Page<Post>>
+     */
+    @GetMapping("categories/{category}/{count}")
+    public ResponseEntity<Page<Post>> getAllActivePostsByCategoryName(@PathVariable("category") String categoryName,
+                                                                      @PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
+        Page<Post> postList = postService.findAllActiveByCategoryName(categoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    /**
+     * ThuanNN
+     * @param categoryName
+     * @param childCategoryName
+     * @param count
+     * @return ResponseEntity<Page<Post>>
+     */
+    @GetMapping("categories/{category}/{childCategory}/{count}")
+    public ResponseEntity<Page<Post>> getAllActivePostsByCategoryNameAndChildCategoryName(
+            @PathVariable("category") String categoryName,
+            @PathVariable("childCategory") String childCategoryName,
+            @PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
         Page<Post> postList = postService.findAllActiveByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
         if (postList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
