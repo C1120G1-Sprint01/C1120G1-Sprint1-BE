@@ -26,12 +26,12 @@ public interface BannerRepository extends JpaRepository<Banner, Integer> {
     void editAdvertiseBanner(Integer bannerId, Timestamp duration, String image, Integer positionId, Integer sizeId);
 
     @Modifying
-    @Query(value = "DELETE FROM ad_web_db.banner WHERE banner.banner_id = ?1" ,nativeQuery = true)
+    @Query(value = "DELETE FROM ad_web_db.banner WHERE banner.banner_id = ?1", nativeQuery = true)
     void deleteAdvertiseBanner(Integer bannerId);
 
-    @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.banner_id = ?1" ,nativeQuery = true)
+    @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.banner_id = ?1", nativeQuery = true)
     Banner findBannerById(Integer bannerId);
 
-    @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.position_id = ?1",nativeQuery = true)
+    @Query(value = "SELECT * FROM ad_web_db.banner WHERE banner.position_id = ?1", nativeQuery = true)
     List<Banner> showAllBannerByPosition(Integer positionId);
 }

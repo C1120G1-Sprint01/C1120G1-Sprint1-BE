@@ -44,13 +44,14 @@ public class BannerController {
     /**
      * Method: get all banner by position
      * Author: HanTH
+     *
      * @param positionId
      * @return
      */
     @GetMapping("admin/banner/position/{positionId}")
-    public ResponseEntity<?> showAllAdvertiseBannerByPosition(@PathVariable Integer positionId){
+    public ResponseEntity<?> showAllAdvertiseBannerByPosition(@PathVariable Integer positionId) {
         try {
-            List<Banner> listBanner = bannerService.showAllBannerByPosition(positionId);
+            List<Banner> listBanner = bannerService.showAllBannerByPosition( positionId );
             return new ResponseEntity<>( listBanner, HttpStatus.OK );
         } catch (Exception e) {
             return new ResponseEntity<>( HttpStatus.BAD_REQUEST );
