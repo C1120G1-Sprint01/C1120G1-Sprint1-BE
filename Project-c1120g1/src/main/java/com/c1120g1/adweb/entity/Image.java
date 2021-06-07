@@ -22,7 +22,7 @@ public class Image {
     @Column(name = "image_name", columnDefinition = "VARCHAR(50)")
     private String imageName;
 
-    @Column(name = "url", columnDefinition = "LONGTEXT")
+    @Column(name = "url", columnDefinition = "VARCHAR(255)")
     private String url;
 
     @ManyToOne
