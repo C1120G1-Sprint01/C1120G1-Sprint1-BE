@@ -1,9 +1,9 @@
 package com.c1120g1.adweb.controller;
-
 import com.c1120g1.adweb.dto.UserDTO;
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.Role;
 import com.c1120g1.adweb.entity.User;
+import com.c1120g1.adweb.dto.UserDTO;
 import com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.repository.WardRepository;
 import com.c1120g1.adweb.service.*;
@@ -58,6 +58,7 @@ public class AdminController {
     //   Ngoc -  Create new user
     @PostMapping(value = "/admin/listUser/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
+
         try {
             List<User> userList = userService.findAll();
             if (!userList.isEmpty()) {
@@ -91,9 +92,8 @@ public class AdminController {
             account.setUsername(userDTO.getUsername());
             account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             account.setRegisterDate(registerDate);
+            accountService.save(account);
             accountService.saveUserAccount(account);
-
-
             System.out.println("Pw Bcrypt64 : " + account.getPassword());
 
             // chuyen method nay vao trong service
@@ -200,6 +200,4 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
-
 }
