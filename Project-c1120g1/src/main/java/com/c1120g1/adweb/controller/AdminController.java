@@ -1,6 +1,6 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.DTO.UserDTO;
+import com.c1120g1.adweb.dto.UserDTO;
 import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
@@ -34,8 +34,10 @@ public class AdminController {
 
     @Autowired
     private DistrictService districtService;
+
     @Autowired
     private AccountService accountService;
+
     @Autowired
     private WardRepository wardRepository;
 
