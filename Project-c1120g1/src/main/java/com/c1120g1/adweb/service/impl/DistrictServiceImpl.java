@@ -16,7 +16,6 @@ public class DistrictServiceImpl implements DistrictService {
     @Autowired
     private DistrictRepository repository;
 
-
     @Override
     public List<District> findAllDistrictByProvinceId(Integer provinceId) {
         return null;

@@ -15,7 +15,6 @@ public class AccountRoleServiceImpl implements AccountRoleService {
     @Autowired
     private AccountRoleRepository repository;
 
-
     @Override
     public List<AccountRole> findByAccount(Account account) {
         return repository.findByAccount(account);

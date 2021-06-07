@@ -57,4 +57,3 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
 //    List<ChildCategory> findAllByChildCategoryName(String childCategoryName);
 //
 //}
-//>>>>>>> b0303d3557f91fac1eba4a09e4f2a3cddfd5d7c5
