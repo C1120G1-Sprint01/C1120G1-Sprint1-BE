@@ -33,4 +33,6 @@ public interface UserService {
 
     List<User> findAllUser();
 
+    void updateUser(User user);
+
 }

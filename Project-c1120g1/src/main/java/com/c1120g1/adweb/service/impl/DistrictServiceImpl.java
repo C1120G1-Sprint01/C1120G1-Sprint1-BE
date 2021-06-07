@@ -19,7 +19,7 @@ public class DistrictServiceImpl implements DistrictService {
 
     @Override
     public List<District> findAllDistrictByProvinceId(Integer provinceId) {
-        return null;
+        return repository.findAllDistrictByProvinceId(provinceId);
     }
 
     @Override
@@ -38,6 +38,7 @@ public class DistrictServiceImpl implements DistrictService {
         return districtDTOList;
     }
 
+    @Override
     public List<District> findAllByProvinceId(Integer provinceId) {
         return repository.findAllByProvinceId(provinceId);
 

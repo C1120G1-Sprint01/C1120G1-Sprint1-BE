@@ -106,4 +106,9 @@ public class UserServiceImpl implements UserService {
         return name;
     }
 
+    @Override
+    public void updateUser(User user) {
+        repository.updateUser(user.getUserId(), standardizeName(user.getName()),
+                user.getEmail(), user.getPhone(), user.getWard(),user.getAvatarUrl());
+    }
 }

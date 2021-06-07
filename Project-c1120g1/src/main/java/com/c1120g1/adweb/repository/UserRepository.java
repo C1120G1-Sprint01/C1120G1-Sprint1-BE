@@ -66,4 +66,14 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     User findByEmail(String email);
 
+    @Modifying
+    @Query(value ="update User u" +
+            " set u.name = ?2, " +
+            "u.email =?3, " +
+            "u.phone =?4, " +
+            "u.ward =?5, " +
+            "u.avatarUrl =?6" +
+            " where u.userId = ?1")
+    void updateUser(Integer userId, String name, String email, String phone, Ward ward, String avatarUrl);
+
 }
