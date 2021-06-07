@@ -10,7 +10,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table( name = "`role`",
+@Table(name = "`role`",
         uniqueConstraints = {
                 @UniqueConstraint(name = "ROLE_UK", columnNames = "role_id")
         })
@@ -21,6 +21,8 @@ public class Role {
     @Column(name = "role_id")
     private Integer roleId;
 
+
     @Column(name = "role_name", columnDefinition = "VARCHAR(50)")
     private String roleName;
+
 }

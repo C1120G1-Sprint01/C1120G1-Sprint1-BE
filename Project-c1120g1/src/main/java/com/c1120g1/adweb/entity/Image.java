@@ -25,8 +25,13 @@ public class Image {
     @Column(name = "url", columnDefinition = "VARCHAR(255)")
     private String url;
 
-    @JsonBackReference
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "post_id", nullable = false, referencedColumnName = "post_id")
     private Post post;
+
+    public Image(String imageName, String url) {
+        this.imageName = imageName;
+        this.url = url;
+    }
 }
