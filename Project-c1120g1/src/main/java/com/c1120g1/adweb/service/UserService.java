@@ -36,7 +36,6 @@ public interface UserService {
 
     List<User> findAllUser();
 
-
     void updateUser(User user);
 
     /**
@@ -44,6 +43,5 @@ public interface UserService {
      * method: get List User Statistics
      * */
     List<UserStatisticsDTO> statisticUser(String startDate, String endDate);
-
 
 }
