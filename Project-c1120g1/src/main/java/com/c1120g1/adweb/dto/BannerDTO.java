@@ -1,4 +1,4 @@
-package com.c1120g1.adweb.model;
+package com.c1120g1.adweb.DTO;
 
 import java.sql.Timestamp;
 

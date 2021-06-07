@@ -22,7 +22,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
      * author: ThinhTHB
      * method: get List User Statistics
      * */
-    @Query(value = "SELECT register_date as timeRegister, " +
+    @Query(value = "SELECT register_date as timeRegister,  " +
             "COUNT(case when register_date >= :startDate and register_date <= :endDate then 1 end ) as countNewUser " +
             "FROM account " +
             "GROUP BY register_date " +
@@ -32,10 +32,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     List<UserStatisticsDTO> userStatistics(String startDate, String endDate);
 
     //    ngoc - tim kiem full text search
-    @Query(value = "select * from user" +
-            "inner join ward on user.wardId = ward.ward_id" +
-            "where concat (user_id, email, name, phone, ward.ward_name) like?1",
-            nativeQuery = true)
+
+    @Query(value = "select * from user " +
+            "inner join ward on user.ward_id = ward.ward_id " +
+            "where concat (user_id, email, name, phone, ward.ward_name) like concat('%',?1,'%') ",
+            nativeQuery =true)
     List<User> fullSearch(String q);
 
     //   ngoc - list user su dung DTO class
@@ -44,12 +45,13 @@ public interface UserRepository extends JpaRepository<User, Integer> {
 
     //    ngoc - them moi user
     @Modifying
-    @Query(value = "insert into User (name, email, phone, ward_id, username)" +
-            "values (:name, :email, :phone, :wardId, :username)",
+    @Query(value = "insert into User (name, email, phone, ward_id, username, avatar_url) " +
+                    "values (:name, :email, :phone, :wardId, :username, :avatarUrl) ",
             nativeQuery = true)
     @Transactional
     void createUser(@Param("name") String name, @Param("email") String email,
-                    @Param("phone") String phone, @Param("wardId") Integer wardId, @Param("username") String username);
+                    @Param("phone") String phone, @Param("wardId") Integer wardId,
+                    @Param("username") String username, @Param("avatarUrl") String avatarUrl);
 
     //    ngoc - edit user
     @Modifying
@@ -78,4 +80,15 @@ public interface UserRepository extends JpaRepository<User, Integer> {
                      @Param("wardId") Integer wardId);
 
     User findByEmail(String email);
+
+    @Modifying
+    @Query(value ="update User u" +
+            " set u.name = ?2, " +
+            "u.email =?3, " +
+            "u.phone =?4, " +
+            "u.ward =?5, " +
+            "u.avatarUrl =?6" +
+            " where u.userId = ?1")
+    void updateUser(Integer userId, String name, String email, String phone, Ward ward, String avatarUrl);
+
 }

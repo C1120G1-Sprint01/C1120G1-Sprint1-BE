@@ -84,6 +84,8 @@ public interface PostService {
 
     Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable);
 
+    List<Post> searchPostByTitle(String title);
+
     List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate);
 
     Page<Post> findAllPost(Pageable pageable);

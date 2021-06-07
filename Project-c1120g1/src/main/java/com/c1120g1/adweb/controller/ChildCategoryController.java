@@ -6,9 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -64,7 +66,11 @@ public class ChildCategoryController {
      */
 
     @PostMapping("/main-category/child-category/create-child-category")
-    public ResponseEntity<Void> createChildCategory(@RequestBody ChildCategory childCategory, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<Void> createChildCategory(@Valid @RequestBody ChildCategory childCategory, BindingResult bindingResult, UriComponentsBuilder ucBuilder) {
+        this.childCategoryService.checkDup(childCategory,bindingResult);
+        if (bindingResult.hasErrors() || childCategory.getCategory() == null){
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
         childCategoryService.addChildCategory(childCategory);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(ucBuilder.path("/child_category/{id}").buildAndExpand(childCategory.getChildCategoryId()).toUri());
@@ -83,13 +89,13 @@ public class ChildCategoryController {
 
         ChildCategory childCategory1 = childCategoryService.findChildCategoryById(id);
 
-        if (childCategory1 == null) {
+        if (childCategory1 == null || id == null) {
             return new ResponseEntity<ChildCategory>(HttpStatus.NOT_FOUND);
         } else {
             childCategory1.setChildCategoryName(childCategory.getChildCategoryName());
             childCategory1.setCategory(childCategory.getCategory());
             childCategory1.setPostSet(childCategory.getPostSet());
-            childCategory1.setDeleteFlag(false);
+            childCategory1.setDeleteFlag(true);
             childCategory1.setChildCategoryId(id);
 
             childCategoryService.saveChildCategory(childCategory1);
@@ -128,6 +134,17 @@ public class ChildCategoryController {
         List<ChildCategory> childCategoryList;
 
         childCategoryList = childCategoryService.findAllByChildCategoryNameAndCategoryName(childCategoryName, categoryName);
+
+        if (childCategoryList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(childCategoryList, HttpStatus.OK);
+    }
+
+    @GetMapping("/main-category/child-category/searchAbsolute")
+    public ResponseEntity<List<ChildCategory>> searchAbsolute(@RequestParam(name = "childCategoryName") String childCategoryName,
+                                                              @RequestParam(name = "categoryId") Integer categoryId) {
+        List<ChildCategory> childCategoryList = childCategoryService.searchAllChildCategory(childCategoryName, categoryId);
 
         if (childCategoryList.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

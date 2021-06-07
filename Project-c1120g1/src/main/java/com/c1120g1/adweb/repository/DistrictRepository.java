@@ -10,4 +10,7 @@ public interface DistrictRepository extends JpaRepository<District, Integer> {
 
     @Query(value = "select * from district where district.province_id = :provinceId", nativeQuery = true)
     List<District> findAllByProvinceId(Integer provinceId);
+
+    @Query(value = "select d from District d join Province p on p.provinceId = d.province.provinceId where p.provinceId =?1")
+    List<District> findAllDistrictByProvinceId(Integer provinceId);
 }

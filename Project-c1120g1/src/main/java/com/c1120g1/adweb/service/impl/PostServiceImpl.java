@@ -229,6 +229,11 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
+    public List<Post> searchPostByTitle(String title) {
+        return repository.searchPostByTitle(title);
+    }
+
+    @Override
     public List<PostStatisticDTO> statisticQuantityPost(String startDate, String endDate) {
         return repository.statisticQuantityPost(startDate, endDate);
     }
