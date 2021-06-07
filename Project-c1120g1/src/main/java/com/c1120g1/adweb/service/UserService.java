@@ -1,13 +1,17 @@
 package com.c1120g1.adweb.service;
+
 import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
+import com.c1120g1.adweb.dto.UserStatisticsDTO;
+import org.springframework.validation.Errors;
 
 import java.util.List;
-@Service
+
+
 public interface UserService {
+
     //    Danh sach user phan trang, sort
     Page<User> findAllUser(Pageable pageable);
 
@@ -15,7 +19,7 @@ public interface UserService {
 
     void save(User user);
 
-    void saveUser(Integer userId, String name, String email, String phone, Ward ward);
+    void validate(User user, Errors errors);
 
     User findById(Integer id);
 
@@ -32,5 +36,13 @@ public interface UserService {
     void saveUserCus(User user);
 
     List<User> findAllUser();
+
+    void updateUser(User user);
+
+    /**
+     * author: ThinhTHB
+     * method: get List User Statistics
+     * */
+    List<UserStatisticsDTO> statisticUser(String startDate, String endDate);
 
 }

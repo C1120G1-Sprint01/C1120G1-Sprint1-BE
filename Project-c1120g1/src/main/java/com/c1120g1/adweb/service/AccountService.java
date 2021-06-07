@@ -14,7 +14,6 @@ public interface AccountService {
 
     List<Account> getAllAccount();
 
-
     Account findByUsername(String username);
 
     String generateCode();
@@ -27,8 +26,12 @@ public interface AccountService {
 
     Account getAccountByUsername (String username);
 
-    void sendEmailApprove(String email, String code);
+    void sendEmailApprove(String email);
+
+    void sendEmailDelete(String email);
 
     void sendEmail(String email, String code);
+
+    Account checkUserExists(String username);
 
 }

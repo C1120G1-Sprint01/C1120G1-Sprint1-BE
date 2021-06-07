@@ -32,5 +32,4 @@ public class WardServiceImpl implements WardService {
     public List<Ward> findWardByDistrictId(Integer wardId) {
         return repository.findByDistrictId(wardId);
     }
-
 }

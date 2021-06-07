@@ -16,14 +16,14 @@ public class DistrictServiceImpl implements DistrictService {
     @Autowired
     private DistrictRepository repository;
 
-
+    //    ThuanNN: edit return null
     @Override
     public List<District> findAllDistrictByProvinceId(Integer provinceId) {
-        return null;
+
+        return repository.findAllDistrictByProvinceId(provinceId);
     }
 
     @Override
-
     public List<DistrictDTO> findAllByProvinceIdDTO(int provinceId) {
         List<District> districtList = repository.findAllByProvinceId(provinceId);
         List<DistrictDTO> districtDTOList = new ArrayList<>();
@@ -34,13 +34,12 @@ public class DistrictServiceImpl implements DistrictService {
             districtDTO.setDistrictName(district.getDistrictName());
             districtDTOList.add(districtDTO);
         }
-
         return districtDTOList;
     }
 
+    @Override
     public List<District> findAllByProvinceId(Integer provinceId) {
         return repository.findAllByProvinceId(provinceId);
-
     }
 
 //    @Override
