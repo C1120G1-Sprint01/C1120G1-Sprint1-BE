@@ -7,14 +7,22 @@ import java.util.Collection;
 
 public class JwtResponse implements Serializable {
     private static final long serialVersionUID = -8091879091924046844L;
-    private final String jwttoken;
+    private String jwttoken;
     private String username;
     private Collection<? extends GrantedAuthority> authorities;
+
+    public JwtResponse() {
+    }
 
     public JwtResponse(String jwttoken, String username, Collection<? extends GrantedAuthority> authorities) {
         this.jwttoken = jwttoken;
         this.username = username;
         this.authorities = authorities;
+    }
+
+    public JwtResponse(String jwttoken, String username) {
+        this.jwttoken = jwttoken;
+        this.username = username;
     }
 
     public String getUsername() {
