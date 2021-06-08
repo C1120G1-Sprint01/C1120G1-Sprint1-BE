@@ -94,7 +94,7 @@ public class AdminController {
             account.setUsername(userDTO.getUsername());
             account.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             account.setRegisterDate(registerDate);
-            accountService.save(account);
+//            accountService.save(account);
             accountService.saveUserAccount(account);
             System.out.println("Pw Bcrypt64 : " + account.getPassword());
 
