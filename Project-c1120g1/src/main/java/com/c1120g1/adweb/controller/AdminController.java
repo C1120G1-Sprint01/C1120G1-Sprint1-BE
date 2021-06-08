@@ -57,7 +57,7 @@ public class AdminController {
 
     //   Ngoc -  Create new user
     @PostMapping(value = "/admin/listUser/create", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> createUser(@RequestBody com.c1120g1.adweb.dto.UserDTO userDTO) {
+    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 
 //    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO) {
 

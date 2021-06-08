@@ -136,4 +136,11 @@ public class UserServiceImpl implements UserService {
     public List<UserStatisticsDTO> statisticUser(String startDate, String endDate) {
         return repository.userStatistics(startDate, endDate);
     }
+
+//    String name, String email, String phone, String username, String avatarUrl, Integer wardId
+    @Override
+    public void saveUserGoogle(User user) {
+        repository.saveUserGoogle(  user.getName(),user.getEmail(), "",
+                                    user.getAccount().getUsername(),user.getAvatarUrl() , null);
+    }
 }

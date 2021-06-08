@@ -1,7 +1,7 @@
 package com.c1120g1.adweb.service;
 
 import com.c1120g1.adweb.entity.Banner;
-import com.c1120g1.adweb.DTO.BannerDTO;
+import com.c1120g1.adweb.dto.BannerDTO;
 import java.util.List;
 
 public interface BannerService {

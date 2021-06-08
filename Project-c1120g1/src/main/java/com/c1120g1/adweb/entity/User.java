@@ -41,7 +41,7 @@ public class User {
     private String avatarUrl;
 
     @ManyToOne
-    @JoinColumn(name = "ward_id", referencedColumnName = "ward_id", nullable = false)
+    @JoinColumn(name = "ward_id", referencedColumnName = "ward_id")
     private Ward ward;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
