@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         repository.updateUser(user.getUserId(), standardizeName(user.getName()),
-                user.getEmail(), user.getPhone(), user.getWard(),user.getAvatarUrl());
+                user.getEmail(), user.getPhone(), user.getWard(),user.getAvatarUrl().replace("imgChange/", "imgChange%2F"));
     }
 
     @Override
