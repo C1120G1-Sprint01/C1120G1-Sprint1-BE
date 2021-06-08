@@ -32,34 +32,4 @@ public interface ChildCategoryRepository extends JpaRepository<ChildCategory, In
             "where (child_category.child_category_name=?1 and child_category.category_id=?2)",nativeQuery = true)
     List<ChildCategory> searchAllChildCategory(String childCategoryName,Integer categoryId);
 }
-//
-//    //    @Query(value = "select child_category.child_category_name, category.category_name" +
-////            " from child_category" +
-////            " inner join category on category.category_id=child_category.category_id" +
-////            " where (child_category_name like concat('%',?1,'%') and category_name like concat('%',?2,'%')", nativeQuery = true)
-//    @Query(value = "select cc from ChildCategory cc " +
-//            "where cc.childCategoryName like concat('%',?1,'%') and cc.category.categoryName like concat('%',?2,'%')")
-////    @Query(value = "select child_category.child_category_name, category.category_name" +
-////            " from child_category" +
-////            " inner join category on category.category_id=child_category.category_id" +
-////            " where (child_category_name like %?1% and category_name like %?2%)", nativeQuery = true)
-//    List<ChildCategory> findAllByChildCategoryNameAndCategoryName(String childCategoryName, String categoryName);
-//
-//    @Query(value = "select cc from ChildCategory cc " +
-//            "where cc.category.categoryName like concat('%',?1,'%')")
-////    @Query(value = "select child_category.child_category_name, category.category_name " +
-////            "from child_category " +
-////            "inner join category on category.category_id=child_category.category_id " +
-////            "where (child_category_name like %?1%)", nativeQuery = true)
-//    List<ChildCategory> findAllByCategoryName(String categoryName);
-//
-//    @Query(value = "select cc from ChildCategory cc " +
-//            "where cc.childCategoryName like concat('%',?1,'%')")
-////    @Query(value = "select child_category.child_category_name, category.category_name " +
-////            "from child_category " +
-////            "inner join category on category.category_id=child_category.category_id " +
-////            "where (category_name like %?1%)", nativeQuery = true)
-//    List<ChildCategory> findAllByChildCategoryName(String childCategoryName);
-//
-//}
-//>>>>>>> b0303d3557f91fac1eba4a09e4f2a3cddfd5d7c5
+
