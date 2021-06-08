@@ -108,6 +108,7 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public void updatePost(PostDTO postDTO) {
+        String postDateTime = postService.getPostDateTime();
         repository.updatePost(postDTO.getPost().getDescription(),
                 postDTO.getPost().getEmail(),
                 postDTO.getPost().getPhone(),
@@ -117,7 +118,9 @@ public class PostServiceImpl implements PostService {
                 postDTO.getPost().getTitle(),
                 postDTO.getPost().getChildCategory().getChildCategoryId(),
                 postDTO.getPost().getStatus().getStatusId(),
-                postDTO.getPost().getWard().getWardId(), postDTO.getPost().getPostId());
+                postDTO.getPost().getWard().getWardId(),
+                postDateTime,
+                postDTO.getPost().getPostId());
         if (postDTO.getImages().length != 0) {
             imageRepository.delete(postDTO.getPost().getPostId());
         }
@@ -161,6 +164,22 @@ public class PostServiceImpl implements PostService {
         return repository.findAllNewest(pageable);
     }
 
+    //    ThuanNN
+//    @Override
+//    public void save(String username, Post post) {
+//        String postDateTime = postService.getPostDateTime();
+//        post.setPostDateTime(postDateTime);
+//        Status status = statusService.findById(1);
+//        post.setStatus(status);
+////        Set<Image> imagesSet = new HashSet<>();
+////        if (post.getImageSet() == null){
+////            Image img = new Image("img_default", "https://fakeimg.pl/100x100/?text=C1120G1");
+////            imagesSet.add(img);
+////            post.setImageSet(imagesSet);
+////        }
+//        repository.save(post);
+//    }
+
     /**
      * Author: ThuanNN, ViNTT
      */
@@ -179,13 +198,46 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<Post> search(String title, String child_category, String province_name) {
-        return repository.search(title, child_category, province_name);
+    public List<Post> findAllActive() {
+        return repository.findAllActive();
     }
 
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public List<Post> searchByTitleContaining(String keyword) {
+        return repository.searchByTitleContaining(keyword);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public List<Post> searchAdvanceWithCategory(String keyword, String category) {
+        return repository.searchAdvanceWithCategory(keyword, category);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public List<Post> searchAdvanceWithProvince(String keyword, String province) {
+        return repository.searchAdvanceWithProvince(keyword, province);
+    }
+
+    /**
+     * Author: ThuanNN
+     */
+    @Override
+    public List<Post> searchAdvance(String keyword, String category, String province) {
+        return repository.searchAdvance(keyword, category, province);
+    }
+
+    //    ThuanNN
     @Override
     public String getPostDateTime() {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();
         return simpleDateFormat.format(now);
     }
@@ -193,6 +245,11 @@ public class PostServiceImpl implements PostService {
     @Override
     public Page<Post> findAllByUsernameAndStatusId(String username, Integer statusId, Pageable pageable) {
         return repository.findAllByUsernameAndStatusId(username, statusId, pageable);
+    }
+
+    @Override
+    public List<Post> searchPostByTitle(String title) {
+        return repository.searchPostByTitle(title);
     }
 
     @Override

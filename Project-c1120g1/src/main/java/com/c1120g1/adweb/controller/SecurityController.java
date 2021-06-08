@@ -94,14 +94,25 @@ public class SecurityController {
         }
     }
 
+    /**
+     * Method: getUser
+     * Author: HoangTQ
+     * @param principal
+     * @return
+     */
     @GetMapping("/api/loginGoogle")
-    public ResponseEntity<Principal> user(Principal principal) {
+    public ResponseEntity<Principal> getUser(Principal principal) {
         if (principal == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(principal, HttpStatus.OK);
     }
 
+    /**
+     * Method: deniedPage
+     * Author: HoangTQ
+     * @return
+     */
     @GetMapping("/403")
     public ResponseEntity<Void> deniedPage(){
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);

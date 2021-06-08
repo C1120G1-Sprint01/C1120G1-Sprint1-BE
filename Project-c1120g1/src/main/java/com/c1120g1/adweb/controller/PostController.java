@@ -3,6 +3,8 @@ package com.c1120g1.adweb.controller;
 import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.dto.PostStatisticDTO;
 import com.c1120g1.adweb.entity.Post;
+import com.c1120g1.adweb.entity.User;
+import com.c1120g1.adweb.service.AccountService;
 import com.c1120g1.adweb.service.PostService;
 import com.c1120g1.adweb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("api/posts")
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(value = "*", allowedHeaders = "*")
 public class PostController {
 
     @Autowired
@@ -32,6 +34,9 @@ public class PostController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private AccountService accountService;
 
     /**
      * author: ThinhTHB
@@ -139,6 +144,12 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.approvePost(postId);
+        User userApprove = currentPost.getUser();
+        if (userApprove != null) {
+            String toEmail = userApprove.getEmail();
+            this.accountService.sendEmailApprove(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -149,6 +160,12 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.deletePost(postId);
+        User userDelete = post.getUser();
+        if (userDelete != null) {
+            String toEmail = userDelete.getEmail();
+            this.accountService.sendEmailDelete(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -189,6 +206,12 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.approvePost(postId);
+        User userApprove = currentPost.getUser();
+        if (userApprove != null) {
+            String toEmail = userApprove.getEmail();
+            this.accountService.sendEmailApprove(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -199,6 +222,12 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.deletePost(postId);
+        User userDelete = post.getUser();
+        if (userDelete != null) {
+            String toEmail = userDelete.getEmail();
+            this.accountService.sendEmailDelete(toEmail);
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -224,13 +253,29 @@ public class PostController {
         }
     }
 
-    @GetMapping("listPost")
-    public ResponseEntity<Page<Post>> getAllPost(@PageableDefault(size = 5) Pageable pageable) {
+    //    ThuanNN
+    @GetMapping("listPost/{count}")
+    public ResponseEntity<Page<Post>> getAllPost(@PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
         if (postService.findAllNewest(pageable).isEmpty()) {
-            return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<Page<Post>>(postService.findAllNewest(pageable), HttpStatus.OK);
+        return new ResponseEntity<>(postService.findAllNewest(pageable), HttpStatus.OK);
     }
+
+    //    ThuanNN
+//    @PostMapping("createPost/{username}")
+//    public ResponseEntity<Void> createPost(@PathVariable(name = "username") String username,
+//                                           @RequestBody Post post) {
+//        User user = userService.findByUsername(username);
+//        if (user == null) {
+//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//        }
+//        post.setUser(user);
+//        postService.save(username, post);
+//
+//        return new ResponseEntity<>(HttpStatus.OK);
+//    }
 
     /**
      * Author: ThuanNN, ViNTT
@@ -248,12 +293,48 @@ public class PostController {
         }
     }
 
+    /**
+     * Author: ViNTT
+     * Search basic by keyword in post title
+     */
     @GetMapping("search")
-    public List<Post> search(
-            @RequestParam(name = "title") String title,
-            @RequestParam(name = "child_category") String child_category,
-            @RequestParam(name = "province") String province) {
-        return postService.search("%" + title + "%", child_category, province);
+    public ResponseEntity<List<Post>> searchByTitleContaining(@RequestParam(name = "key") String keyword) {
+        List<Post> posts = postService.searchByTitleContaining(keyword);
+
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    /**
+     * Author: ViNTT, ThuanNN
+     * Search advance
+     */
+    @GetMapping("search-advance")
+    public ResponseEntity<List<Post>> searchAdvance(@RequestParam(name = "key") String keyword,
+                                                    @RequestParam(name = "category") String category,
+                                                    @RequestParam(name = "province") String province) {
+        List<Post> posts;
+
+        if (category.equals("")) {
+            if (province.equals("")) {
+                posts = this.postService.searchByTitleContaining(keyword);
+            } else {
+                posts = this.postService.searchAdvanceWithProvince(keyword, province);
+            }
+        } else {
+            if (province.equals("")) {
+                posts = this.postService.searchAdvanceWithCategory(keyword, category);
+            } else {
+                posts = this.postService.searchAdvance(keyword, category, province);
+            }
+        }
+
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     /**
@@ -312,6 +393,45 @@ public class PostController {
         return new ResponseEntity<>(postList, HttpStatus.OK);
     }
 
+    /**
+     * ThuanNN
+     *
+     * @param categoryName
+     * @param count
+     * @return ResponseEntity<Page < Post>>
+     */
+    @GetMapping("categories/{category}/{count}")
+    public ResponseEntity<Page<Post>> getAllActivePostsByCategoryName(@PathVariable("category") String categoryName,
+                                                                      @PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
+        Page<Post> postList = postService.findAllActiveByCategoryName(categoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
+    /**
+     * ThuanNN
+     *
+     * @param categoryName
+     * @param childCategoryName
+     * @param count
+     * @return ResponseEntity<Page < Post>>
+     */
+    @GetMapping("categories/{category}/{childCategory}/{count}")
+    public ResponseEntity<Page<Post>> getAllActivePostsByCategoryNameAndChildCategoryName(
+            @PathVariable("category") String categoryName,
+            @PathVariable("childCategory") String childCategoryName,
+            @PathVariable(name = "count") Integer count) {
+        PageRequest pageable = PageRequest.of(0, count);
+        Page<Post> postList = postService.findAllActiveByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
+        if (postList.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(postList, HttpStatus.OK);
+    }
+
     // method of Dong
     @GetMapping(value = "/list", params = {"page", "size", "onSorting", "textSorting"})
     public ResponseEntity<Page<Post>> listPost(@RequestParam("page") int page, @RequestParam("size") int size,
@@ -358,4 +478,3 @@ public class PostController {
         return new ResponseEntity<>(postList, HttpStatus.OK); //200
     }
 }
-

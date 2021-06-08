@@ -55,8 +55,8 @@ public class Post {
 
     @Min(0)
     @Max(2000000000)
-    @Column(name = "price", columnDefinition = "INT")
-    private Integer price;
+    @Column(name = "price", columnDefinition = "DOUBLE")
+    private Long price;
 
     @NotBlank
     @Column(name = "description", columnDefinition = "TEXT")
