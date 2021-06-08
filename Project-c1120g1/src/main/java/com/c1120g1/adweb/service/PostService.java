@@ -17,7 +17,7 @@ public interface PostService {
      * author: ThinhTHB
      * method: search post by name
      */
-    List<Post> searchByName(String posterName);
+    Page<Post> searchByName(String posterName, Pageable pageable);
 
     Page<Post> findAllListDetail(Pageable pageable);
 

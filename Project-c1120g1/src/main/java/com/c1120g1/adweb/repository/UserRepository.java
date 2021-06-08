@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     /**
      * author: ThinhTHB
      * method: get List User Statistics
-     * */
+     */
     @Query(value = "SELECT register_date as timeRegister,  " +
             "COUNT(case when register_date >= :startDate and register_date <= :endDate then 1 end ) as countNewUser " +
             "FROM account " +
@@ -36,7 +36,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "select * from user " +
             "inner join ward on user.ward_id = ward.ward_id " +
             "where concat (user_id, email, name, phone, ward.ward_name) like concat('%',?1,'%') ",
-            nativeQuery =true)
+            nativeQuery = true)
     List<User> fullSearch(String q);
 
     //   ngoc - list user su dung DTO class
@@ -46,7 +46,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     //    ngoc - them moi user
     @Modifying
     @Query(value = "insert into User (name, email, phone, ward_id, username, avatar_url) " +
-                    "values (:name, :email, :phone, :wardId, :username, :avatarUrl) ",
+            "values (:name, :email, :phone, :wardId, :username, :avatarUrl) ",
             nativeQuery = true)
     @Transactional
     void createUser(@Param("name") String name, @Param("email") String email,
@@ -82,7 +82,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     User findByEmail(String email);
 
     @Modifying
-    @Query(value ="update User u" +
+    @Query(value = "update User u" +
             " set u.name = ?2, " +
             "u.email =?3, " +
             "u.phone =?4, " +
@@ -90,5 +90,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
             "u.avatarUrl =?6" +
             " where u.userId = ?1")
     void updateUser(Integer userId, String name, String email, String phone, Ward ward, String avatarUrl);
+
+    @Modifying
+    @Query(value = "insert into `user`(name, email, phone, username, avatar_url, ward_id) " +
+            "value (?1, ?2, ?3, ?4 , ?5, ?6)"
+            , nativeQuery = true)
+    void saveUserGoogle(String name, String email, String phone, String username, String avatarUrl, Integer wardId);
 
 }
