@@ -103,6 +103,9 @@ public class UserController {
             user.setAccount(account);
             userService.saveUserCus(user);
             accountRoleService.saveAccountRoleUser(user.getAccount().getUsername(),1);
+
+            accountService.sendEmailConfirmRegister(userDTO.getEmail());
+
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
