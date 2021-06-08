@@ -42,8 +42,8 @@ public class PostServiceImpl implements PostService {
      * method: search post by name
      */
     @Override
-    public List<Post> searchByName(String posterName) {
-        return repository.searchByName(posterName);
+    public Page<Post> searchByName(String posterName, Pageable pageable) {
+        return repository.searchByName(posterName, pageable);
     }
 
     @Override

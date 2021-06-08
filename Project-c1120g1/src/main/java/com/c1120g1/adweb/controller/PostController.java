@@ -43,8 +43,13 @@ public class PostController {
      * method: search post by name
      */
     @GetMapping("/search/{posterName}")
-    public List<Post> searchByName(@PathVariable("posterName") String posterName) {
-        return postService.searchByName(posterName);
+    public ResponseEntity<Page<Post>> searchByName(@PathVariable("posterName") String posterName,
+                                                   @PageableDefault(size = 2) Pageable pageable) {
+        Page<Post> listPostSearch = postService.searchByName(posterName, pageable);
+        if (listPostSearch.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(listPostSearch, HttpStatus.OK);
     }
 
 //    -----------------------LIST DETAIL------------------------

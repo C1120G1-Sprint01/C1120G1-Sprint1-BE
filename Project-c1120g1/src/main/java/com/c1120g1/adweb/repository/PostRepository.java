@@ -22,7 +22,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
      */
     @Query(value = "select p from Post p " +
             "where p.posterName like %:posterName%")
-    List<Post> searchByName(String posterName);
+    Page<Post> searchByName(String posterName, Pageable pageable);
 
     @Query(value = "select * " +
             "from post " +
