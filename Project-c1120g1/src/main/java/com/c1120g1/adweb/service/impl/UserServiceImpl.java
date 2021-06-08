@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.Errors;
 
 import java.util.List;
 
@@ -42,10 +43,20 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void saveUser(Integer userId, String name, String email, String phone, Ward ward) {
-        name = standardizeName(name);
-        repository.updateUser(userId, name, email, phone, ward);
+    public void validate(User user, Errors errors) {
+        for (User u: findAllUser()) {
+            if (u.getAccount().getUsername().equals(user.getAccount().getUsername())) {
+                errors.rejectValue("username", "checkDuplicateUsername");
+            }
+            if (u.getEmail().equals(user.getEmail())) {
+                errors.rejectValue("email", "checkDuplicateEmail");
+            }
+            if (u.getPhone().equals(user.getPhone())) {
+                errors.rejectValue("phone", "checkDuplicatePhone");
+            }
+        }
     }
+
 
     @Override
     public void saveUserCus(User user) {
@@ -65,7 +76,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUser(User user) {
         repository.updateUser(user.getUserId(), standardizeName(user.getName()),
-                user.getEmail(), user.getPhone(), user.getWard(),user.getAvatarUrl());
+                user.getEmail(), user.getPhone(), user.getWard(),user.getAvatarUrl().replace("imgChange/", "imgChange%2F"));
     }
 
     @Override

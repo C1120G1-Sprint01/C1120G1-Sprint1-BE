@@ -149,11 +149,19 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.approvePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/listApprove/sendEmailApprove/{postId}")
+    public ResponseEntity<Post> sendEmailApprove(@PathVariable("postId") Integer postId) {
+        Post currentPost = this.postService.findById(postId);
+        if (currentPost == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         User userApprove = currentPost.getUser();
         if (userApprove != null) {
             String toEmail = userApprove.getEmail();
             this.accountService.sendEmailApprove(toEmail);
-            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -165,11 +173,19 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.deletePost(postId);
-        User userDelete = post.getUser();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/listApprove/sendEmailDelete/{postId}")
+    public ResponseEntity<Post> sendEmailDelete(@PathVariable("postId") Integer postId) {
+        Post currentPost = this.postService.findById(postId);
+        if (currentPost == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User userDelete = currentPost.getUser();
         if (userDelete != null) {
             String toEmail = userDelete.getEmail();
             this.accountService.sendEmailDelete(toEmail);
-            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -211,11 +227,19 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.approvePost(postId);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/listWait/sendEmailApprove/{postId}")
+    public ResponseEntity<Post> sendEmailApproveWait(@PathVariable("postId") Integer postId) {
+        Post currentPost = this.postService.findById(postId);
+        if (currentPost == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         User userApprove = currentPost.getUser();
         if (userApprove != null) {
             String toEmail = userApprove.getEmail();
             this.accountService.sendEmailApprove(toEmail);
-            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -227,11 +251,19 @@ public class PostController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         this.postService.deletePost(postId);
-        User userDelete = post.getUser();
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/listWait/sendEmailDelete/{postId}")
+    public ResponseEntity<Post> sendEmailDeleteWait(@PathVariable("postId") Integer postId) {
+        Post currentPost = this.postService.findById(postId);
+        if (currentPost == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        User userDelete = currentPost.getUser();
         if (userDelete != null) {
             String toEmail = userDelete.getEmail();
             this.accountService.sendEmailDelete(toEmail);
-            return new ResponseEntity<>(HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
