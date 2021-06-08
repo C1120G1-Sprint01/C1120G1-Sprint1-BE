@@ -103,6 +103,9 @@ public class UserController {
             user.setAccount(account);
             userService.saveUserCus(user);
             accountRoleService.saveAccountRoleUser(user.getAccount().getUsername(),1);
+
+            accountService.sendEmailConfirmRegister(userDTO.getEmail());
+
             return new ResponseEntity<>(user, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
@@ -165,17 +168,5 @@ public class UserController {
             errors.put(fieldName, errorMessage);
         });
         return errors;
-    }
-
-    @GetMapping("/api/registerEmail/{email}")
-    public ResponseEntity<User> getEmail(@PathVariable(name = "email") String email){
-        User user = this.userService.findByEmail(email);
-        if (user != null) {
-            String toEmail = user.getEmail();
-            accountService.sendEmailConfirmRegister(toEmail);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
     }
 }
