@@ -5,6 +5,7 @@ import com.c1120g1.adweb.dto.PostDTO;
 import com.c1120g1.adweb.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -52,15 +53,30 @@ public interface PostService {
      */
     void saveNewPost(Post post, String username);
 
+    /**
+     * Author: ViNTT
+     */
+    List<Post> findAllActive();
+
+    /**
+     * Author: ViNTT
+     */
+    List<Post> searchByTitleContaining(String keyword);
+
+    /**
+     * Author: ViNTT
+     */
+    List<Post> searchAdvanceWithCategory(String keyword, String category);
+
+    /**
+     * Author: ViNTT
+     */
+    List<Post> searchAdvanceWithProvince(String keyword, String province);
+
     //    ThuanNN
-    Page<Post> search(String keyword, Integer category, Integer province, Pageable pageable);
+    List<Post> searchAdvance(String keyword, String category, String province);
 
     String getPostDateTime();
-
-    //    ViNTT
-    Page<Post> findAllByCategoryName(String categoryName, Pageable pageable);
-
-    Page<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
 
     /**
      * Author: ViNTT

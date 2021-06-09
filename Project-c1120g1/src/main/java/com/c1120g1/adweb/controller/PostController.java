@@ -330,17 +330,48 @@ public class PostController {
         }
     }
 
-    //    ThuanNN
-    @GetMapping("search/{keyword}/{category}/{province}")
-    public ResponseEntity<Page<Post>> search(@PathVariable(name = "keyword") String keyword,
-                                             @PathVariable(name = "category") String category,
-                                             @PathVariable(name = "province") String province,
-                                             @PageableDefault(value = 5) Pageable pageable) {
-        Page<Post> pagePost = postService.search(keyword, Integer.parseInt(category), Integer.parseInt(province), pageable);
-        if (pagePost.isEmpty()) {
+    /**
+     * Author: ViNTT
+     * Search basic by keyword in post title
+     */
+    @GetMapping("search")
+    public ResponseEntity<List<Post>> searchByTitleContaining(@RequestParam(name = "key") String keyword) {
+        List<Post> posts = postService.searchByTitleContaining(keyword);
+
+        if (posts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
-        return new ResponseEntity<>(pagePost, HttpStatus.OK);
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    /**
+     * Author: ViNTT, ThuanNN
+     * Search advance
+     */
+    @GetMapping("search-advance")
+    public ResponseEntity<List<Post>> searchAdvance(@RequestParam(name = "key") String keyword,
+                                                    @RequestParam(name = "category") String category,
+                                                    @RequestParam(name = "province") String province) {
+        List<Post> posts;
+
+        if (category.equals("")) {
+            if (province.equals("")) {
+                posts = this.postService.searchByTitleContaining(keyword);
+            } else {
+                posts = this.postService.searchAdvanceWithProvince(keyword, province);
+            }
+        } else {
+            if (province.equals("")) {
+                posts = this.postService.searchAdvanceWithCategory(keyword, category);
+            } else {
+                posts = this.postService.searchAdvance(keyword, category, province);
+            }
+        }
+
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     /**
@@ -401,9 +432,10 @@ public class PostController {
 
     /**
      * ThuanNN
+     *
      * @param categoryName
      * @param count
-     * @return ResponseEntity<Page<Post>>
+     * @return ResponseEntity<Page < Post>>
      */
     @GetMapping("categories/{category}/{count}")
     public ResponseEntity<Page<Post>> getAllActivePostsByCategoryName(@PathVariable("category") String categoryName,
@@ -418,10 +450,11 @@ public class PostController {
 
     /**
      * ThuanNN
+     *
      * @param categoryName
      * @param childCategoryName
      * @param count
-     * @return ResponseEntity<Page<Post>>
+     * @return ResponseEntity<Page < Post>>
      */
     @GetMapping("categories/{category}/{childCategory}/{count}")
     public ResponseEntity<Page<Post>> getAllActivePostsByCategoryNameAndChildCategoryName(
@@ -473,23 +506,6 @@ public class PostController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-//    @GetMapping("search")
-//    public List<Post> search(
-//            @RequestParam(name = "title") String title,
-//            @RequestParam(name = "child_category") String child_category,
-//            @RequestParam(name = "province") String province) {
-//        return postService.search("%" + title + "%", child_category, province);
-//    }
-
-    @GetMapping("search/title")
-    public ResponseEntity<List<Post>> searchByTitle(@RequestParam(name = "keySearch") String title) {
-        List<Post> postList = postService.searchPostByTitle(title);
-
-        if (postList.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return new ResponseEntity<>(postList, HttpStatus.OK);
-    }
     @GetMapping(value = "/statistic", params = {"startDate", "endDate"})
     public ResponseEntity<List<PostStatisticDTO>> getListStatisticQuantity(@RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate) {
         List<PostStatisticDTO> postList = postService.statisticQuantityPost(startDate, endDate);

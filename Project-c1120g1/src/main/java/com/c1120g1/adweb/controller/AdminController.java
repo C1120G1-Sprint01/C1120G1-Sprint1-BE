@@ -1,9 +1,8 @@
 package com.c1120g1.adweb.controller;
 
-import com.c1120g1.adweb.entity.Account;
-import com.c1120g1.adweb.entity.Role;
-import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.dto.UserDTO;
+import com.c1120g1.adweb.entity.Account;
+import com.c1120g1.adweb.entity.User;
 import com.c1120g1.adweb.entity.Ward;
 import com.c1120g1.adweb.repository.WardRepository;
 import com.c1120g1.adweb.service.*;
@@ -12,12 +11,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -35,8 +32,10 @@ public class AdminController {
 
     @Autowired
     private DistrictService districtService;
+
     @Autowired
     private AccountService accountService;
+
     @Autowired
     private WardRepository wardRepository;
     @Autowired

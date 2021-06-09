@@ -29,9 +29,9 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "where status_id = 1 and enabled = 1", nativeQuery = true)
     Page<Post> findAllListDetail(Pageable pageable);
 
-    @Query(value =  "select * " +
-                    "from post " +
-                    "where status_id = 1 and enabled = 1 and title like concat('%',?1,'%')", nativeQuery = true)
+    @Query(value = "select * " +
+            "from post " +
+            "where status_id = 1 and enabled = 1 and title like concat('%',?1,'%')", nativeQuery = true)
     Page<Post> searchByTitle(String title, Pageable pageable);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
@@ -83,40 +83,65 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
             "title = ?7, child_category_id = ?8, " +
             "status_id = ?9, ward_id = ?10, post_date_time = ?11 " +
             "where post_id = ?12", nativeQuery = true)
-    void updatePost(String description, String email, String phone, boolean postType, String posterName, int price,
+    void updatePost(String description, String email, String phone, boolean postType, String posterName, long price,
                     String title, int childCategoryId, int statusId, int wardId, String date, int postId);
+
+    /**
+     * Author: ViNTT
+     */
+    @Query(value = "select * from post " +
+            "where status_id = 1 and enabled = 1", nativeQuery = true)
+    List<Post> findAllActive();
+
+    /**
+     * Author: ViNTT
+     */
+    @Query(value = "select * " +
+            "from post " +
+            "where status_id = 1 and enabled = 1 and title like concat('%',?1,'%')", nativeQuery = true)
+    List<Post> searchByTitleContaining(String keyword);
+
+    /**
+     * Author: ViNTT
+     */
+    @Query(value = "select * from post p " +
+            "inner join child_category cc on cc.child_category_id = p.child_category_id " +
+            "inner join category c on c.category_id = cc.category_id " +
+            "where p.title like concat('%', ?1, '%') " +
+            "and c.category_name = ?2 " +
+            "and p.status_id = 1 and p.enabled = 1 " +
+            "order by p.post_date_time desc", nativeQuery = true)
+    List<Post> searchAdvanceWithCategory(String keyword, String category);
+
+    /**
+     * Author: ViNTT
+     */
+    @Query(value = "select * from post p " +
+            "inner join ward w on p.ward_id = w.ward_id " +
+            "inner join district d on d.district_id = w.district_id " +
+            "inner join province pr on pr.province_id = d.province_id " +
+            "where p.title like concat('%', ?1, '%') " +
+            "and pr.province_name = ?2 " +
+            "and p.status_id = 1 and p.enabled = 1 " +
+            "order by p.post_date_time desc", nativeQuery = true)
+    List<Post> searchAdvanceWithProvince(String keyword, String province);
 
     /**
      * Author: ThuanNN
      */
-    @Query(value = "select * from post " +
-            "inner join ward on post.ward_id = ward.ward_id " +
-            "inner join district on district.district_id = ward.district_id " +
-            "inner join province on province.province_id = district.province_id " +
-            "inner join child_category on child_category.child_category_id = post.child_category_id " +
-            "inner join category on category.category_id = child_category.category_id " +
-            "where (  " +
-            "        (post.title like '%'+?1+'%') &&  " +
-            "        (category.category_id = ?2) &&  " +
-            "        (province.province_id = ?3)  " +
-            "       )" +
-            "order by post.post_date_time desc ",
+    @Query(value = "select * from post p " +
+            "inner join ward w on p.ward_id = w.ward_id " +
+            "inner join district d on d.district_id = w.district_id " +
+            "inner join province pr on pr.province_id = d.province_id " +
+            "inner join child_category cc on cc.child_category_id = p.child_category_id " +
+            "inner join category c on c.category_id = cc.category_id " +
+            "where p.title like concat('%', ?1, '%') " +
+            "and c.category_name = ?2 " +
+            "and pr.province_name = ?3 " +
+            "and p.status_id = 1 and p.enabled = 1 " +
+            "order by p.post_date_time desc",
             nativeQuery = true)
-    Page<Post> search(String keyword, Integer category, Integer province, Pageable pageable);
-
-//    ViNTT
-    @Query(value = "SELECT * FROM post " +
-            "INNER JOIN child_category on post.child_category_id = child_category.child_category_id " +
-            "INNER JOIN category on child_category.category_id = category.category_id " +
-            "WHERE category.category_name like ?1", nativeQuery = true)
-    Page<Post> findAllByCategoryName(String categoryName, Pageable pageable);
-
-//    ViNTT
-    @Query(value = "SELECT * FROM post " +
-            "INNER JOIN child_category on post.child_category_id = child_category.child_category_id " +
-            "INNER JOIN category on child_category.category_id = category.category_id " +
-            "WHERE category.category_name like ?1 AND child_category.child_category_name like ?2", nativeQuery = true)
-    Page<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable);
+    List<Post> searchAdvance(String keyword, String category, String province);
 
     /**
      * Author: ThuanNN
@@ -162,7 +187,7 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
 
     @Query(value = "select * " +
             "from post " +
-            "where (post.title like concat('%',?1,'%'))",nativeQuery = true)
+            "where (post.title like concat('%',?1,'%'))", nativeQuery = true)
     List<Post> searchPostByTitle(String title);
 
     @Query(value = "SELECT post_date_time as timePost, " +

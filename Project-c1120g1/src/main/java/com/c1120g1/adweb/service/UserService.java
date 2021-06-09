@@ -1,14 +1,12 @@
 package com.c1120g1.adweb.service;
 
 import com.c1120g1.adweb.entity.User;
-import com.c1120g1.adweb.entity.Ward;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import com.c1120g1.adweb.dto.UserStatisticsDTO;
 import org.springframework.validation.Errors;
 
 import java.util.List;
-
 
 public interface UserService {
 

@@ -4,8 +4,10 @@ import com.c1120g1.adweb.entity.Account;
 import com.c1120g1.adweb.repository.AccountRepository;
 import com.c1120g1.adweb.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Date;
@@ -14,6 +16,9 @@ import java.util.Random;
 
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 
 @Service
@@ -35,7 +40,6 @@ public class AccountServiceImpl implements AccountService {
         repository.save(account);
     }
 
-
     @Override
     public void saveAccount(Account account) {
         if (account.getUsername() == null) {
@@ -49,7 +53,7 @@ public class AccountServiceImpl implements AccountService {
 
     }
 
-//    ThuanNN: edit return null
+    //    ThuanNN: edit return null
     @Override
     public Account findByUsername(String username) {
         return repository.findByUsername(username);
@@ -91,8 +95,8 @@ public class AccountServiceImpl implements AccountService {
         SimpleMailMessage messageApprove = new SimpleMailMessage();
         messageApprove.setTo(email);
         messageApprove.setSubject("Email xác nhận bài đăng được phê duyệt");
-        messageApprove.setText( "Chúc mừng bạn! Tin của bạn đã được đăng thành công!" +
-                                " Thanks and regards!");
+        messageApprove.setText("Chúc mừng bạn! Tin của bạn đã được đăng thành công!" +
+                " Thanks and regards!");
         this.emailSender.send(messageApprove);
     }
 
@@ -101,7 +105,7 @@ public class AccountServiceImpl implements AccountService {
         SimpleMailMessage messageDelete = new SimpleMailMessage();
         messageDelete.setTo(email);
         messageDelete.setSubject("Email thông báo xoá bài đăng");
-        messageDelete.setText( "Xin thông báo! Tin của bạn đã bị xoá do vi phạm!" +
+        messageDelete.setText("Xin thông báo! Tin của bạn đã bị xoá do vi phạm!" +
                 " Nếu có bất kì thắc mắc nào, bạn có thể liên hệ với Admin qua thanh chat. \n" +
                 " Thanks and regards!");
         this.emailSender.send(messageDelete);
@@ -124,5 +128,24 @@ public class AccountServiceImpl implements AccountService {
     public Account checkUserExists(String username) {
         return repository.checkUserExists(username);
     }
-}
 
+    @Override
+    public void sendEmailConfirmRegister(String email) {
+        String htmlMsg = "Chào bạn, bạn đã đăng kí thành công tài khoản tại TRANG WEB RAO VẶT C11\n"
+                + "<a href = 'http://localhost:4200' target='_blank'>Click vào đây để hoàn tất việc đăng ký</a>";
+
+        MimeMessage mimeMessage = emailSender.createMimeMessage();
+        try {
+
+            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true,"utf-8");
+
+            mimeMessageHelper.setSubject("Email hoàn tất việc đăng kí");
+            mimeMessageHelper.setTo(email);
+            mimeMessageHelper.setText(htmlMsg, true);
+
+            emailSender.send(mimeMessageHelper.getMimeMessage());
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+    }
+}

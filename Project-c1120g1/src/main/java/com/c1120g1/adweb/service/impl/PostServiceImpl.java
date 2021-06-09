@@ -197,10 +197,41 @@ public class PostServiceImpl implements PostService {
         repository.save(post);
     }
 
-    //    ThuanNN
     @Override
-    public Page<Post> search(String keyword, Integer category, Integer province, Pageable pageable) {
-        return repository.search(keyword, category, province, pageable);
+    public List<Post> findAllActive() {
+        return repository.findAllActive();
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public List<Post> searchByTitleContaining(String keyword) {
+        return repository.searchByTitleContaining(keyword);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public List<Post> searchAdvanceWithCategory(String keyword, String category) {
+        return repository.searchAdvanceWithCategory(keyword, category);
+    }
+
+    /**
+     * Author: ViNTT
+     */
+    @Override
+    public List<Post> searchAdvanceWithProvince(String keyword, String province) {
+        return repository.searchAdvanceWithProvince(keyword, province);
+    }
+
+    /**
+     * Author: ThuanNN
+     */
+    @Override
+    public List<Post> searchAdvance(String keyword, String category, String province) {
+        return repository.searchAdvance(keyword, category, province);
     }
 
     //    ThuanNN
@@ -209,21 +240,6 @@ public class PostServiceImpl implements PostService {
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date now = new Date();
         return simpleDateFormat.format(now);
-    }
-
-    //    ViNTT
-    @Override
-    public Page<Post> findAllByCategoryName(String categoryName, Pageable pageable) {
-        categoryName = categoryName.replace("-", " ");
-        return repository.findAllByCategoryName(categoryName, pageable);
-    }
-
-    //    ViNTT
-    @Override
-    public Page<Post> findAllByCategoryNameAndChildCategoryName(String categoryName, String childCategoryName, Pageable pageable) {
-        categoryName = categoryName.replace("-", " ");
-        childCategoryName = childCategoryName.replace("-", " ");
-        return repository.findAllByCategoryNameAndChildCategoryName(categoryName, childCategoryName, pageable);
     }
 
     @Override
