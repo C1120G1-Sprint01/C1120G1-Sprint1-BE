@@ -24,6 +24,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.social.facebook.api.Facebook;
+import org.springframework.social.facebook.api.impl.FacebookTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -34,8 +36,8 @@ import java.util.Collections;
 @CrossOrigin(value = "*", allowedHeaders = "*")
 public class SecurityController {
 
-
-    @Value("${google.clienId}") String googleClientId;
+    @Value("${google.clientId}")
+    String googleClientId;
 
     @Autowired(required = false)
     private AuthenticationManager authenticationManager;
@@ -142,14 +144,9 @@ public class SecurityController {
         return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-//    @PostMapping("login/google")
-//    public ResponseEntity<Void> createUserGoogle(@RequestBody UserGoogleDTO userGoogleDTO) {
-//        System.out.println(userGoogleDTO);
-//        return new ResponseEntity<>(HttpStatus.OK);
-//    }
 
     @PostMapping("api/login/google")
-    public ResponseEntity<?> google(@RequestBody UserGoogleDTO jwtResponseSocial) throws IOException {
+    public ResponseEntity<?> loginGoogle(@RequestBody UserGoogleDTO jwtResponseSocial) throws IOException {
         final NetHttpTransport netHttpTransport = new NetHttpTransport();
         final JacksonFactory jacksonFactory = JacksonFactory.getDefaultInstance();
         GoogleIdTokenVerifier.Builder builder = new GoogleIdTokenVerifier.Builder(netHttpTransport, jacksonFactory).setAudience(Collections.singletonList(googleClientId));
@@ -170,8 +167,8 @@ public class SecurityController {
             accountService.saveUserAccount(account);
             newUser.setAccount(account);
 
-            userService.saveUserGoogle(newUser);
-            accountRoleService.saveAccountRoleUser(newUser.getAccount().getUsername(),1);
+            userService.saveUserSocial(newUser);
+            accountRoleService.saveAccountRoleUser(newUser.getAccount().getUsername(), 1);
 
             UserDetails userDetails = userDetailsService.loadUserByUsername(newUser.getAccount().getUsername());
             JwtResponse jwtResponse = new JwtResponse(jwtResponseSocial.getToken(), jwtResponseSocial.getEmail(), userDetails.getAuthorities());
@@ -183,6 +180,47 @@ public class SecurityController {
         AuthLogin jwtRequest = new AuthLogin(account.getUsername(), account.getPassword());
         UserDetails userDetails = userDetailsService
                 .loadUserByUsername(jwtRequest.getUsername());
+        String jwtToken = jwtTokenUtil.generateToken(userDetails);
+        JwtResponse jwtResponse = new JwtResponse(jwtToken, userDetails.getUsername(), userDetails.getAuthorities());
+
+        jwtResponse.setUsername(account.getUsername());
+
+        return ResponseEntity.ok(jwtResponse);
+    }
+
+    @PostMapping("api/login/facebook")
+    public ResponseEntity<?> loginFacebook(@RequestBody UserGoogleDTO jwtResponseSocial) {
+        System.out.println("Token : "+ jwtResponseSocial.getToken());
+        Facebook facebook = new FacebookTemplate(jwtResponseSocial.getToken());
+        final String[] fields = {"email", "name"};
+        org.springframework.social.facebook.api.User user = facebook.fetchObject("me", org.springframework.social.facebook.api.User.class, fields);
+        User newUser = userService.findByEmail(user.getEmail());
+
+        if (newUser == null) {
+            newUser = new User();
+            newUser.setEmail(jwtResponseSocial.getEmail());
+            newUser.setName(jwtResponseSocial.getName());
+            newUser.setAvatarUrl(jwtResponseSocial.getAvatarUrl());
+
+            Account account = new Account();
+            account.setUsername(jwtResponseSocial.getEmail());
+            account.setPassword(passwordEncoder.encode(""));
+            accountService.saveUserAccount(account);
+            newUser.setAccount(account);
+
+            userService.saveUserSocial(newUser);
+            accountRoleService.saveAccountRoleUser(newUser.getAccount().getUsername(), 1);
+
+            UserDetails userDetails = userDetailsService.loadUserByUsername(newUser.getAccount().getUsername());
+            JwtResponse jwtResponse = new JwtResponse(jwtResponseSocial.getToken(), jwtResponseSocial.getEmail(), userDetails.getAuthorities());
+
+            return ResponseEntity.ok(jwtResponse);
+        }
+
+        Account account = newUser.getAccount();
+        AuthLogin jwtRequest = new AuthLogin(account.getUsername(), account.getPassword());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(jwtRequest.getUsername());
+
         String jwtToken = jwtTokenUtil.generateToken(userDetails);
         JwtResponse jwtResponse = new JwtResponse(jwtToken, userDetails.getUsername(), userDetails.getAuthorities());
 

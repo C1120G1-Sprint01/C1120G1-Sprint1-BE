@@ -95,6 +95,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "insert into `user`(name, email, phone, username, avatar_url, ward_id) " +
             "value (?1, ?2, ?3, ?4 , ?5, ?6)"
             , nativeQuery = true)
-    void saveUserGoogle(String name, String email, String phone, String username, String avatarUrl, Integer wardId);
+    void saveUserSocial(String name, String email, String phone, String username, String avatarUrl, Integer wardId);
 
 }

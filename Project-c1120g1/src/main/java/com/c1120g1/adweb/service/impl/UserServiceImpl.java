@@ -139,8 +139,8 @@ public class UserServiceImpl implements UserService {
 
 //    String name, String email, String phone, String username, String avatarUrl, Integer wardId
     @Override
-    public void saveUserGoogle(User user) {
-        repository.saveUserGoogle(  user.getName(),user.getEmail(), "",
+    public void saveUserSocial(User user) {
+        repository.saveUserSocial(  user.getName(),user.getEmail(), "",
                                     user.getAccount().getUsername(),user.getAvatarUrl() , null);
     }
 }
