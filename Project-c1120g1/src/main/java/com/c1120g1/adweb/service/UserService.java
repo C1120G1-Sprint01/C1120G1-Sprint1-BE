@@ -45,6 +45,6 @@ public interface UserService {
      * */
     List<UserStatisticsDTO> statisticUser(String startDate, String endDate);
 
-    void saveUserGoogle(User user);
+    void saveUserSocial(User user);
 
 }
